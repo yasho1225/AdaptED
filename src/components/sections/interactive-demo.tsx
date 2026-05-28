@@ -20,6 +20,7 @@ export function InteractiveDemo() {
   const [mode, setMode] = useState<AccessibilityMode>("dyslexia");
 
   const activeModeConfig = MODES.find((m) => m.id === mode)!;
+  const { theme } = activeModeConfig;
   const { result, status, error, retry, isLoading } = useTransform(input, mode);
 
   const loadExample = () => {
@@ -56,7 +57,7 @@ export function InteractiveDemo() {
   };
 
   return (
-    <section id="demo" className="scroll-mt-[4.25rem] border-t border-border/60 bg-muted/40 py-20 md:py-28">
+    <section id="demo" className="section-band scroll-mt-[4.25rem] py-20 md:py-28">
       <div className="mx-auto max-w-6xl px-5 sm:px-6">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
@@ -74,19 +75,19 @@ export function InteractiveDemo() {
         </motion.div>
 
         <div className="mb-8 flex flex-wrap items-center justify-center gap-2 text-[13px] font-medium text-muted-foreground">
-          <span className="rounded-full border border-border bg-background px-3 py-1 shadow-sm">
+          <span className="rounded-full border border-white/25 bg-white/10 px-3 py-1 text-foreground shadow-sm">
             1 · Input
           </span>
-          <span className="text-border" aria-hidden>
+          <span className="text-white/40" aria-hidden>
             →
           </span>
-          <span className="rounded-full border border-border bg-background px-3 py-1 shadow-sm">
+          <span className="rounded-full border border-white/25 bg-white/10 px-3 py-1 text-foreground shadow-sm">
             2 · Mode
           </span>
-          <span className="text-border" aria-hidden>
+          <span className="text-white/40" aria-hidden>
             →
           </span>
-          <span className="rounded-full border border-primary/20 bg-accent px-3 py-1 text-primary shadow-sm">
+          <span className="rounded-full border border-white/30 bg-card px-3 py-1 font-medium text-card-foreground shadow-sm">
             3 · AI output
           </span>
         </div>
@@ -103,7 +104,7 @@ export function InteractiveDemo() {
                     variant="outline"
                     size="sm"
                     onClick={handlePaste}
-                    className="gap-1.5 font-medium"
+                    className="gap-1.5 border-border font-medium"
                   >
                     <ClipboardPaste className="size-3.5" />
                     Paste
@@ -117,7 +118,7 @@ export function InteractiveDemo() {
                     Example
                   </Button>
                   <label className="inline-flex cursor-pointer">
-                    <span className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-border bg-background px-3 text-[13px] font-medium text-foreground shadow-sm transition-colors hover:bg-muted">
+                    <span className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-border bg-input px-3 text-[13px] font-medium text-card-foreground shadow-sm transition-colors hover:bg-muted">
                       <FileUp className="size-3.5" />
                       Upload
                     </span>
@@ -135,7 +136,7 @@ export function InteractiveDemo() {
               <Textarea
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                className="min-h-[280px] resize-none border-border/80 bg-background/50 text-[15px] leading-7 shadow-none focus-visible:border-ring focus-visible:ring-ring/30 md:min-h-[340px]"
+                className="min-h-[280px] resize-none border-border bg-input text-[15px] leading-7 text-card-foreground shadow-none placeholder:text-card-muted-foreground focus-visible:border-ring focus-visible:ring-ring/30 md:min-h-[340px]"
                 placeholder="Paste your assignment, worksheet, or lesson notes here..."
               />
             </div>
@@ -144,20 +145,15 @@ export function InteractiveDemo() {
           <Card
             className={cn(
               "surface-card flex flex-col gap-0 overflow-hidden py-0 ring-2",
-              activeModeConfig.theme.ring,
+              theme.ring,
             )}
           >
-            <div
-              className={cn(
-                "border-b border-border/70 px-5 py-4",
-                activeModeConfig.theme.surface,
-              )}
-            >
+            <div className={cn("border-b border-border/70 px-5 py-4", theme.tint)}>
               <div className="flex items-center gap-2">
                 <span
                   className={cn(
-                    "flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br text-white shadow-sm",
-                    activeModeConfig.theme.gradient,
+                    "flex h-8 w-8 items-center justify-center rounded-lg shadow-sm",
+                    theme.icon,
                   )}
                 >
                   <Wand2 className="size-4" />
@@ -178,10 +174,10 @@ export function InteractiveDemo() {
                   result={result}
                   modeSlug={mode}
                   canDownload={Boolean(input.trim()) && status === "success"}
-                  modeColor={activeModeConfig.theme.gradient}
-                  modeSurface={activeModeConfig.theme.surface}
-                  modeBorder={activeModeConfig.theme.border}
-                  modeText={activeModeConfig.theme.text}
+                  modeIcon={theme.icon}
+                  modeAccent={theme.accent}
+                  modeTint={theme.tint}
+                  modeBorder={theme.border}
                 />
               )}
             </div>

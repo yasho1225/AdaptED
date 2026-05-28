@@ -12,37 +12,37 @@ import type { AccessibilityMode } from "@/lib/types";
 
 interface TransformOutputProps {
   result: TransformResult;
-  modeColor: string;
   modeSlug: AccessibilityMode;
   canDownload?: boolean;
-  modeSurface?: string;
+  modeIcon: string;
+  modeAccent: string;
+  modeTint?: string;
   modeBorder?: string;
-  modeText?: string;
 }
 
 const blockStyles: Record<string, string> = {
   title:
-    "text-[17px] font-semibold tracking-[-0.02em] leading-snug text-foreground",
+    "text-[17px] font-semibold tracking-[-0.02em] leading-snug text-card-foreground",
   chunk:
-    "text-[15px] leading-7 text-foreground/90 py-2.5 border-b border-border/50 last:border-0",
-  key: "rounded-xl bg-primary/5 border border-primary/15 px-4 py-3 text-[14px] font-medium leading-relaxed text-foreground",
-  step: "flex gap-3 text-[14px] leading-relaxed text-foreground/90",
-  bullet: "text-[14px] leading-7 text-foreground/85 pl-1",
+    "text-[15px] leading-7 text-card-foreground py-2.5 border-b border-border/50 last:border-0",
+  key: "rounded-xl bg-card-accent/5 border border-card-accent/15 px-4 py-3 text-[14px] font-medium leading-relaxed text-card-foreground",
+  step: "flex gap-3 text-[14px] leading-relaxed text-card-foreground",
+  bullet: "text-[14px] leading-7 text-card-foreground pl-1",
   caption:
-    "font-mono text-[11px] font-medium uppercase tracking-[0.12em] text-muted-foreground",
+    "font-mono text-[11px] font-medium uppercase tracking-[0.12em] text-card-muted-foreground",
   describe:
-    "rounded-xl bg-mode-apd-surface border border-mode-apd-border px-4 py-3 text-[14px] leading-7 text-foreground/90",
-  note: "text-[14px] leading-relaxed text-muted-foreground italic",
+    "rounded-xl bg-muted border border-border px-4 py-3 text-[14px] leading-7 text-card-foreground",
+  note: "text-[14px] leading-relaxed text-card-muted-foreground italic",
 };
 
 export function TransformOutput({
   result,
-  modeColor,
   modeSlug,
   canDownload = false,
-  modeSurface,
+  modeIcon,
+  modeAccent,
+  modeTint,
   modeBorder,
-  modeText,
 }: TransformOutputProps) {
   const fallbackMessage = getFallbackBannerMessage(result.fallbackReason);
 
@@ -50,36 +50,28 @@ export function TransformOutput({
     <div className="flex h-full flex-col">
       {fallbackMessage && (
         <div
-          className="mb-4 flex gap-2 rounded-lg border border-amber-200/80 bg-amber-50/90 px-3 py-2.5 text-[13px] leading-snug text-amber-950"
+          className="alert-warning mb-4 flex gap-2 rounded-lg px-3 py-2.5"
           role="status"
         >
-          <Info className="mt-0.5 size-4 shrink-0 text-amber-700" aria-hidden />
+          <Info className="mt-0.5 size-4 shrink-0 text-warning-foreground" aria-hidden />
           <span>{fallbackMessage}</span>
         </div>
       )}
       {result.source === "gemini" && (
-        <p
-          className={cn(
-            "mb-3 text-[11px] font-medium uppercase tracking-wider",
-            modeText ?? "text-primary",
-          )}
-        >
+        <p className="mb-3 text-[11px] font-semibold uppercase tracking-wider text-card-accent">
           AI-enhanced
         </p>
       )}
       <div className="mb-5 flex items-start justify-between gap-3 border-b border-border/50 pb-4">
         <div className="flex min-w-0 items-start gap-3">
           <div
-            className={cn(
-              "mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full bg-gradient-to-r",
-              modeColor,
-            )}
+            className={cn("mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full", modeAccent)}
           />
           <div className="min-w-0">
-            <p className="text-[15px] font-semibold tracking-[-0.01em] text-foreground">
+            <p className="text-[15px] font-semibold tracking-[-0.01em] text-card-foreground">
               {result.modeLabel}
             </p>
-            <p className="mt-0.5 text-[13px] leading-snug text-muted-foreground">
+            <p className="mt-0.5 text-[13px] leading-snug text-card-muted-foreground">
               {result.modeDescription}
             </p>
           </div>
@@ -120,19 +112,19 @@ export function TransformOutput({
                   (block.text.startsWith("☐") || block.text.startsWith("[ ]")) &&
                   cn(
                     "rounded-lg border px-3 py-2",
-                    modeSurface ?? "bg-mode-adhd-surface",
-                    modeBorder ?? "border-mode-adhd-border",
+                    modeTint ?? "bg-muted",
+                    modeBorder ?? "border-border",
                   ),
                 block.type === "caption" &&
                   block.text.startsWith("SECTION") &&
-                  "mt-4 first:mt-0 border-l-2 border-l-primary/40 pl-3 font-semibold text-foreground",
+                  "mt-4 first:mt-0 border-l-2 border-l-card-accent pl-3 font-semibold text-card-foreground",
               )}
             >
               {block.type === "step" && (
                 <span
                   className={cn(
-                    "flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-gradient-to-br text-[10px] font-semibold text-white",
-                    modeColor,
+                    "flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-[10px] font-semibold",
+                    modeIcon,
                   )}
                 >
                   {block.text.match(/^Step (\d+)/)?.[1] ?? "•"}

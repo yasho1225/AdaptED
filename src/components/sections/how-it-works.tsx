@@ -8,7 +8,7 @@ const icons = [Upload, SlidersHorizontal, Zap];
 
 export function HowItWorks() {
   return (
-    <section id="how-it-works" className="scroll-mt-[4.25rem] py-20 md:py-28">
+    <section id="how-it-works" className="section-band scroll-mt-[4.25rem] py-20 md:py-28">
       <div className="mx-auto max-w-6xl px-5 sm:px-6">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
@@ -38,18 +38,18 @@ export function HowItWorks() {
                 className="surface-card relative rounded-2xl p-7 md:p-8"
               >
                 <span
-                  className="text-4xl font-bold tabular-nums tracking-[-0.04em] text-primary/45"
+                  className="text-4xl font-bold tabular-nums tracking-[-0.04em] text-card-muted-foreground/40"
                   aria-hidden
                 >
                   {item.step}
                 </span>
-                <div className="mt-5 flex h-11 w-11 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-[var(--shadow-soft)]">
+                <div className="mt-5 flex h-11 w-11 items-center justify-center rounded-xl bg-card-accent text-white shadow-[var(--shadow-soft)]">
                   <Icon className="size-5" />
                 </div>
-                <h3 className="mt-6 text-[17px] font-semibold tracking-[-0.02em]">
+                <h3 className="mt-6 text-[17px] font-semibold tracking-[-0.02em] text-card-foreground">
                   {item.title}
                 </h3>
-                <p className="mt-2.5 text-[14px] leading-7 text-muted-foreground">
+                <p className="mt-2.5 text-[14px] leading-7 text-card-muted-foreground">
                   {item.description}
                 </p>
               </motion.div>

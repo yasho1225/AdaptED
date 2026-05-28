@@ -27,6 +27,9 @@
   --color-input: var(--input);
   --color-border: var(--border);
   --color-destructive: var(--destructive);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-warning-border: var(--warning-border);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
   --color-muted-foreground: var(--muted-foreground);
@@ -38,18 +41,22 @@
   --color-popover-foreground: var(--popover-foreground);
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
+  --color-card-muted-foreground: var(--card-muted-foreground);
+  --color-card-accent: var(--card-accent);
+  --color-card-border: var(--card-border);
   --color-card: var(--card);
+  --color-section: var(--section);
   --color-mode-dyslexia: var(--mode-dyslexia);
-  --color-mode-dyslexia-surface: var(--mode-dyslexia-surface);
+  --color-mode-dyslexia-muted: var(--mode-dyslexia-muted);
   --color-mode-dyslexia-border: var(--mode-dyslexia-border);
   --color-mode-adhd: var(--mode-adhd);
-  --color-mode-adhd-surface: var(--mode-adhd-surface);
+  --color-mode-adhd-muted: var(--mode-adhd-muted);
   --color-mode-adhd-border: var(--mode-adhd-border);
   --color-mode-apd: var(--mode-apd);
-  --color-mode-apd-surface: var(--mode-apd-surface);
+  --color-mode-apd-muted: var(--mode-apd-muted);
   --color-mode-apd-border: var(--mode-apd-border);
   --color-mode-autism: var(--mode-autism);
-  --color-mode-autism-surface: var(--mode-autism-surface);
+  --color-mode-autism-muted: var(--mode-autism-muted);
   --color-mode-autism-border: var(--mode-autism-border);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
@@ -60,62 +67,69 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-/* Calm, education-focused palette — warm neutrals + muted teal primary */
+/* Blue canvas + white reading surfaces (foreground = on blue, card-* = on white) */
 :root {
-  --background: oklch(0.985 0.006 90);
-  --foreground: oklch(0.28 0.02 265);
-  --card: oklch(0.995 0.004 92);
-  --card-foreground: oklch(0.28 0.02 265);
-  --popover: oklch(0.995 0.004 92);
-  --popover-foreground: oklch(0.28 0.02 265);
-  --primary: oklch(0.48 0.09 200);
-  --primary-foreground: oklch(0.99 0.005 200);
-  --secondary: oklch(0.96 0.008 92);
-  --secondary-foreground: oklch(0.32 0.02 265);
-  --muted: oklch(0.96 0.008 92);
-  --muted-foreground: oklch(0.5 0.02 265);
-  --accent: oklch(0.955 0.012 200);
-  --accent-foreground: oklch(0.32 0.02 265);
-  --destructive: oklch(0.55 0.18 25);
-  --border: oklch(0.9 0.01 92);
-  --input: oklch(0.92 0.01 92);
-  --ring: oklch(0.48 0.09 200 / 28%);
+  --background: oklch(0.34 0.09 252);
+  --foreground: oklch(0.98 0.01 252);
+  --card: oklch(0.96 0.018 252);
+  --card-foreground: oklch(0.26 0.05 252);
+  --card-muted-foreground: oklch(0.46 0.03 252);
+  --card-accent: oklch(0.38 0.11 235);
+  --card-border: oklch(0.84 0.022 252);
+  --section: oklch(0.3 0.088 252);
+  --popover: oklch(0.96 0.018 252);
+  --popover-foreground: oklch(0.26 0.05 252);
+  --primary: oklch(0.78 0.12 235);
+  --primary-foreground: oklch(0.28 0.09 252);
+  --secondary: oklch(0.42 0.085 252);
+  --secondary-foreground: oklch(0.96 0.01 252);
+  --muted: oklch(0.925 0.02 252);
+  --muted-foreground: oklch(0.82 0.04 252);
+  --accent: oklch(0.45 0.09 252);
+  --accent-foreground: oklch(0.98 0.01 252);
+  --destructive: oklch(0.65 0.18 25);
+  --destructive-foreground: oklch(0.99 0 0);
+  --warning: oklch(0.96 0.04 85);
+  --warning-foreground: oklch(0.32 0.06 85);
+  --warning-border: oklch(0.82 0.08 85);
+  --border: oklch(0.5 0.075 252);
+  --input: oklch(0.97 0.014 252);
+  --ring: oklch(0.78 0.12 235 / 45%);
   --radius: 0.75rem;
 
-  /* Mode accents — low saturation, research-aligned */
-  /* Slate blue — reading clarity; sits between brand teal and APD blue */
-  --mode-dyslexia: oklch(0.48 0.09 220);
-  --mode-dyslexia-surface: oklch(0.985 0.01 220);
-  --mode-dyslexia-border: oklch(0.88 0.04 220);
+  /* Mode accents — icons, borders, rings, tints on white panels only */
+  --mode-dyslexia: oklch(0.48 0.11 220);
+  --mode-dyslexia-muted: oklch(0.93 0.032 220);
+  --mode-dyslexia-border: oklch(0.76 0.07 220);
 
-  --mode-adhd: oklch(0.56 0.09 155);
-  --mode-adhd-surface: oklch(0.97 0.022 155);
-  --mode-adhd-border: oklch(0.87 0.04 155);
+  --mode-adhd: oklch(0.48 0.1 155);
+  --mode-adhd-muted: oklch(0.93 0.032 155);
+  --mode-adhd-border: oklch(0.76 0.07 155);
 
-  --mode-apd: oklch(0.54 0.08 230);
-  --mode-apd-surface: oklch(0.97 0.018 230);
-  --mode-apd-border: oklch(0.87 0.035 230);
+  --mode-apd: oklch(0.48 0.1 230);
+  --mode-apd-muted: oklch(0.93 0.03 230);
+  --mode-apd-border: oklch(0.76 0.07 230);
 
-  --mode-autism: oklch(0.55 0.06 285);
-  --mode-autism-surface: oklch(0.97 0.015 285);
-  --mode-autism-border: oklch(0.87 0.03 285);
+  --mode-autism: oklch(0.5 0.08 285);
+  --mode-autism-muted: oklch(0.93 0.028 285);
+  --mode-autism-border: oklch(0.76 0.065 285);
 
-  --shadow-soft: 0 4px 24px oklch(0.25 0.02 265 / 0.06);
-  --shadow-elevated: 0 12px 40px oklch(0.25 0.02 265 / 0.08);
+  --shadow-soft: 0 4px 24px oklch(0.12 0.05 252 / 0.35);
+  --shadow-elevated: 0 16px 48px oklch(0.1 0.05 252 / 0.45);
 
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.985 0.006 90);
-  --sidebar-foreground: oklch(0.28 0.02 265);
-  --sidebar-primary: oklch(0.48 0.09 200);
+  --sidebar: oklch(0.965 0.008 95);
+  --sidebar-foreground: oklch(0.22 0.025 265);
+  --sidebar-primary: oklch(0.42 0.1 200);
   --sidebar-primary-foreground: oklch(0.99 0 0);
-  --sidebar-accent: oklch(0.96 0.008 92);
-  --sidebar-accent-foreground: oklch(0.32 0.02 265);
-  --sidebar-border: oklch(0.9 0.01 92);
-  --sidebar-ring: oklch(0.48 0.09 200 / 28%);
+  --sidebar-accent: oklch(0.94 0.012 95);
+  --sidebar-accent-foreground: oklch(0.22 0.025 265);
+  --sidebar-border: oklch(0.87 0.012 95);
+  --sidebar-ring: oklch(0.42 0.1 200 / 35%);
 }
 
 .dark {
@@ -123,48 +137,55 @@
   --foreground: oklch(0.94 0.01 265);
   --card: oklch(0.22 0.015 265);
   --card-foreground: oklch(0.94 0.01 265);
+  --card-muted-foreground: oklch(0.7 0.02 265);
+  --card-accent: oklch(0.68 0.12 200);
+  --card-border: oklch(0.32 0.015 265);
+  --section: oklch(0.2 0.015 265);
   --popover: oklch(0.22 0.015 265);
   --popover-foreground: oklch(0.94 0.01 265);
-  --primary: oklch(0.72 0.1 200);
-  --primary-foreground: oklch(0.18 0.02 265);
+  --primary: oklch(0.68 0.12 200);
+  --primary-foreground: oklch(0.15 0.02 265);
   --secondary: oklch(0.26 0.015 265);
   --secondary-foreground: oklch(0.94 0.01 265);
   --muted: oklch(0.26 0.015 265);
-  --muted-foreground: oklch(0.68 0.02 265);
+  --muted-foreground: oklch(0.7 0.02 265);
   --accent: oklch(0.28 0.02 265);
   --accent-foreground: oklch(0.94 0.01 265);
   --destructive: oklch(0.65 0.18 25);
+  --warning: oklch(0.28 0.04 85);
+  --warning-foreground: oklch(0.92 0.04 85);
+  --warning-border: oklch(0.42 0.06 85);
   --border: oklch(0.32 0.015 265);
-  --input: oklch(0.3 0.015 265);
-  --ring: oklch(0.72 0.1 200 / 35%);
+  --input: oklch(0.24 0.015 265);
+  --ring: oklch(0.68 0.12 200 / 40%);
 
-  --mode-dyslexia: oklch(0.68 0.065 220);
-  --mode-dyslexia-surface: oklch(0.24 0.02 220);
-  --mode-dyslexia-border: oklch(0.34 0.026 220);
+  --mode-dyslexia: oklch(0.68 0.1 220);
+  --mode-dyslexia-muted: oklch(0.26 0.03 220);
+  --mode-dyslexia-border: oklch(0.4 0.05 220);
 
-  --mode-adhd: oklch(0.72 0.08 155);
-  --mode-adhd-surface: oklch(0.23 0.025 155);
-  --mode-adhd-border: oklch(0.34 0.035 155);
+  --mode-adhd: oklch(0.68 0.09 155);
+  --mode-adhd-muted: oklch(0.26 0.03 155);
+  --mode-adhd-border: oklch(0.4 0.05 155);
 
-  --mode-apd: oklch(0.72 0.07 230);
-  --mode-apd-surface: oklch(0.23 0.02 230);
-  --mode-apd-border: oklch(0.34 0.03 230);
+  --mode-apd: oklch(0.68 0.08 230);
+  --mode-apd-muted: oklch(0.26 0.025 230);
+  --mode-apd-border: oklch(0.4 0.045 230);
 
-  --mode-autism: oklch(0.72 0.05 285);
-  --mode-autism-surface: oklch(0.23 0.018 285);
-  --mode-autism-border: oklch(0.34 0.025 285);
+  --mode-autism: oklch(0.68 0.07 285);
+  --mode-autism-muted: oklch(0.26 0.02 285);
+  --mode-autism-border: oklch(0.4 0.04 285);
 
   --shadow-soft: 0 4px 24px oklch(0 0 0 / 0.25);
   --shadow-elevated: 0 12px 40px oklch(0 0 0 / 0.35);
 
   --sidebar: oklch(0.22 0.015 265);
   --sidebar-foreground: oklch(0.94 0.01 265);
-  --sidebar-primary: oklch(0.72 0.1 200);
-  --sidebar-primary-foreground: oklch(0.18 0.02 265);
+  --sidebar-primary: oklch(0.68 0.12 200);
+  --sidebar-primary-foreground: oklch(0.15 0.02 265);
   --sidebar-accent: oklch(0.26 0.015 265);
   --sidebar-accent-foreground: oklch(0.94 0.01 265);
   --sidebar-border: oklch(0.32 0.015 265);
-  --sidebar-ring: oklch(0.72 0.1 200 / 35%);
+  --sidebar-ring: oklch(0.68 0.12 200 / 40%);
 }
 
 @layer base {
@@ -182,6 +203,11 @@
   body {
     @apply bg-background text-foreground text-[15px] leading-relaxed;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11", "ss01";
+    background-image: radial-gradient(
+      120% 90% at 50% -30%,
+      oklch(0.55 0.12 235 / 0.4),
+      transparent 60%
+    );
   }
 
   h1,
@@ -223,26 +249,97 @@
   }
 
   .panel-label {
-    @apply text-[13px] font-medium tracking-[-0.01em] text-foreground;
+    @apply text-[13px] font-semibold tracking-[-0.01em] text-card-foreground;
   }
 
   .gradient-text {
-    @apply bg-gradient-to-r from-primary to-mode-apd bg-clip-text text-transparent;
+    @apply text-primary;
   }
 
   .btn-primary {
-    @apply inline-flex h-11 items-center justify-center rounded-full bg-primary px-6 text-[15px] font-medium text-primary-foreground shadow-[var(--shadow-soft)] transition-all duration-200 hover:brightness-[1.03] active:scale-[0.98];
+    @apply inline-flex h-11 items-center justify-center rounded-full bg-card px-6 text-[15px] font-semibold text-card-foreground shadow-[var(--shadow-soft)] transition-all duration-200 hover:brightness-[0.98] active:scale-[0.98];
   }
 
   .btn-secondary {
-    @apply inline-flex h-11 items-center justify-center rounded-full border border-border bg-card px-6 text-[15px] font-medium text-foreground shadow-[var(--shadow-soft)] transition-all duration-200 hover:bg-muted active:scale-[0.98];
+    @apply inline-flex h-11 items-center justify-center rounded-full border border-white/30 bg-white/10 px-6 text-[15px] font-medium text-foreground shadow-sm transition-all duration-200 hover:bg-white/15 active:scale-[0.98];
   }
 
   .surface-card {
-    @apply border border-border/80 bg-card shadow-[var(--shadow-soft)] ring-1 ring-foreground/[0.03];
+    @apply border border-white/20 bg-card text-card-foreground shadow-[var(--shadow-soft)] ring-1 ring-white/10;
+    --border: var(--card-border);
   }
 
   .surface-elevated {
-    @apply border border-border/80 bg-card shadow-[var(--shadow-elevated)] ring-1 ring-foreground/[0.04];
+    @apply border border-white/25 bg-card text-card-foreground shadow-[var(--shadow-elevated)] ring-1 ring-white/15;
+    --border: var(--card-border);
+  }
+
+  .section-band {
+    @apply border-t border-white/10 bg-section;
+  }
+
+  .on-canvas {
+    @apply text-foreground;
+  }
+
+  .on-surface {
+    @apply text-card-foreground;
+  }
+
+  .on-surface-muted {
+    @apply text-card-muted-foreground;
+  }
+
+  .mode-icon-dyslexia {
+    @apply bg-mode-dyslexia text-white;
+  }
+  .mode-icon-adhd {
+    @apply bg-mode-adhd text-white;
+  }
+  .mode-icon-apd {
+    @apply bg-mode-apd text-white;
+  }
+  .mode-icon-autism {
+    @apply bg-mode-autism text-white;
+  }
+  .mode-tint-dyslexia {
+    @apply bg-mode-dyslexia-muted;
+  }
+  .mode-tint-adhd {
+    @apply bg-mode-adhd-muted;
+  }
+  .mode-tint-apd {
+    @apply bg-mode-apd-muted;
+  }
+  .mode-tint-autism {
+    @apply bg-mode-autism-muted;
+  }
+  .mode-ring-dyslexia {
+    @apply ring-mode-dyslexia/35;
+  }
+  .mode-ring-adhd {
+    @apply ring-mode-adhd/35;
+  }
+  .mode-ring-apd {
+    @apply ring-mode-apd/35;
+  }
+  .mode-ring-autism {
+    @apply ring-mode-autism/35;
+  }
+  .mode-border-dyslexia {
+    @apply border-mode-dyslexia-border;
+  }
+  .mode-border-adhd {
+    @apply border-mode-adhd-border;
+  }
+  .mode-border-apd {
+    @apply border-mode-apd-border;
+  }
+  .mode-border-autism {
+    @apply border-mode-autism-border;
+  }
+
+  .alert-warning {
+    @apply border border-warning-border bg-warning text-[13px] leading-snug text-warning-foreground;
   }
 }

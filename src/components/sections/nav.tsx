@@ -15,11 +15,11 @@ export function Nav() {
       initial={{ y: -10, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-      className="fixed top-0 z-50 w-full border-b border-border/50 bg-background/85 backdrop-blur-xl backdrop-saturate-150"
+      className="fixed top-0 z-50 w-full border-b border-border bg-background/90 backdrop-blur-xl backdrop-saturate-150"
     >
       <div className="mx-auto flex h-[4.25rem] max-w-6xl items-center justify-between px-5 sm:px-6">
         <a href="#" className="flex items-center gap-2.5">
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-sm font-semibold text-primary-foreground shadow-[var(--shadow-soft)]">
+          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-card text-sm font-semibold text-card-foreground shadow-sm">
             A
           </span>
           <span className="text-[17px] font-semibold tracking-[-0.02em] text-foreground">

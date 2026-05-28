@@ -6,7 +6,7 @@ export function renderFormattedText(text: string) {
   return parts.map((part, i) => {
     if (part.startsWith("**") && part.endsWith("**")) {
       return (
-        <strong key={i} className="font-semibold text-foreground">
+        <strong key={i} className="font-semibold text-card-foreground">
           {part.slice(2, -2)}
         </strong>
       );

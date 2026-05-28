@@ -16,17 +16,17 @@ function ShowcaseBlock({
   return (
     <p
       className={cn(
-        "text-[14px] leading-7 text-foreground/85",
+        "text-[14px] leading-7 text-card-foreground",
         block.type === "key" &&
-          "rounded-lg border border-primary/10 bg-primary/5 px-3 py-2 font-medium",
-        block.type === "step" && "border-l-2 border-primary/50 pl-4",
+          "rounded-lg border border-card-accent/15 bg-card-accent/5 px-3 py-2 font-medium",
+        block.type === "step" && "border-l-2 border-card-accent/50 pl-4",
         block.type === "caption" &&
           (block.text.startsWith("SECTION")
-            ? "mt-3 first:mt-0 border-l-2 border-teal-500 pl-3 font-semibold text-foreground not-italic normal-case tracking-normal"
-            : "font-mono text-[11px] uppercase tracking-[0.1em] text-muted-foreground"),
+            ? "mt-3 first:mt-0 border-l-2 border-card-accent pl-3 font-semibold text-card-foreground not-italic normal-case tracking-normal"
+            : "font-mono text-[11px] uppercase tracking-[0.1em] text-card-muted-foreground"),
         block.type === "bullet" &&
           (block.text.startsWith("☐")
-            ? "rounded-lg border border-amber-200/60 bg-amber-50/50 px-3 py-2"
+            ? "rounded-lg border border-border bg-muted px-3 py-2"
             : ""),
       )}
     >
@@ -56,7 +56,7 @@ export function FeaturesScroll() {
   const result = getFeatureShowcase(activeMode.id as AccessibilityMode);
 
   return (
-    <section id="features" className="scroll-mt-[4.25rem] bg-muted/30">
+    <section id="features" className="section-band scroll-mt-[4.25rem]">
       <div className="mx-auto max-w-6xl px-5 pt-20 pb-10 text-center sm:px-6 md:pt-24">
         <p className="section-eyebrow">Accessibility modes</p>
         <h2 className="section-title">One lesson, transformed four ways</h2>
@@ -73,31 +73,44 @@ export function FeaturesScroll() {
                 <motion.div
                   key={mode.id}
                   animate={{
-                    opacity: activeIndex === i ? 1 : 0.4,
                     x: activeIndex === i ? 0 : -6,
                   }}
                   transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                   className={cn(
                     "rounded-2xl border p-5 transition-shadow duration-300 md:p-6",
                     activeIndex === i
-                      ? "surface-card border-border/80"
+                      ? "surface-card border-white/25"
                       : "border-transparent bg-transparent",
                   )}
                 >
                   <div className="flex items-center gap-3.5">
                     <span
                       className={cn(
-                        "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br text-sm font-semibold text-white shadow-sm",
-                        mode.theme.gradient,
+                        "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-sm font-semibold shadow-sm",
+                        mode.theme.icon,
                       )}
                     >
                       {mode.icon}
                     </span>
                     <div>
-                      <h3 className="text-[16px] font-semibold tracking-[-0.02em]">
+                      <h3
+                        className={cn(
+                          "text-[16px] font-semibold tracking-[-0.02em]",
+                          activeIndex === i
+                            ? "text-card-foreground"
+                            : "text-foreground",
+                        )}
+                      >
                         {FEATURE_MODE_BLURBS[mode.id].title}
                       </h3>
-                      <p className="mt-0.5 text-[13px] leading-snug text-muted-foreground">
+                      <p
+                        className={cn(
+                          "mt-0.5 text-[13px] leading-snug",
+                          activeIndex === i
+                            ? "text-card-muted-foreground"
+                            : "text-muted-foreground",
+                        )}
+                      >
                         {FEATURE_MODE_BLURBS[mode.id].blurb}
                       </p>
                     </div>
@@ -112,7 +125,7 @@ export function FeaturesScroll() {
                 layout
                 className="surface-elevated relative rounded-2xl p-6 md:p-8"
               >
-                <div className="mb-4 flex items-center gap-2 text-[12px] font-medium text-muted-foreground">
+                <div className="mb-4 flex items-center gap-2 text-[12px] font-medium text-card-muted-foreground">
                   <span className="rounded-md bg-muted px-2 py-0.5 font-mono text-[10px] tracking-wider">
                     INPUT
                   </span>
@@ -121,8 +134,8 @@ export function FeaturesScroll() {
 
                 <div
                   className={cn(
-                    "mb-5 h-1 rounded-full bg-gradient-to-r",
-                    activeMode.theme.gradient,
+                    "mb-5 h-1 rounded-full",
+                    activeMode.theme.accent,
                   )}
                 />
 
@@ -135,7 +148,7 @@ export function FeaturesScroll() {
                     transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
                     className="min-h-[200px] space-y-3"
                   >
-                    <p className="text-[14px] font-semibold tracking-[-0.01em] text-foreground">
+                    <p className="text-[14px] font-semibold tracking-[-0.01em] text-card-foreground">
                       {result.modeLabel}
                     </p>
                     {result.blocks.map((block, i) => (

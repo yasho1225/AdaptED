@@ -32,17 +32,13 @@ export interface TransformResult {
   fallbackReason?: FallbackReason;
 }
 
+/** Mode accent tokens — never use for body text */
 export interface ModeTheme {
-  /** Muted gradient for icons and indicators */
-  gradient: string;
-  /** Subtle surface tint for panels */
-  surface: string;
-  /** Active ring / focus */
+  icon: string;
+  accent: string;
+  tint: string;
   ring: string;
-  /** Accent border */
   border: string;
-  /** Label / eyebrow accent */
-  text: string;
 }
 
 export interface ModeConfig {
@@ -50,7 +46,7 @@ export interface ModeConfig {
   label: string;
   shortLabel: string;
   description: string;
-  /** @deprecated Use theme.gradient — kept for existing consumers */
+  /** Icon badge gradient (deprecated alias: use theme.icon) */
   color: string;
   theme: ModeTheme;
   icon: string;

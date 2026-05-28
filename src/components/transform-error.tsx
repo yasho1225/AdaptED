@@ -18,7 +18,7 @@ export function TransformError({
       role="alert"
     >
       <AlertCircle className="size-8 text-destructive/80" />
-      <p className="max-w-xs text-sm text-foreground/90">{message}</p>
+      <p className="max-w-xs text-sm text-card-foreground">{message}</p>
       <Button variant="outline" size="sm" onClick={onRetry} className="gap-2">
         <RefreshCw className="size-3.5" />
         Try again

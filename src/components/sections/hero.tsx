@@ -24,10 +24,10 @@ export function Hero() {
     <section className="relative overflow-hidden pt-24 pb-16 md:pt-32 md:pb-24">
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div
-          className="absolute inset-0 opacity-[0.35]"
+          className="absolute inset-0 opacity-40"
           style={{
             backgroundImage:
-              "radial-gradient(circle at 1px 1px, oklch(0.85 0.01 247) 1px, transparent 0)",
+              "radial-gradient(circle at 1px 1px, oklch(1 0 0 / 0.1) 1px, transparent 0)",
             backgroundSize: "32px 32px",
           }}
         />
@@ -40,7 +40,7 @@ export function Hero() {
           <motion.div custom={0} variants={fadeUp} initial="hidden" animate="show">
             <Badge
               variant="secondary"
-              className="mb-6 gap-1.5 rounded-full border border-primary/15 bg-accent px-4 py-1.5 text-[13px] font-medium text-primary shadow-sm"
+              className="mb-6 gap-1.5 rounded-full border border-white/25 bg-card px-4 py-1.5 text-[13px] font-medium text-card-foreground shadow-sm"
             >
               <Sparkles className="size-3.5 text-primary" />
               Built for K–12 teachers · Demo ready
@@ -131,39 +131,39 @@ export function Hero() {
               <span className="size-2.5 rounded-full bg-red-400/90" />
               <span className="size-2.5 rounded-full bg-amber-400/90" />
               <span className="size-2.5 rounded-full bg-emerald-400/90" />
-              <span className="ml-2 text-[12px] font-medium text-muted-foreground">
+              <span className="ml-2 text-[12px] font-medium text-card-muted-foreground">
                 AdaptED · Live preview
               </span>
             </div>
 
             <div className="grid gap-0 sm:grid-cols-2">
               <div className="border-b border-border/60 p-4 sm:border-b-0 sm:border-r">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-card-muted-foreground">
                   Original
                 </p>
-                <p className="mt-2 text-[13px] leading-6 text-foreground/80">
+                <p className="mt-2 text-[13px] leading-6 text-card-muted-foreground">
                   Photosynthesis is the process by which green plants use sunlight
                   to make food. Chlorophyll captures light energy…
                 </p>
               </div>
 
-              <div className="bg-mode-dyslexia-surface p-4">
+              <div className="mode-tint-dyslexia border-l-2 border-l-mode-dyslexia-border p-4">
                 <div className="flex items-center justify-between gap-2">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-mode-dyslexia">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-card-muted-foreground">
                     Dyslexia mode
                   </p>
-                  <span className="rounded-full border border-mode-dyslexia-border bg-card px-2 py-0.5 text-[10px] font-semibold text-mode-dyslexia">
+                  <span className="rounded-full border border-mode-dyslexia-border bg-card px-2 py-0.5 text-[10px] font-semibold text-card-foreground">
                     Adapted
                   </span>
                 </div>
                 <div className="mt-2 space-y-2">
-                  <p className="text-[14px] font-medium leading-snug text-foreground">
+                  <p className="text-[14px] font-medium leading-snug text-card-foreground">
                     Plants make food using sunlight.
                   </p>
-                  <p className="text-[13px] leading-6 text-foreground/85">
+                  <p className="text-[13px] leading-6 text-card-foreground">
                     This is called <strong>photosynthesis</strong>.
                   </p>
-                  <p className="text-[13px] leading-6 text-foreground/85">
+                  <p className="text-[13px] leading-6 text-card-foreground">
                     Leaves use <strong>chlorophyll</strong> to catch light.
                   </p>
                 </div>
@@ -178,18 +178,15 @@ export function Hero() {
                     className={cn(
                       "rounded-md px-2 py-0.5 text-[10px] font-semibold",
                       i === 0
-                        ? cn(
-                            "bg-gradient-to-r text-white shadow-sm",
-                            mode.theme.gradient,
-                          )
-                        : "bg-card text-muted-foreground ring-1 ring-border/80",
+                        ? cn("shadow-sm", mode.theme.icon)
+                        : "bg-muted text-card-muted-foreground ring-1 ring-border",
                     )}
                   >
                     {mode.shortLabel}
                   </span>
                 ))}
               </div>
-              <span className="text-[11px] font-medium text-primary">
+              <span className="text-[11px] font-medium text-card-accent">
                 Switch mode → instant rewrite
               </span>
             </div>

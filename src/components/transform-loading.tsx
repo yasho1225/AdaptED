@@ -21,10 +21,10 @@ export function TransformLoading({ modeLabel }: TransformLoadingProps) {
         <Loader2 className="size-8 text-primary" />
       </motion.div>
       <div className="text-center">
-        <p className="text-sm font-medium text-foreground">
+        <p className="text-sm font-medium text-card-foreground">
           Adapting for {modeLabel}…
         </p>
-        <p className="mt-1 text-xs text-muted-foreground">Adapting content…</p>
+        <p className="mt-1 text-xs text-card-muted-foreground">Adapting content…</p>
       </div>
       <div className="w-full max-w-xs space-y-2 px-4">
         {[92, 76, 88].map((w, i) => (

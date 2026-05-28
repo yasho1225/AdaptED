@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/card";
 
 export function Impact() {
   return (
-    <section id="impact" className="scroll-mt-[4.25rem] bg-muted/30 py-20 md:py-28">
+    <section id="impact" className="section-band scroll-mt-[4.25rem] py-20 md:py-28">
       <div className="mx-auto max-w-6xl px-5 sm:px-6">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
@@ -34,13 +34,13 @@ export function Impact() {
             >
               <Card className="surface-card h-full gap-0 py-0 transition-shadow duration-200 hover:shadow-[var(--shadow-elevated)]">
                 <div className="p-6 text-center">
-                  <p className="gradient-text text-3xl font-semibold tracking-[-0.03em] md:text-[2rem]">
+                  <p className="text-3xl font-semibold tracking-[-0.03em] text-card-accent md:text-[2rem]">
                     {stat.value}
                   </p>
-                  <p className="mt-3 text-[14px] font-medium leading-snug text-foreground">
+                  <p className="mt-3 text-[14px] font-medium leading-snug text-card-foreground">
                     {stat.label}
                   </p>
-                  <p className="mt-2 text-[12px] leading-relaxed text-muted-foreground">
+                  <p className="mt-2 text-[12px] leading-relaxed text-card-muted-foreground">
                     {stat.source}
                   </p>
                 </div>
