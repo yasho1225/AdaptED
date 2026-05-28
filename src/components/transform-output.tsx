@@ -2,7 +2,10 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import type { TransformResult } from "@/lib/types";
+import { renderFormattedText } from "@/lib/render-text";
+import { getFallbackBannerMessage } from "@/lib/fallback-messages";
 import { cn } from "@/lib/utils";
+import { Info } from "lucide-react";
 
 interface TransformOutputProps {
   result: TransformResult;
@@ -25,8 +28,24 @@ const blockStyles: Record<string, string> = {
 };
 
 export function TransformOutput({ result, modeColor }: TransformOutputProps) {
+  const fallbackMessage = getFallbackBannerMessage(result.fallbackReason);
+
   return (
     <div className="flex h-full flex-col">
+      {fallbackMessage && (
+        <div
+          className="mb-4 flex gap-2 rounded-lg border border-amber-200/80 bg-amber-50/90 px-3 py-2.5 text-[13px] leading-snug text-amber-950"
+          role="status"
+        >
+          <Info className="mt-0.5 size-4 shrink-0 text-amber-700" aria-hidden />
+          <span>{fallbackMessage}</span>
+        </div>
+      )}
+      {result.source === "gemini" && (
+        <p className="mb-3 text-[11px] font-medium uppercase tracking-wider text-teal-700/80">
+          AI-enhanced
+        </p>
+      )}
       <div className="mb-5 flex items-start gap-3 border-b border-border/50 pb-4">
         <div
           className={cn(
@@ -79,9 +98,11 @@ export function TransformOutput({ result, modeColor }: TransformOutputProps) {
                   block.type === "step" ? "flex-1 pt-0.5 leading-7" : undefined
                 }
               >
-                {block.type === "step"
-                  ? block.text.replace(/^Step \d+:\s*/, "")
-                  : block.text}
+                {renderFormattedText(
+                  block.type === "step"
+                    ? block.text.replace(/^Step \d+:\s*/, "")
+                    : block.text,
+                )}
               </span>
             </motion.div>
           ))}

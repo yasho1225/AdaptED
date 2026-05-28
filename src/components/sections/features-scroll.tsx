@@ -3,13 +3,17 @@
 import { useRef, useState, useEffect, useMemo } from "react";
 import { motion, useScroll, AnimatePresence } from "framer-motion";
 import { MODES, FEATURE_SAMPLE } from "@/lib/constants";
-import { transformContent } from "@/lib/transform";
+import { getCachedTransform } from "@/lib/transform-cache";
+import { emptyTransformResult } from "@/lib/placeholders";
+import { usePrefetchTransforms } from "@/hooks/use-transform";
 import type { AccessibilityMode } from "@/lib/types";
+import { TransformLoading } from "@/components/transform-loading";
 import { cn } from "@/lib/utils";
 
 export function FeaturesScroll() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const cacheVersion = usePrefetchTransforms(FEATURE_SAMPLE);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -25,9 +29,16 @@ export function FeaturesScroll() {
   }, [scrollYProgress]);
 
   const activeMode = MODES[activeIndex];
-  const result = useMemo(
-    () => transformContent(FEATURE_SAMPLE, activeMode.id as AccessibilityMode),
-    [activeMode.id],
+  const result = useMemo(() => {
+    return (
+      getCachedTransform(FEATURE_SAMPLE, activeMode.id as AccessibilityMode) ??
+      emptyTransformResult(activeMode.id as AccessibilityMode)
+    );
+  }, [activeMode.id, cacheVersion]);
+
+  const isLoading = !getCachedTransform(
+    FEATURE_SAMPLE,
+    activeMode.id as AccessibilityMode,
   );
 
   return (
@@ -36,7 +47,7 @@ export function FeaturesScroll() {
         <p className="section-eyebrow text-indigo-600">Accessibility modes</p>
         <h2 className="section-title">One lesson, transformed four ways</h2>
         <p className="section-description">
-          Scroll to see how the same content adapts for each learning need.
+          Scroll to see the same content adapt for each learning need.
         </p>
       </div>
 
@@ -101,36 +112,42 @@ export function FeaturesScroll() {
                   )}
                 />
 
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={activeMode.id}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
-                    className="min-h-[200px] space-y-3"
-                  >
-                    <p className="text-[14px] font-semibold tracking-[-0.01em] text-foreground">
-                      {result.modeLabel}
-                    </p>
-                    {result.blocks.slice(0, 6).map((block, i) => (
-                      <p
-                        key={i}
-                        className={cn(
-                          "text-[14px] leading-7 text-foreground/85",
-                          block.type === "key" &&
-                            "rounded-lg border border-primary/10 bg-primary/5 px-3 py-2 font-medium",
-                          block.type === "step" &&
-                            "border-l-2 border-teal-500 pl-4",
-                          block.type === "caption" &&
-                            "font-mono text-[11px] uppercase tracking-[0.1em] text-muted-foreground",
-                        )}
-                      >
-                        {block.text}
+                {isLoading ? (
+                  <TransformLoading modeLabel={activeMode.label} />
+                ) : (
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={activeMode.id}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+                      className="min-h-[200px] space-y-3"
+                    >
+                      <p className="text-[14px] font-semibold tracking-[-0.01em] text-foreground">
+                        {result.modeLabel}
                       </p>
-                    ))}
-                  </motion.div>
-                </AnimatePresence>
+                      {result.blocks.slice(0, 6).map((block, i) => (
+                        <p
+                          key={i}
+                          className={cn(
+                            "text-[14px] leading-7 text-foreground/85",
+                            block.type === "key" &&
+                              "rounded-lg border border-primary/10 bg-primary/5 px-3 py-2 font-medium",
+                            block.type === "step" &&
+                              "border-l-2 border-teal-500 pl-4",
+                            block.type === "caption" &&
+                              "font-mono text-[11px] uppercase tracking-[0.1em] text-muted-foreground",
+                            block.type === "describe" &&
+                              "rounded-lg border border-blue-100 bg-blue-50/80 px-3 py-2",
+                          )}
+                        >
+                          {block.text}
+                        </p>
+                      ))}
+                    </motion.div>
+                  </AnimatePresence>
+                )}
               </motion.div>
             </div>
           </div>

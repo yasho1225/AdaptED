@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { FileUp, ClipboardPaste, Wand2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -8,27 +8,18 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { ModeSelector } from "@/components/mode-selector";
 import { TransformOutput } from "@/components/transform-output";
+import { TransformLoading } from "@/components/transform-loading";
+import { TransformError } from "@/components/transform-error";
 import { EXAMPLE_ASSIGNMENT, MODES } from "@/lib/constants";
-import { transformContent } from "@/lib/transform";
+import { useTransform } from "@/hooks/use-transform";
 import type { AccessibilityMode } from "@/lib/types";
 
 export function InteractiveDemo() {
   const [input, setInput] = useState(EXAMPLE_ASSIGNMENT);
   const [mode, setMode] = useState<AccessibilityMode>("dyslexia");
-  const [isTransforming, setIsTransforming] = useState(false);
 
   const activeModeConfig = MODES.find((m) => m.id === mode)!;
-
-  const result = useMemo(
-    () => transformContent(input, mode),
-    [input, mode],
-  );
-
-  const handleModeChange = useCallback((next: AccessibilityMode) => {
-    setIsTransforming(true);
-    setMode(next);
-    setTimeout(() => setIsTransforming(false), 300);
-  }, []);
+  const { result, status, error, retry, isLoading } = useTransform(input, mode);
 
   const loadExample = () => {
     setInput(EXAMPLE_ASSIGNMENT);
@@ -57,7 +48,7 @@ export function InteractiveDemo() {
     } else if (file.type === "application/pdf") {
       setInput(
         input +
-          "\n\n[PDF uploaded — for the demo, text is shown from your current content. In production, PDF text would be extracted automatically.]",
+          "\n\n[PDF uploaded — paste text or use Example for best demo results.]",
       );
     }
     e.target.value = "";
@@ -76,8 +67,8 @@ export function InteractiveDemo() {
           <p className="section-eyebrow">Try it yourself</p>
           <h2 className="section-title">Same assignment. Four ways to learn.</h2>
           <p className="section-description">
-            Paste your material, pick an accessibility mode, and see AdaptED reshape
-            it instantly—no setup required.
+            Paste your material, pick an accessibility mode, and see it reshape
+            instantly for each learning need.
           </p>
         </motion.div>
 
@@ -95,11 +86,11 @@ export function InteractiveDemo() {
             →
           </span>
           <span className="rounded-full border border-teal-200 bg-teal-50 px-3 py-1 text-teal-800 shadow-sm">
-            3 · Output
+            3 · AI output
           </span>
         </div>
 
-        <ModeSelector active={mode} onChange={handleModeChange} variant="cards" />
+        <ModeSelector active={mode} onChange={setMode} variant="cards" />
 
         <motion.div layout className="mt-8 grid gap-5 lg:grid-cols-2 lg:gap-6">
           <Card className="flex flex-col gap-0 overflow-hidden border-border/70 bg-card py-0 shadow-[0_8px_30px_rgba(15,23,42,0.06)] ring-1 ring-black/[0.04]">
@@ -149,11 +140,7 @@ export function InteractiveDemo() {
             </div>
           </Card>
 
-          <Card
-            className={`flex flex-col gap-0 overflow-hidden border-border/70 bg-card py-0 shadow-[0_8px_30px_rgba(15,23,42,0.06)] ring-1 ring-black/[0.04] transition-opacity duration-300 ${
-              isTransforming ? "opacity-75" : "opacity-100"
-            }`}
-          >
+          <Card className="flex flex-col gap-0 overflow-hidden border-border/70 bg-card py-0 shadow-[0_8px_30px_rgba(15,23,42,0.06)] ring-1 ring-black/[0.04]">
             <div className="border-b border-border/70 bg-gradient-to-r from-muted/50 to-background px-5 py-4">
               <div className="flex items-center gap-2">
                 <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-teal-50 text-teal-700">
@@ -162,24 +149,14 @@ export function InteractiveDemo() {
                 <h3 className="panel-label">Adapted output</h3>
               </div>
               <div className="mt-4">
-                <ModeSelector
-                  active={mode}
-                  onChange={handleModeChange}
-                  variant="tabs"
-                />
+                <ModeSelector active={mode} onChange={setMode} variant="tabs" />
               </div>
             </div>
             <div className="min-h-[280px] flex-1 p-5 md:min-h-[340px]">
-              {isTransforming ? (
-                <div className="space-y-3 pt-2" aria-busy="true" aria-label="Transforming">
-                  {[88, 72, 94, 65, 80].map((width, index) => (
-                    <div
-                      key={index}
-                      className="h-3.5 animate-pulse rounded-md bg-muted"
-                      style={{ width: `${width}%` }}
-                    />
-                  ))}
-                </div>
+              {status === "error" ? (
+                <TransformError message={error ?? undefined} onRetry={retry} />
+              ) : isLoading ? (
+                <TransformLoading modeLabel={activeModeConfig.label} />
               ) : (
                 <TransformOutput
                   result={result}
