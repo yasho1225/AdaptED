@@ -98,17 +98,19 @@
   --radius: 0.75rem;
 
   /* Mode accents — icons, borders, rings, tints on white panels only */
-  --mode-dyslexia: oklch(0.48 0.11 220);
-  --mode-dyslexia-muted: oklch(0.93 0.032 220);
-  --mode-dyslexia-border: oklch(0.76 0.07 220);
+  /* Dyslexia: slate blue (original) */
+  --mode-dyslexia: oklch(0.48 0.09 220);
+  --mode-dyslexia-muted: oklch(0.93 0.02 220);
+  --mode-dyslexia-border: oklch(0.88 0.04 220);
 
   --mode-adhd: oklch(0.48 0.1 155);
   --mode-adhd-muted: oklch(0.93 0.032 155);
   --mode-adhd-border: oklch(0.76 0.07 155);
 
-  --mode-apd: oklch(0.48 0.1 230);
-  --mode-apd-muted: oklch(0.93 0.03 230);
-  --mode-apd-border: oklch(0.76 0.07 230);
+  /* APD: teal/cyan (structured, cool — not another slate blue) */
+  --mode-apd: oklch(0.48 0.11 195);
+  --mode-apd-muted: oklch(0.93 0.03 195);
+  --mode-apd-border: oklch(0.76 0.08 195);
 
   --mode-autism: oklch(0.5 0.08 285);
   --mode-autism-muted: oklch(0.93 0.028 285);
@@ -159,17 +161,17 @@
   --input: oklch(0.24 0.015 265);
   --ring: oklch(0.68 0.12 200 / 40%);
 
-  --mode-dyslexia: oklch(0.68 0.1 220);
-  --mode-dyslexia-muted: oklch(0.26 0.03 220);
-  --mode-dyslexia-border: oklch(0.4 0.05 220);
+  --mode-dyslexia: oklch(0.68 0.065 220);
+  --mode-dyslexia-muted: oklch(0.26 0.02 220);
+  --mode-dyslexia-border: oklch(0.34 0.026 220);
 
   --mode-adhd: oklch(0.68 0.09 155);
   --mode-adhd-muted: oklch(0.26 0.03 155);
   --mode-adhd-border: oklch(0.4 0.05 155);
 
-  --mode-apd: oklch(0.68 0.08 230);
-  --mode-apd-muted: oklch(0.26 0.025 230);
-  --mode-apd-border: oklch(0.4 0.045 230);
+  --mode-apd: oklch(0.7 0.1 195);
+  --mode-apd-muted: oklch(0.26 0.03 195);
+  --mode-apd-border: oklch(0.4 0.055 195);
 
   --mode-autism: oklch(0.68 0.07 285);
   --mode-autism-muted: oklch(0.26 0.02 285);

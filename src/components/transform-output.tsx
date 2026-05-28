@@ -82,7 +82,7 @@ export function TransformOutput({
             variant="outline"
             size="sm"
             className="shrink-0 gap-1.5 font-medium"
-            onClick={() => downloadTransformResult(result, modeSlug)}
+            onClick={() => void downloadTransformResult(result, modeSlug)}
           >
             <Download className="size-3.5" aria-hidden />
             Download
