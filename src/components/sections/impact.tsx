@@ -15,7 +15,7 @@ export function Impact() {
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           className="text-center"
         >
-          <p className="section-eyebrow text-indigo-600">Why it matters</p>
+          <p className="section-eyebrow">Why it matters</p>
           <h2 className="section-title">Every student deserves access</h2>
           <p className="section-description max-w-xl">
             Teachers shouldn&apos;t choose between time and inclusion. AdaptED
@@ -32,9 +32,9 @@ export function Impact() {
               viewport={{ once: true, margin: "-40px" }}
               transition={{ delay: i * 0.06, duration: 0.45 }}
             >
-              <Card className="h-full gap-0 border-border/70 bg-card py-0 shadow-[0_4px_20px_rgba(15,23,42,0.05)] ring-1 ring-black/[0.03] transition-shadow duration-200 hover:shadow-[0_8px_28px_rgba(15,23,42,0.08)]">
+              <Card className="surface-card h-full gap-0 py-0 transition-shadow duration-200 hover:shadow-[var(--shadow-elevated)]">
                 <div className="p-6 text-center">
-                  <p className="text-3xl font-semibold tracking-[-0.03em] gradient-text md:text-[2rem]">
+                  <p className="gradient-text text-3xl font-semibold tracking-[-0.03em] md:text-[2rem]">
                     {stat.value}
                   </p>
                   <p className="mt-3 text-[14px] font-medium leading-snug text-foreground">

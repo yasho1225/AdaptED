@@ -32,11 +32,26 @@ export interface TransformResult {
   fallbackReason?: FallbackReason;
 }
 
+export interface ModeTheme {
+  /** Muted gradient for icons and indicators */
+  gradient: string;
+  /** Subtle surface tint for panels */
+  surface: string;
+  /** Active ring / focus */
+  ring: string;
+  /** Accent border */
+  border: string;
+  /** Label / eyebrow accent */
+  text: string;
+}
+
 export interface ModeConfig {
   id: AccessibilityMode;
   label: string;
   shortLabel: string;
   description: string;
+  /** @deprecated Use theme.gradient — kept for existing consumers */
   color: string;
+  theme: ModeTheme;
   icon: string;
 }

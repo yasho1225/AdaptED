@@ -18,7 +18,7 @@ export function TransformLoading({ modeLabel }: TransformLoadingProps) {
         animate={{ rotate: 360 }}
         transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
       >
-        <Loader2 className="size-8 text-teal-600" />
+        <Loader2 className="size-8 text-primary" />
       </motion.div>
       <div className="text-center">
         <p className="text-sm font-medium text-foreground">

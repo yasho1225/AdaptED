@@ -1,4 +1,15 @@
-import type { ModeConfig } from "./types";
+import type { AccessibilityMode, ModeConfig } from "./types";
+
+/** Short copy for the features scroll list (left column). */
+export const FEATURE_MODE_BLURBS: Record<
+  AccessibilityMode,
+  { title: string; blurb: string }
+> = {
+  dyslexia: { title: "Dyslexia", blurb: "Short chunks, simpler words" },
+  adhd: { title: "ADHD", blurb: "One clear step at a time" },
+  apd: { title: "APD", blurb: "Headings and bullet notes" },
+  autism: { title: "Autism", blurb: "Same layout every lesson" },
+};
 
 export const EXAMPLE_ASSIGNMENT = `Explain photosynthesis and then describe its importance in ecosystems.
 
@@ -8,16 +19,20 @@ After reading, complete the following:
 1. Name the inputs and outputs of photosynthesis.
 2. Explain why photosynthesis matters for food chains and oxygen in the atmosphere.`;
 
-export const FEATURE_SAMPLE =
-  "Explain photosynthesis and then describe its importance in ecosystems.";
-
 export const MODES: ModeConfig[] = [
   {
     id: "dyslexia",
     label: "Dyslexia Mode",
     shortLabel: "Dyslexia",
     description: "Simpler words, short chunks, easier scanning",
-    color: "from-violet-500 to-purple-600",
+    color: "from-mode-dyslexia to-mode-dyslexia/85",
+    theme: {
+      gradient: "from-mode-dyslexia to-mode-dyslexia/85",
+      surface: "bg-mode-dyslexia-surface",
+      ring: "ring-mode-dyslexia/25",
+      border: "border-mode-dyslexia-border",
+      text: "text-mode-dyslexia",
+    },
     icon: "Aa",
   },
   {
@@ -25,7 +40,14 @@ export const MODES: ModeConfig[] = [
     label: "ADHD / Executive Function",
     shortLabel: "ADHD",
     description: "Small actionable steps, clear sequence, less overload",
-    color: "from-amber-500 to-orange-600",
+    color: "from-mode-adhd to-mode-adhd/85",
+    theme: {
+      gradient: "from-mode-adhd to-mode-adhd/85",
+      surface: "bg-mode-adhd-surface",
+      ring: "ring-mode-adhd/25",
+      border: "border-mode-adhd-border",
+      text: "text-mode-adhd",
+    },
     icon: "1→",
   },
   {
@@ -33,7 +55,14 @@ export const MODES: ModeConfig[] = [
     label: "Auditory Processing",
     shortLabel: "APD",
     description: "Structured written notes from spoken-style content",
-    color: "from-blue-500 to-indigo-600",
+    color: "from-mode-apd to-mode-apd/85",
+    theme: {
+      gradient: "from-mode-apd to-mode-apd/85",
+      surface: "bg-mode-apd-surface",
+      ring: "ring-mode-apd/25",
+      border: "border-mode-apd-border",
+      text: "text-mode-apd",
+    },
     icon: "▤",
   },
   {
@@ -41,7 +70,14 @@ export const MODES: ModeConfig[] = [
     label: "Autism Structure",
     shortLabel: "Autism",
     description: "Predictable sections, calm tone, zero ambiguity",
-    color: "from-teal-500 to-emerald-600",
+    color: "from-mode-autism to-mode-autism/85",
+    theme: {
+      gradient: "from-mode-autism to-mode-autism/85",
+      surface: "bg-mode-autism-surface",
+      ring: "ring-mode-autism/25",
+      border: "border-mode-autism-border",
+      text: "text-mode-autism",
+    },
     icon: "☰",
   },
 ];

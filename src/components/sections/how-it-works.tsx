@@ -35,12 +35,15 @@ export function HowItWorks() {
                   duration: 0.45,
                   ease: [0.22, 1, 0.36, 1],
                 }}
-                className="relative rounded-2xl border border-border/70 bg-card p-7 shadow-[0_4px_24px_rgba(15,23,42,0.05)] ring-1 ring-black/[0.03] md:p-8"
+                className="surface-card relative rounded-2xl p-7 md:p-8"
               >
-                <span className="text-4xl font-semibold tracking-[-0.04em] text-muted/60">
+                <span
+                  className="text-4xl font-bold tabular-nums tracking-[-0.04em] text-primary/45"
+                  aria-hidden
+                >
                   {item.step}
                 </span>
-                <div className="mt-5 flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-teal-500 to-indigo-600 text-white shadow-sm shadow-teal-600/20">
+                <div className="mt-5 flex h-11 w-11 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-[var(--shadow-soft)]">
                   <Icon className="size-5" />
                 </div>
                 <h3 className="mt-6 text-[17px] font-semibold tracking-[-0.02em]">

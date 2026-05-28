@@ -11,6 +11,13 @@ interface ModeSelectorProps {
   variant?: "tabs" | "cards";
 }
 
+const modeIconBg: Record<AccessibilityMode, string> = {
+  dyslexia: "bg-mode-dyslexia",
+  adhd: "bg-mode-adhd",
+  apd: "bg-mode-apd",
+  autism: "bg-mode-autism",
+};
+
 export function ModeSelector({
   active,
   onChange,
@@ -21,6 +28,7 @@ export function ModeSelector({
       <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4 sm:gap-3">
         {MODES.map((mode) => {
           const isActive = active === mode.id;
+          const { theme } = mode;
           return (
             <button
               key={mode.id}
@@ -28,26 +36,28 @@ export function ModeSelector({
               onClick={() => onChange(mode.id)}
               aria-pressed={isActive}
               className={cn(
-                "relative rounded-xl border px-3.5 py-3.5 text-left transition-all duration-200",
+                "relative overflow-hidden rounded-xl border px-3.5 py-3.5 text-left transition-shadow duration-200",
                 isActive
-                  ? "border-border bg-card shadow-[0_4px_20px_rgba(15,23,42,0.08)] ring-2 ring-teal-500/20"
-                  : "border-border/70 bg-card/60 hover:border-border hover:bg-card hover:shadow-sm",
+                  ? cn(
+                      "border shadow-[var(--shadow-soft)] ring-2 ring-offset-2 ring-offset-background",
+                      theme.surface,
+                      theme.border,
+                      theme.ring,
+                    )
+                  : "border-border/80 bg-card hover:border-border hover:shadow-[var(--shadow-soft)]",
               )}
             >
               {isActive && (
                 <motion.div
                   layoutId="mode-card-indicator"
-                  className={cn(
-                    "absolute inset-0 rounded-xl bg-gradient-to-br opacity-[0.07]",
-                    mode.color,
-                  )}
+                  className={cn("absolute inset-0 rounded-xl", theme.surface)}
                   transition={{ type: "spring", stiffness: 420, damping: 32 }}
                 />
               )}
               <span
                 className={cn(
-                  "relative mb-2.5 flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br text-xs font-semibold text-white shadow-sm",
-                  mode.color,
+                  "relative mb-2.5 flex h-9 w-9 items-center justify-center rounded-lg text-xs font-semibold text-white shadow-sm",
+                  modeIconBg[mode.id],
                 )}
               >
                 {mode.icon}
@@ -66,9 +76,10 @@ export function ModeSelector({
   }
 
   return (
-    <div className="flex flex-wrap gap-1 rounded-xl border border-border/60 bg-muted/40 p-1">
+    <div className="flex flex-wrap gap-1 rounded-xl border border-border/70 bg-muted/50 p-1">
       {MODES.map((mode) => {
         const isActive = active === mode.id;
+        const { theme } = mode;
         return (
           <button
             key={mode.id}
@@ -85,11 +96,22 @@ export function ModeSelector({
             {isActive && (
               <motion.div
                 layoutId="mode-tab-indicator"
-                className="absolute inset-0 rounded-lg bg-card shadow-sm ring-1 ring-black/[0.04]"
+                className={cn(
+                  "absolute inset-0 rounded-lg border shadow-sm",
+                  theme.surface,
+                  theme.border,
+                )}
                 transition={{ type: "spring", stiffness: 420, damping: 32 }}
               />
             )}
-            <span className="relative">{mode.shortLabel}</span>
+            <span className="relative flex items-center gap-1.5">
+              {isActive && (
+                <span
+                  className={cn("size-1.5 shrink-0 rounded-full", modeIconBg[mode.id])}
+                />
+              )}
+              {mode.shortLabel}
+            </span>
           </button>
         );
       })}

@@ -5,7 +5,11 @@ import type {
 } from "./types";
 import { buildTransformResult, transformWithGemini } from "./gemini/server";
 import { classifyGeminiError, isQuotaOrRateLimitError } from "./gemini/errors";
-import { isGeminiInCooldown, markGeminiCooldown } from "./gemini/quota-state";
+import {
+  getGeminiCooldownReason,
+  isGeminiInCooldown,
+  markGeminiCooldown,
+} from "./gemini/quota-state";
 import { transformLocally } from "./local-transform";
 
 function hasGeminiKey(): boolean {
@@ -38,7 +42,14 @@ export async function transformContent(
   }
 
   if (isGeminiInCooldown()) {
-    return localWithFallback(trimmed, mode, "quota_exceeded");
+    const cooldownReason = getGeminiCooldownReason();
+    const reason: FallbackReason =
+      cooldownReason === "rate_limited" ||
+      cooldownReason === "quota_exceeded" ||
+      cooldownReason === "api_error"
+        ? cooldownReason
+        : "quota_exceeded";
+    return localWithFallback(trimmed, mode, reason);
   }
 
   try {

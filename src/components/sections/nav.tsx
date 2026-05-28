@@ -19,11 +19,11 @@ export function Nav() {
     >
       <div className="mx-auto flex h-[4.25rem] max-w-6xl items-center justify-between px-5 sm:px-6">
         <a href="#" className="flex items-center gap-2.5">
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-teal-500 to-indigo-600 text-sm font-semibold text-white shadow-sm shadow-teal-600/20">
+          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-sm font-semibold text-primary-foreground shadow-[var(--shadow-soft)]">
             A
           </span>
           <span className="text-[17px] font-semibold tracking-[-0.02em] text-foreground">
-            Adapt<span className="text-teal-600">ED</span>
+            Adapt<span className="text-primary">ED</span>
           </span>
         </a>
 

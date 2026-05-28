@@ -5,11 +5,19 @@ import type { TransformResult } from "@/lib/types";
 import { renderFormattedText } from "@/lib/render-text";
 import { getFallbackBannerMessage } from "@/lib/fallback-messages";
 import { cn } from "@/lib/utils";
-import { Info } from "lucide-react";
+import { Download, Info } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { downloadTransformResult } from "@/lib/export-transform";
+import type { AccessibilityMode } from "@/lib/types";
 
 interface TransformOutputProps {
   result: TransformResult;
   modeColor: string;
+  modeSlug: AccessibilityMode;
+  canDownload?: boolean;
+  modeSurface?: string;
+  modeBorder?: string;
+  modeText?: string;
 }
 
 const blockStyles: Record<string, string> = {
@@ -23,11 +31,19 @@ const blockStyles: Record<string, string> = {
   caption:
     "font-mono text-[11px] font-medium uppercase tracking-[0.12em] text-muted-foreground",
   describe:
-    "rounded-xl bg-blue-50/80 border border-blue-100 px-4 py-3 text-[14px] leading-7 text-foreground/90",
+    "rounded-xl bg-mode-apd-surface border border-mode-apd-border px-4 py-3 text-[14px] leading-7 text-foreground/90",
   note: "text-[14px] leading-relaxed text-muted-foreground italic",
 };
 
-export function TransformOutput({ result, modeColor }: TransformOutputProps) {
+export function TransformOutput({
+  result,
+  modeColor,
+  modeSlug,
+  canDownload = false,
+  modeSurface,
+  modeBorder,
+  modeText,
+}: TransformOutputProps) {
   const fallbackMessage = getFallbackBannerMessage(result.fallbackReason);
 
   return (
@@ -42,25 +58,44 @@ export function TransformOutput({ result, modeColor }: TransformOutputProps) {
         </div>
       )}
       {result.source === "gemini" && (
-        <p className="mb-3 text-[11px] font-medium uppercase tracking-wider text-teal-700/80">
+        <p
+          className={cn(
+            "mb-3 text-[11px] font-medium uppercase tracking-wider",
+            modeText ?? "text-primary",
+          )}
+        >
           AI-enhanced
         </p>
       )}
-      <div className="mb-5 flex items-start gap-3 border-b border-border/50 pb-4">
-        <div
-          className={cn(
-            "mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full bg-gradient-to-r",
-            modeColor,
-          )}
-        />
-        <div>
-          <p className="text-[15px] font-semibold tracking-[-0.01em] text-foreground">
-            {result.modeLabel}
-          </p>
-          <p className="mt-0.5 text-[13px] leading-snug text-muted-foreground">
-            {result.modeDescription}
-          </p>
+      <div className="mb-5 flex items-start justify-between gap-3 border-b border-border/50 pb-4">
+        <div className="flex min-w-0 items-start gap-3">
+          <div
+            className={cn(
+              "mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full bg-gradient-to-r",
+              modeColor,
+            )}
+          />
+          <div className="min-w-0">
+            <p className="text-[15px] font-semibold tracking-[-0.01em] text-foreground">
+              {result.modeLabel}
+            </p>
+            <p className="mt-0.5 text-[13px] leading-snug text-muted-foreground">
+              {result.modeDescription}
+            </p>
+          </div>
         </div>
+        {canDownload && (
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className="shrink-0 gap-1.5 font-medium"
+            onClick={() => downloadTransformResult(result, modeSlug)}
+          >
+            <Download className="size-3.5" aria-hidden />
+            Download
+          </Button>
+        )}
       </div>
 
       <AnimatePresence mode="wait">
@@ -83,10 +118,14 @@ export function TransformOutput({ result, modeColor }: TransformOutputProps) {
                 block.type === "step" && "flex items-start gap-3",
                 block.type === "bullet" &&
                   (block.text.startsWith("☐") || block.text.startsWith("[ ]")) &&
-                  "rounded-lg border border-amber-200/60 bg-amber-50/50 px-3 py-2",
+                  cn(
+                    "rounded-lg border px-3 py-2",
+                    modeSurface ?? "bg-mode-adhd-surface",
+                    modeBorder ?? "border-mode-adhd-border",
+                  ),
                 block.type === "caption" &&
                   block.text.startsWith("SECTION") &&
-                  "mt-4 first:mt-0 border-l-2 border-teal-500 pl-3 font-semibold text-foreground",
+                  "mt-4 first:mt-0 border-l-2 border-l-primary/40 pl-3 font-semibold text-foreground",
               )}
             >
               {block.type === "step" && (

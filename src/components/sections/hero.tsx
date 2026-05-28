@@ -1,6 +1,8 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
+import { MODES } from "@/lib/constants";
+import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles, Zap } from "lucide-react";
 
@@ -29,7 +31,7 @@ export function Hero() {
             backgroundSize: "32px 32px",
           }}
         />
-        <div className="absolute -top-24 left-1/2 h-[520px] w-[900px] -translate-x-1/2 rounded-full bg-gradient-to-br from-teal-400/20 via-indigo-400/15 to-violet-500/15 blur-3xl" />
+        <div className="absolute -top-24 left-1/2 h-[520px] w-[900px] -translate-x-1/2 rounded-full bg-primary/10 blur-3xl" />
         <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
       </div>
 
@@ -38,9 +40,9 @@ export function Hero() {
           <motion.div custom={0} variants={fadeUp} initial="hidden" animate="show">
             <Badge
               variant="secondary"
-              className="mb-6 gap-1.5 rounded-full border border-teal-200/80 bg-teal-50 px-4 py-1.5 text-[13px] font-medium text-teal-800 shadow-sm"
+              className="mb-6 gap-1.5 rounded-full border border-primary/15 bg-accent px-4 py-1.5 text-[13px] font-medium text-primary shadow-sm"
             >
-              <Sparkles className="size-3.5 text-teal-600" />
+              <Sparkles className="size-3.5 text-primary" />
               Built for K–12 teachers · Demo ready
             </Badge>
           </motion.div>
@@ -99,10 +101,10 @@ export function Hero() {
             ].map((item) => (
               <li key={item.text} className="flex items-center gap-2">
                 {item.icon ? (
-                  <item.icon className="size-3.5 text-teal-600" aria-hidden />
+                  <item.icon className="size-3.5 text-primary" aria-hidden />
                 ) : (
                   <span
-                    className="size-1.5 rounded-full bg-teal-500"
+                    className="size-1.5 rounded-full bg-primary/70"
                     aria-hidden
                   />
                 )}
@@ -118,12 +120,12 @@ export function Hero() {
           transition={{ delay: 0.2, duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
           className="relative mx-auto w-full max-w-lg lg:max-w-none"
         >
-          <div className="absolute -inset-4 rounded-3xl bg-gradient-to-br from-teal-500/15 via-indigo-500/10 to-violet-500/15 blur-2xl" />
+          <div className="absolute -inset-4 rounded-3xl bg-primary/8 blur-2xl" />
 
           <motion.div
             animate={{ y: [0, -6, 0] }}
             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-            className="relative overflow-hidden rounded-2xl border border-border/80 bg-card shadow-[0_24px_60px_rgba(15,23,42,0.12)] ring-1 ring-black/[0.04]"
+            className="surface-elevated relative overflow-hidden rounded-2xl"
           >
             <div className="flex items-center gap-2 border-b border-border/70 bg-muted/50 px-4 py-3">
               <span className="size-2.5 rounded-full bg-red-400/90" />
@@ -145,12 +147,12 @@ export function Hero() {
                 </p>
               </div>
 
-              <div className="bg-gradient-to-br from-violet-50/80 to-white p-4">
+              <div className="bg-mode-dyslexia-surface p-4">
                 <div className="flex items-center justify-between gap-2">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-violet-700">
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-mode-dyslexia">
                     Dyslexia mode
                   </p>
-                  <span className="rounded-full bg-violet-100 px-2 py-0.5 text-[10px] font-semibold text-violet-800">
+                  <span className="rounded-full border border-mode-dyslexia-border bg-card px-2 py-0.5 text-[10px] font-semibold text-mode-dyslexia">
                     Adapted
                   </span>
                 </div>
@@ -168,22 +170,26 @@ export function Hero() {
               </div>
             </div>
 
-            <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border/60 bg-muted/30 px-4 py-3">
-              <div className="flex gap-1.5">
-                {["Dyslexia", "Autism", "Visual", "Hearing"].map((mode, i) => (
+            <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border/60 bg-muted/40 px-4 py-3">
+              <div className="flex flex-wrap gap-1.5">
+                {MODES.map((mode, i) => (
                   <span
-                    key={mode}
-                    className={`rounded-md px-2 py-0.5 text-[10px] font-semibold ${
+                    key={mode.id}
+                    className={cn(
+                      "rounded-md px-2 py-0.5 text-[10px] font-semibold",
                       i === 0
-                        ? "bg-violet-600 text-white shadow-sm"
-                        : "bg-background text-muted-foreground ring-1 ring-border/80"
-                    }`}
+                        ? cn(
+                            "bg-gradient-to-r text-white shadow-sm",
+                            mode.theme.gradient,
+                          )
+                        : "bg-card text-muted-foreground ring-1 ring-border/80",
+                    )}
                   >
-                    {mode}
+                    {mode.shortLabel}
                   </span>
                 ))}
               </div>
-              <span className="text-[11px] font-medium text-teal-700">
+              <span className="text-[11px] font-medium text-primary">
                 Switch mode → instant rewrite
               </span>
             </div>

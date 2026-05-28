@@ -13,6 +13,7 @@ import { TransformError } from "@/components/transform-error";
 import { EXAMPLE_ASSIGNMENT, MODES } from "@/lib/constants";
 import { useTransform } from "@/hooks/use-transform";
 import type { AccessibilityMode } from "@/lib/types";
+import { cn } from "@/lib/utils";
 
 export function InteractiveDemo() {
   const [input, setInput] = useState(EXAMPLE_ASSIGNMENT);
@@ -55,7 +56,7 @@ export function InteractiveDemo() {
   };
 
   return (
-    <section id="demo" className="scroll-mt-[4.25rem] border-t border-border/60 bg-muted/25 py-20 md:py-28">
+    <section id="demo" className="scroll-mt-[4.25rem] border-t border-border/60 bg-muted/40 py-20 md:py-28">
       <div className="mx-auto max-w-6xl px-5 sm:px-6">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
@@ -85,7 +86,7 @@ export function InteractiveDemo() {
           <span className="text-border" aria-hidden>
             →
           </span>
-          <span className="rounded-full border border-teal-200 bg-teal-50 px-3 py-1 text-teal-800 shadow-sm">
+          <span className="rounded-full border border-primary/20 bg-accent px-3 py-1 text-primary shadow-sm">
             3 · AI output
           </span>
         </div>
@@ -93,8 +94,8 @@ export function InteractiveDemo() {
         <ModeSelector active={mode} onChange={setMode} variant="cards" />
 
         <motion.div layout className="mt-8 grid gap-5 lg:grid-cols-2 lg:gap-6">
-          <Card className="flex flex-col gap-0 overflow-hidden border-border/70 bg-card py-0 shadow-[0_8px_30px_rgba(15,23,42,0.06)] ring-1 ring-black/[0.04]">
-            <div className="border-b border-border/70 bg-muted/40 px-5 py-4">
+          <Card className="surface-card flex flex-col gap-0 overflow-hidden py-0">
+            <div className="border-b border-border/70 bg-muted/50 px-5 py-4">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <h3 className="panel-label">Original material</h3>
                 <div className="flex flex-wrap gap-2">
@@ -140,10 +141,25 @@ export function InteractiveDemo() {
             </div>
           </Card>
 
-          <Card className="flex flex-col gap-0 overflow-hidden border-border/70 bg-card py-0 shadow-[0_8px_30px_rgba(15,23,42,0.06)] ring-1 ring-black/[0.04]">
-            <div className="border-b border-border/70 bg-gradient-to-r from-muted/50 to-background px-5 py-4">
+          <Card
+            className={cn(
+              "surface-card flex flex-col gap-0 overflow-hidden py-0 ring-2",
+              activeModeConfig.theme.ring,
+            )}
+          >
+            <div
+              className={cn(
+                "border-b border-border/70 px-5 py-4",
+                activeModeConfig.theme.surface,
+              )}
+            >
               <div className="flex items-center gap-2">
-                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-teal-50 text-teal-700">
+                <span
+                  className={cn(
+                    "flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br text-white shadow-sm",
+                    activeModeConfig.theme.gradient,
+                  )}
+                >
                   <Wand2 className="size-4" />
                 </span>
                 <h3 className="panel-label">Adapted output</h3>
@@ -152,7 +168,7 @@ export function InteractiveDemo() {
                 <ModeSelector active={mode} onChange={setMode} variant="tabs" />
               </div>
             </div>
-            <div className="min-h-[280px] flex-1 p-5 md:min-h-[340px]">
+            <div className="min-h-[280px] flex-1 bg-card p-5 md:min-h-[340px]">
               {status === "error" ? (
                 <TransformError message={error ?? undefined} onRetry={retry} />
               ) : isLoading ? (
@@ -160,7 +176,12 @@ export function InteractiveDemo() {
               ) : (
                 <TransformOutput
                   result={result}
-                  modeColor={activeModeConfig.color}
+                  modeSlug={mode}
+                  canDownload={Boolean(input.trim()) && status === "success"}
+                  modeColor={activeModeConfig.theme.gradient}
+                  modeSurface={activeModeConfig.theme.surface}
+                  modeBorder={activeModeConfig.theme.border}
+                  modeText={activeModeConfig.theme.text}
                 />
               )}
             </div>

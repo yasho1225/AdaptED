@@ -1,7 +1,9 @@
 import type { AccessibilityMode, TransformResult } from "./types";
+import { getExampleTransform, seedExampleCache } from "./example-showcase";
 import { cacheKey } from "./placeholders";
 
 const cache = new Map<string, TransformResult>();
+const inflight = new Map<string, Promise<TransformResult>>();
 
 export function getCachedTransform(
   input: string,
@@ -29,23 +31,47 @@ export async function fetchTransform(
   const existing = cache.get(key);
   if (existing) return existing;
 
-  const res = await fetch("/api/transform", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ input: trimmed, mode }),
-    signal,
-  });
-
-  const data = await res.json();
-
-  if (!res.ok) {
-    throw new Error(
-      typeof data.error === "string"
-        ? data.error
-        : "Couldn't transform content. Please try again.",
-    );
+  const example = getExampleTransform(trimmed, mode);
+  if (example) {
+    cache.set(key, example);
+    return example;
   }
 
-  cache.set(key, data as TransformResult);
-  return data as TransformResult;
+  const pending = inflight.get(key);
+  if (pending) return pending;
+
+  const request = (async () => {
+    const res = await fetch("/api/transform", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ input: trimmed, mode }),
+      signal,
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(
+        typeof data.error === "string"
+          ? data.error
+          : "Couldn't transform content. Please try again.",
+      );
+    }
+
+    const result = data as TransformResult;
+    cache.set(key, result);
+    return result;
+  })();
+
+  inflight.set(key, request);
+
+  try {
+    return await request;
+  } finally {
+    if (inflight.get(key) === request) {
+      inflight.delete(key);
+    }
+  }
 }
+
+seedExampleCache(setCachedTransform);
