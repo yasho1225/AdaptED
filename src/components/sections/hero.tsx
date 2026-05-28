@@ -64,9 +64,9 @@ export function Hero() {
             animate="show"
             className="mx-auto mt-5 max-w-xl text-base leading-7 text-muted-foreground md:text-lg md:leading-8 lg:mx-0"
           >
-            Paste or upload any assignment. AdaptED instantly reshapes it for
-            dyslexia, autism, visual impairment, and hearing impairment—so every
-            student gets material they can actually use.
+            Paste or upload any assignment. AdaptED reshapes it for dyslexia,
+            ADHD, auditory processing, and autism structure—so every student
+            gets material they can actually use.
           </motion.p>
 
           <motion.div

@@ -81,6 +81,12 @@ export function TransformOutput({ result, modeColor }: TransformOutputProps) {
               className={cn(
                 blockStyles[block.type] ?? blockStyles.chunk,
                 block.type === "step" && "flex items-start gap-3",
+                block.type === "bullet" &&
+                  (block.text.startsWith("☐") || block.text.startsWith("[ ]")) &&
+                  "rounded-lg border border-amber-200/60 bg-amber-50/50 px-3 py-2",
+                block.type === "caption" &&
+                  block.text.startsWith("SECTION") &&
+                  "mt-4 first:mt-0 border-l-2 border-teal-500 pl-3 font-semibold text-foreground",
               )}
             >
               {block.type === "step" && (

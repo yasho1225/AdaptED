@@ -1,52 +1,48 @@
 import type { ModeConfig } from "./types";
 
-export const EXAMPLE_ASSIGNMENT = `Photosynthesis Assignment
+export const EXAMPLE_ASSIGNMENT = `Explain photosynthesis and then describe its importance in ecosystems.
 
-Read the passage below and answer questions 1–3.
+Photosynthesis is the process by which green plants use sunlight to convert carbon dioxide and water into glucose and oxygen. Chlorophyll in the leaves captures light energy.
 
-Photosynthesis is the process by which green plants use sunlight to make food. Chlorophyll in the leaves captures light energy. The plant combines carbon dioxide from the air with water from the roots to produce glucose (sugar) and oxygen.
-
-Look at the diagram: sunlight hits the leaf, arrows show CO₂ entering and O₂ leaving.
-
-1. What are the inputs of photosynthesis?
-2. What are the outputs?
-3. Why is photosynthesis important for life on Earth?`;
+After reading, complete the following:
+1. Name the inputs and outputs of photosynthesis.
+2. Explain why photosynthesis matters for food chains and oxygen in the atmosphere.`;
 
 export const FEATURE_SAMPLE =
-  "The water cycle moves water through evaporation, condensation, and precipitation. Clouds form when water vapor cools in the atmosphere.";
+  "Explain photosynthesis and then describe its importance in ecosystems.";
 
 export const MODES: ModeConfig[] = [
   {
     id: "dyslexia",
     label: "Dyslexia Mode",
     shortLabel: "Dyslexia",
-    description: "Shorter sentences, clearer chunks, less overwhelm",
+    description: "Simpler words, short chunks, easier scanning",
     color: "from-violet-500 to-purple-600",
     icon: "Aa",
   },
   {
+    id: "adhd",
+    label: "ADHD / Executive Function",
+    shortLabel: "ADHD",
+    description: "Small actionable steps, clear sequence, less overload",
+    color: "from-amber-500 to-orange-600",
+    icon: "1→",
+  },
+  {
+    id: "apd",
+    label: "Auditory Processing",
+    shortLabel: "APD",
+    description: "Structured written notes from spoken-style content",
+    color: "from-blue-500 to-indigo-600",
+    icon: "▤",
+  },
+  {
     id: "autism",
-    label: "Autism Mode",
+    label: "Autism Structure",
     shortLabel: "Autism",
-    description: "Predictable steps, bullets, calm structure",
+    description: "Predictable sections, calm tone, zero ambiguity",
     color: "from-teal-500 to-emerald-600",
     icon: "☰",
-  },
-  {
-    id: "visual",
-    label: "Visual Impairment Mode",
-    shortLabel: "Visual",
-    description: "Rich descriptions of visuals and diagrams",
-    color: "from-blue-500 to-indigo-600",
-    icon: "◎",
-  },
-  {
-    id: "hearing",
-    label: "Hearing Impairment Mode",
-    shortLabel: "Hearing",
-    description: "Visual notes and caption-style organization",
-    color: "from-amber-500 to-orange-600",
-    icon: "▤",
   },
 ];
 
@@ -84,7 +80,7 @@ export const HOW_IT_WORKS = [
     step: "02",
     title: "Choose accessibility mode",
     description:
-      "Pick dyslexia, autism, visual, or hearing support—each tuned to how students learn.",
+      "Pick dyslexia, ADHD, auditory processing, or autism structure—each changes how content reads.",
   },
   {
     step: "03",

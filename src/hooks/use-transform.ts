@@ -123,12 +123,7 @@ export function usePrefetchTransforms(input: string): number {
     const trimmed = input.trim();
     if (!trimmed) return;
 
-    const modes: AccessibilityMode[] = [
-      "dyslexia",
-      "autism",
-      "visual",
-      "hearing",
-    ];
+    const modes: AccessibilityMode[] = ["dyslexia", "adhd", "apd", "autism"];
 
     void Promise.all(
       modes.map((mode) =>

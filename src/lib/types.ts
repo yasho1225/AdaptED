@@ -1,8 +1,4 @@
-export type AccessibilityMode =
-  | "dyslexia"
-  | "autism"
-  | "visual"
-  | "hearing";
+export type AccessibilityMode = "dyslexia" | "adhd" | "apd" | "autism";
 
 export type BlockType =
   | "title"

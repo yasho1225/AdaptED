@@ -9,16 +9,10 @@ const SIMPLIFY: Record<string, string> = {
   photosynthesis: "how plants make food from light",
   chlorophyll: "the green part in leaves",
   glucose: "plant sugar",
-  precipitation: "rain or snow",
-  condensation: "water forming clouds",
-  evaporation: "water turning into vapor",
+  ecosystems: "living communities in nature",
   atmosphere: "the air around Earth",
-  approximately: "about",
-  demonstrate: "show",
-  utilize: "use",
-  furthermore: "also",
-  therefore: "so",
-  however: "but",
+  carbon: "carbon",
+  dioxide: "dioxide",
 };
 
 function simplifyWord(word: string): string {
@@ -41,53 +35,57 @@ function splitParagraphs(text: string): string[] {
     .filter(Boolean);
 }
 
+/** Dyslexia: short chunks + key ideas — no steps or section headers */
 function transformDyslexia(input: string): ContentBlock[] {
   const blocks: ContentBlock[] = [
     { type: "title", text: "Easy-Read Version" },
-    { type: "note", text: "Short sections. **Bold** marks big ideas." },
+    { type: "note", text: "Read one short block at a time. **Bold** = big idea." },
   ];
 
   splitParagraphs(input).forEach((para) => {
-    if (/^\d+\./.test(para)) {
-      blocks.push({ type: "key", text: para.replace(/\n/g, " · ") });
-      return;
-    }
     splitSentences(para).forEach((s) => {
       const simple = s
         .split(/\s+/)
         .map(simplifyWord)
         .join(" ");
       const words = simple.split(/\s+/);
-      if (words.length > 14) {
+      if (words.length > 12) {
         const mid = Math.ceil(words.length / 2);
-        blocks.push({
-          type: "chunk",
-          text: words.slice(0, mid).join(" ") + ".",
-        });
-        blocks.push({
-          type: "chunk",
-          text: words.slice(mid).join(" ") + ".",
-        });
+        blocks.push({ type: "chunk", text: words.slice(0, mid).join(" ") + "." });
+        blocks.push({ type: "chunk", text: words.slice(mid).join(" ") + "." });
       } else {
         blocks.push({ type: "chunk", text: simple });
       }
     });
   });
 
-  return blocks.slice(0, 14);
+  if (blocks.length > 4) {
+    blocks.splice(3, 0, {
+      type: "key",
+      text: "**Main idea:** " + splitSentences(input)[0]?.replace(/\.$/, "") + ".",
+    });
+  }
+
+  return blocks.slice(0, 16);
 }
 
-function transformAutism(input: string): ContentBlock[] {
+/** ADHD: numbered actionable steps + checkboxes — no paragraph chunks */
+function transformAdhd(input: string): ContentBlock[] {
   const blocks: ContentBlock[] = [
-    { type: "title", text: "Structured Lesson" },
-    { type: "key", text: "What you will do: follow each step in order." },
+    { type: "title", text: "Your Action Plan" },
+    { type: "note", text: "Do one step. Check it off. Then go to the next." },
+    { type: "step", text: "Step 1: Read the full assignment once without writing." },
   ];
 
-  let step = 1;
+  let step = 2;
   splitParagraphs(input).forEach((para) => {
-    const questions = para.match(/\d+\.\s*[^\n]+/g);
-    if (questions) {
-      questions.forEach((q) => blocks.push({ type: "bullet", text: q.trim() }));
+    const numbered = para.match(/\d+\.\s*[^\n]+/g);
+    if (numbered) {
+      numbered.forEach((q) => {
+        blocks.push({ type: "step", text: `Step ${step}: Answer — ${q.trim()}` });
+        blocks.push({ type: "bullet", text: "☐ Write your answer in complete sentences." });
+        step += 1;
+      });
       return;
     }
     splitSentences(para).forEach((s) => {
@@ -96,71 +94,78 @@ function transformAutism(input: string): ContentBlock[] {
     });
   });
 
-  blocks.push({
-    type: "note",
-    text: "✓ Finish one step before the next. Take a short break between sections.",
-  });
+  blocks.push({ type: "step", text: `Step ${step}: Review your work against the instructions.` });
+  blocks.push({ type: "bullet", text: "☐ I finished every step above." });
 
-  return blocks.slice(0, 14);
+  return blocks.slice(0, 16);
 }
 
-function transformVisual(input: string): ContentBlock[] {
+/** APD: heading captions + bullets + takeaways — no Step N format */
+function transformApd(input: string): ContentBlock[] {
   const blocks: ContentBlock[] = [
-    { type: "title", text: "Audio-Description Notes" },
-    {
-      type: "describe",
-      text: "[SCENE] You are learning from spoken-style notes—no picture required.",
-    },
+    { type: "title", text: "Structured Study Notes" },
+    { type: "caption", text: "TOPIC: Main content" },
   ];
 
-  const visual = /diagram|chart|image|figure|look at|arrow|draw|picture/i;
-
-  splitParagraphs(input).forEach((para) => {
-    if (visual.test(para)) {
-      blocks.push({
-        type: "describe",
-        text: `[VISUAL] ${para}. Imagine labels on each part and arrows showing flow from start to end.`,
-      });
-    } else {
-      splitSentences(para).forEach((s) => blocks.push({ type: "chunk", text: s }));
+  splitParagraphs(input).forEach((para, i) => {
+    if (i > 0) {
+      blocks.push({ type: "caption", text: `SECTION: Part ${i + 1}` });
     }
-  });
-
-  blocks.push({
-    type: "key",
-    text: "Summary: All ideas are explained in words—you do not need to see the page layout.",
-  });
-
-  return blocks.slice(0, 14);
-}
-
-function transformHearing(input: string): ContentBlock[] {
-  const blocks: ContentBlock[] = [
-    { type: "title", text: "Visual Lecture Notes" },
-    { type: "caption", text: "[LESSON START]" },
-  ];
-
-  let section = 1;
-  splitParagraphs(input).forEach((para) => {
-    blocks.push({ type: "caption", text: `[SECTION ${section}]` });
-    section += 1;
     splitSentences(para).forEach((s) => {
-      if (/important|because|process|means/i.test(s)) {
-        blocks.push({ type: "key", text: `★ ${s}` });
-      } else {
-        blocks.push({ type: "bullet", text: `• ${s}` });
-      }
+      blocks.push({ type: "bullet", text: `• ${s}` });
     });
   });
 
-  blocks.push({ type: "caption", text: "[KEY TAKEAWAYS]" });
+  blocks.push({ type: "caption", text: "TOPIC: Key takeaways" });
   blocks.push({
     type: "key",
-    text: `★ ${splitSentences(input)[0] ?? "Main idea from the lesson."}`,
+    text: "★ " + (splitSentences(input)[0] ?? "Core idea from the lesson."),
   });
-  blocks.push({ type: "caption", text: "[LESSON END]" });
+  blocks.push({
+    type: "note",
+    text: "Read each heading first, then the bullets under it.",
+  });
 
-  return blocks.slice(0, 14);
+  return blocks.slice(0, 16);
+}
+
+/** Autism: fixed 3-section layout every time */
+function transformAutism(input: string): ContentBlock[] {
+  const sentences = splitSentences(input);
+  const first = sentences[0] ?? input.slice(0, 120);
+
+  const blocks: ContentBlock[] = [
+    { type: "title", text: "Lesson (Structured Format)" },
+    { type: "caption", text: "SECTION 1: WHAT THIS IS" },
+    { type: "chunk", text: first },
+    { type: "caption", text: "SECTION 2: KEY POINTS" },
+  ];
+
+  sentences.slice(1, 6).forEach((s) => {
+    blocks.push({ type: "bullet", text: `• ${s}` });
+  });
+
+  blocks.push({ type: "caption", text: "SECTION 3: STEP-BY-STEP BREAKDOWN" });
+
+  let step = 1;
+  const questions = input.match(/\d+\.\s*[^\n]+/g);
+  if (questions) {
+    questions.forEach((q) => {
+      blocks.push({ type: "step", text: `Step ${step}: Complete — ${q.trim()}` });
+      step += 1;
+    });
+  } else {
+    blocks.push({ type: "step", text: "Step 1: Read the material." });
+    blocks.push({ type: "step", text: "Step 2: Write the main ideas in your own words." });
+    blocks.push({ type: "step", text: "Step 3: Check your answers against the source." });
+  }
+
+  blocks.push({
+    type: "note",
+    text: "This lesson uses the same three sections every time.",
+  });
+
+  return blocks.slice(0, 16);
 }
 
 export function transformLocally(
@@ -188,14 +193,14 @@ export function transformLocally(
     case "dyslexia":
       blocks = transformDyslexia(trimmed);
       break;
+    case "adhd":
+      blocks = transformAdhd(trimmed);
+      break;
+    case "apd":
+      blocks = transformApd(trimmed);
+      break;
     case "autism":
       blocks = transformAutism(trimmed);
-      break;
-    case "visual":
-      blocks = transformVisual(trimmed);
-      break;
-    case "hearing":
-      blocks = transformHearing(trimmed);
       break;
   }
 

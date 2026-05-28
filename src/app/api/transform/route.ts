@@ -2,12 +2,7 @@ import { NextResponse } from "next/server";
 import type { AccessibilityMode } from "@/lib/types";
 import { transformContent } from "@/lib/transform-service";
 
-const MODES: AccessibilityMode[] = [
-  "dyslexia",
-  "autism",
-  "visual",
-  "hearing",
-];
+const MODES: AccessibilityMode[] = ["dyslexia", "adhd", "apd", "autism"];
 
 export async function POST(request: Request) {
   try {

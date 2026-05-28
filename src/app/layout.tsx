@@ -11,7 +11,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "AdaptED — One lesson. Every learner.",
   description:
-    "Transform educational content into accessible formats instantly for dyslexia, autism, visual impairment, and hearing impairment.",
+    "Transform educational content for dyslexia, ADHD, auditory processing, and autism structure—powered by Gemini with local fallback.",
 };
 
 export default function RootLayout({
