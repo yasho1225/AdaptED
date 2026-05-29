@@ -66,25 +66,33 @@ export const EXAMPLE_SHOWCASE: Record<AccessibilityMode, TransformResult> = {
     blocks: [
       { type: "title", text: "Your Action Plan" },
       { type: "note", text: "Do one step. Check it off. Then go to the next." },
-      { type: "step", text: "Step 1: Read the full assignment once without writing." },
       {
         type: "step",
-        text: "Step 2: Underline the main topic — photosynthesis and ecosystems.",
+        text: "Step 1: Learn the main idea — green plants use sunlight to turn carbon dioxide and water into glucose and oxygen.",
       },
       {
         type: "step",
-        text: "Step 3: Write what photosynthesis means in your own words.",
+        text: "Step 2: Remember — chlorophyll in leaves captures light energy for photosynthesis.",
       },
       {
         type: "step",
-        text: "Step 4: Answer — 1. Name the inputs and outputs of photosynthesis." },
-      { type: "bullet", text: "☐ Write your answer in complete sentences." },
+        text: "Step 3: Know why it matters — photosynthesis supports food chains and adds oxygen to the atmosphere.",
+      },
       {
         type: "step",
-        text: "Step 5: Answer — 2. Explain why photosynthesis matters for food chains and oxygen in the atmosphere.",
+        text: "Step 4: Answer question 1 — name the inputs and outputs of photosynthesis.",
       },
-      { type: "bullet", text: "☐ Write your answer in complete sentences." },
-      { type: "step", text: "Step 6: Review your work against the instructions." },
+      { type: "bullet", text: "☐ Inputs: sunlight, carbon dioxide, water" },
+      { type: "bullet", text: "☐ Outputs: glucose (sugar), oxygen" },
+      {
+        type: "step",
+        text: "Step 5: Answer question 2 — explain why photosynthesis matters for food chains and oxygen in the atmosphere.",
+      },
+      {
+        type: "bullet",
+        text: "☐ Say how plants feed food chains and give oxygen to other living things",
+      },
+      { type: "step", text: "Step 6: Review your answers against both questions." },
       { type: "bullet", text: "☐ I finished every step above." },
     ],
   },

@@ -221,11 +221,16 @@
   }
 
   h1 {
-    @apply text-4xl font-semibold leading-[1.08] sm:text-5xl md:text-6xl;
+    @apply text-4xl font-bold leading-[1.08] sm:text-5xl md:text-[3.5rem];
   }
 
   h2 {
-    @apply text-3xl font-semibold leading-[1.12] md:text-4xl;
+    @apply text-3xl font-bold leading-[1.12] md:text-[2.75rem];
+  }
+
+  a:focus-visible,
+  button:focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
   }
 
   h3 {
@@ -243,11 +248,11 @@
   }
 
   .section-title {
-    @apply mt-3 font-semibold tracking-[-0.03em] text-foreground;
+    @apply mt-3 font-bold tracking-[-0.03em] text-foreground;
   }
 
   .section-description {
-    @apply mx-auto mt-4 max-w-2xl text-[15px] leading-7 text-muted-foreground md:text-base md:leading-7;
+    @apply mx-auto mt-5 max-w-2xl text-[16px] leading-8 text-muted-foreground md:text-lg md:leading-8;
   }
 
   .panel-label {
@@ -258,12 +263,24 @@
     @apply text-primary;
   }
 
+  .interactive-hover {
+    @apply transition-[transform,box-shadow,background-color,border-color,color] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)];
+  }
+
+  .interactive-hover:hover {
+    @apply -translate-y-0.5;
+  }
+
+  .interactive-hover:active {
+    @apply translate-y-0 scale-[0.99];
+  }
+
   .btn-primary {
-    @apply inline-flex h-11 items-center justify-center rounded-full bg-card px-6 text-[15px] font-semibold text-card-foreground shadow-[var(--shadow-soft)] transition-all duration-200 hover:brightness-[0.98] active:scale-[0.98];
+    @apply inline-flex h-12 min-w-[10rem] items-center justify-center rounded-full bg-card px-7 text-[15px] font-semibold text-card-foreground shadow-[var(--shadow-soft)] transition-[transform,box-shadow,background-color,border-color,color] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:shadow-[var(--shadow-elevated)] active:translate-y-0 active:scale-[0.98];
   }
 
   .btn-secondary {
-    @apply inline-flex h-11 items-center justify-center rounded-full border border-white/30 bg-white/10 px-6 text-[15px] font-medium text-foreground shadow-sm transition-all duration-200 hover:bg-white/15 active:scale-[0.98];
+    @apply inline-flex h-12 items-center justify-center rounded-full border border-white/30 bg-white/10 px-7 text-[15px] font-medium text-foreground shadow-sm transition-[transform,box-shadow,background-color,border-color,color] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:bg-white/18 hover:shadow-[var(--shadow-soft)] active:translate-y-0 active:scale-[0.98];
   }
 
   .surface-card {
@@ -271,9 +288,26 @@
     --border: var(--card-border);
   }
 
+  .surface-card-interactive {
+    @apply border border-white/20 bg-card text-card-foreground ring-1 ring-white/10 shadow-[var(--shadow-soft)] transition-[transform,box-shadow,background-color,border-color,color] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:shadow-[var(--shadow-elevated)] active:translate-y-0 active:scale-[0.99];
+    --border: var(--card-border);
+  }
+
   .surface-elevated {
     @apply border border-white/25 bg-card text-card-foreground shadow-[var(--shadow-elevated)] ring-1 ring-white/15;
     --border: var(--card-border);
+  }
+
+  .nav-link {
+    @apply relative text-[13px] font-medium text-muted-foreground transition-colors duration-200 hover:text-foreground;
+  }
+
+  .nav-link::after {
+    @apply absolute -bottom-1 left-0 h-0.5 w-0 rounded-full bg-primary transition-all duration-200 content-[''];
+  }
+
+  .nav-link:hover::after {
+    @apply w-full;
   }
 
   .section-band {
@@ -339,6 +373,22 @@
   }
   .mode-border-autism {
     @apply border-mode-autism-border;
+  }
+
+  .text-mode-dyslexia {
+    color: var(--mode-dyslexia);
+  }
+  .text-mode-adhd {
+    color: var(--mode-adhd);
+  }
+  .text-mode-apd {
+    color: var(--mode-apd);
+  }
+  .text-mode-autism {
+    color: var(--mode-autism);
+  }
+  .bg-mode-adhd {
+    background-color: var(--mode-adhd);
   }
 
   .alert-warning {

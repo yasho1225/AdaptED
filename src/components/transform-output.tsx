@@ -35,6 +35,73 @@ const blockStyles: Record<string, string> = {
   note: "text-[14px] leading-relaxed text-card-muted-foreground italic",
 };
 
+function modeSurfaceClass(modeSlug: AccessibilityMode): string {
+  switch (modeSlug) {
+    case "dyslexia":
+      return "rounded-xl border border-mode-dyslexia-border bg-mode-dyslexia-muted/45 p-4 space-y-3";
+    case "adhd":
+      return "rounded-xl border-2 border-dashed border-mode-adhd-border bg-mode-adhd-muted/60 p-3 space-y-2";
+    case "apd":
+      return "rounded-xl border border-mode-apd-border bg-mode-apd-muted/50 p-4 space-y-3";
+    case "autism":
+      return "rounded-xl border-2 border-mode-autism-border bg-mode-autism-muted/40 p-4 space-y-3";
+  }
+}
+
+function modeBlockClass(
+  modeSlug: AccessibilityMode,
+  blockType: string,
+  text: string,
+): string {
+  if (modeSlug === "dyslexia") {
+    if (blockType === "chunk") {
+      return "rounded-lg border border-mode-dyslexia-border bg-card px-4 py-3 text-[17px] leading-[1.85] tracking-wide shadow-sm last:!border-b";
+    }
+    if (blockType === "key") {
+      return "rounded-lg border-2 border-mode-dyslexia-border bg-mode-dyslexia-muted/70 px-4 py-3 text-[15px] font-medium leading-relaxed shadow-sm";
+    }
+    if (blockType === "bullet") {
+      return "rounded-lg border border-mode-dyslexia-border/80 bg-card px-3 py-2 text-[16px] leading-8";
+    }
+    if (blockType === "title") {
+      return "rounded-lg border border-mode-dyslexia-border bg-card px-3 py-2 text-[19px] font-semibold mb-0";
+    }
+    if (blockType === "note") {
+      return "rounded-md border border-dashed border-mode-dyslexia-border/70 bg-card/70 px-3 py-2 text-[13px] not-italic";
+    }
+  }
+
+  if (modeSlug === "adhd") {
+    if (blockType === "step") {
+      return "rounded-lg border-2 border-mode-adhd-border bg-card px-3 py-2.5 font-medium shadow-sm";
+    }
+    if (blockType === "bullet" && (text.startsWith("☐") || text.startsWith("[ ]"))) {
+      return "rounded-lg border-2 border-mode-adhd bg-mode-adhd-muted px-3 py-2 font-medium";
+    }
+    if (blockType === "title") return "text-mode-adhd";
+  }
+
+  if (modeSlug === "apd") {
+    if (blockType === "caption") {
+      return "rounded-md border-l-4 border-l-mode-apd bg-card px-3 py-1.5 font-bold text-mode-apd not-italic normal-case tracking-normal";
+    }
+    if (blockType === "bullet") return "pl-2 font-medium";
+    if (blockType === "key") return "border-l-4 border-l-mode-apd";
+  }
+
+  if (modeSlug === "autism") {
+    if (blockType === "caption" && text.startsWith("SECTION")) {
+      return "mt-5 first:mt-0 rounded-lg bg-card border border-mode-autism-border px-3 py-2 font-bold text-card-foreground not-italic normal-case tracking-normal";
+    }
+    if (blockType === "chunk" || blockType === "step") {
+      return "rounded-lg border border-mode-autism-border bg-card px-3 py-2.5";
+    }
+    if (blockType === "bullet") return "bg-card/80 rounded-md px-2 py-1";
+  }
+
+  return "";
+}
+
 export function TransformOutput({
   result,
   modeSlug,
@@ -47,7 +114,7 @@ export function TransformOutput({
   const fallbackMessage = getFallbackBannerMessage(result.fallbackReason);
 
   return (
-    <div className="flex h-full flex-col">
+    <div className={cn("flex h-full flex-col", modeSurfaceClass(modeSlug))}>
       {fallbackMessage && (
         <div
           className="alert-warning mb-4 flex gap-2 rounded-lg px-3 py-2.5"
@@ -107,6 +174,7 @@ export function TransformOutput({
               transition={{ delay: i * 0.025, duration: 0.22 }}
               className={cn(
                 blockStyles[block.type] ?? blockStyles.chunk,
+                modeBlockClass(modeSlug, block.type, block.text),
                 block.type === "step" && "flex items-start gap-3",
                 block.type === "bullet" &&
                   (block.text.startsWith("☐") || block.text.startsWith("[ ]")) &&

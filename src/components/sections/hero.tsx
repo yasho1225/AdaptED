@@ -1,10 +1,9 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
 import { MODES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
-import { ArrowRight, Sparkles, Zap } from "lucide-react";
+import { ArrowRight, ShieldCheck } from "lucide-react";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -21,7 +20,10 @@ const fadeUp = {
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden pt-24 pb-16 md:pt-32 md:pb-24">
+    <section
+      className="relative overflow-hidden pt-24 pb-6 md:pt-28 md:pb-8"
+      aria-labelledby="hero-heading"
+    >
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div
           className="absolute inset-0 opacity-40"
@@ -32,43 +34,43 @@ export function Hero() {
           }}
         />
         <div className="absolute -top-24 left-1/2 h-[520px] w-[900px] -translate-x-1/2 rounded-full bg-primary/10 blur-3xl" />
-        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
       </div>
 
-      <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
+      <div className="mx-auto grid max-w-6xl items-start gap-8 px-5 sm:px-6 lg:grid-cols-[1.08fr_0.92fr] lg:gap-10">
         <div className="text-center lg:text-left">
-          <motion.div custom={0} variants={fadeUp} initial="hidden" animate="show">
-            <Badge
-              variant="secondary"
-              className="mb-6 gap-1.5 rounded-full border border-white/25 bg-card px-4 py-1.5 text-[13px] font-medium text-card-foreground shadow-sm"
-            >
-              <Sparkles className="size-3.5 text-primary" />
-              Built for K–12 teachers · Demo ready
-            </Badge>
-          </motion.div>
-
           <motion.h1
+            id="hero-heading"
+            custom={0}
+            variants={fadeUp}
+            initial="hidden"
+            animate="show"
+            className="mx-auto max-w-2xl text-[2.35rem] font-bold leading-[1.05] tracking-[-0.045em] sm:text-5xl lg:mx-0 lg:max-w-none lg:text-[3.5rem] lg:leading-[1.02]"
+          >
+            Education should adapt to students
+            <span className="text-primary"> — not the other way around.</span>
+          </motion.h1>
+
+          <motion.p
             custom={1}
             variants={fadeUp}
             initial="hidden"
             animate="show"
-            className="mx-auto max-w-xl text-[2.35rem] font-semibold leading-[1.06] tracking-[-0.04em] sm:text-5xl lg:mx-0 lg:max-w-none lg:text-[3.25rem] lg:leading-[1.05]"
+            className="mx-auto mt-5 max-w-2xl text-lg font-medium leading-8 text-foreground md:text-xl lg:mx-0"
           >
-            Turn one lesson into{" "}
-            <span className="gradient-text">four accessible versions</span>
-            <span className="text-foreground">—in seconds.</span>
-          </motion.h1>
+            AdaptED instantly transforms lessons into accessible formats for
+            different learning needs.
+          </motion.p>
 
           <motion.p
             custom={2}
             variants={fadeUp}
             initial="hidden"
             animate="show"
-            className="mx-auto mt-5 max-w-xl text-base leading-7 text-muted-foreground md:text-lg md:leading-8 lg:mx-0"
+            className="mx-auto mt-4 max-w-2xl text-base leading-7 text-muted-foreground md:text-[17px] md:leading-8 lg:mx-0"
           >
-            Paste or upload any assignment. AdaptED reshapes it for dyslexia,
-            ADHD, auditory processing, and autism structure—so every student
-            gets material they can actually use.
+            Upload any worksheet, PDF, notes, or assignment and instantly adapt
+            it for different students.
           </motion.p>
 
           <motion.div
@@ -76,49 +78,39 @@ export function Hero() {
             variants={fadeUp}
             initial="hidden"
             animate="show"
-            className="mt-8 flex flex-col items-center gap-3 sm:flex-row lg:justify-start"
+            className="mt-7 flex justify-center lg:justify-start"
           >
-            <a href="#demo" className="btn-primary group w-full gap-2 sm:w-auto">
-              Try live demo
-              <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
-            </a>
-            <a href="#features" className="btn-secondary w-full sm:w-auto">
-              See all modes
-            </a>
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/[0.07] px-3.5 py-1.5 text-[13px] font-medium text-foreground/90 shadow-sm backdrop-blur-sm">
+              <ShieldCheck
+                className="size-3.5 shrink-0 text-primary"
+                aria-hidden
+              />
+              Built for inclusive classrooms
+            </span>
           </motion.div>
 
-          <motion.ul
+          <motion.div
             custom={4}
             variants={fadeUp}
             initial="hidden"
             animate="show"
-            className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-[13px] font-medium text-muted-foreground lg:justify-start"
+            className="mt-5 flex flex-col items-center gap-3 sm:flex-row lg:justify-start"
           >
-            {[
-              { icon: Zap, text: "Under 30 seconds" },
-              { icon: null, text: "4 accessibility modes" },
-              { icon: null, text: "No setup required" },
-            ].map((item) => (
-              <li key={item.text} className="flex items-center gap-2">
-                {item.icon ? (
-                  <item.icon className="size-3.5 text-primary" aria-hidden />
-                ) : (
-                  <span
-                    className="size-1.5 rounded-full bg-primary/70"
-                    aria-hidden
-                  />
-                )}
-                {item.text}
-              </li>
-            ))}
-          </motion.ul>
+            <a href="#demo" className="btn-primary group w-full gap-2 sm:w-auto">
+              Try Live Demo
+              <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+            </a>
+            <a href="#how-it-works" className="btn-secondary w-full sm:w-auto">
+              See How It Works
+            </a>
+          </motion.div>
         </div>
 
         <motion.div
           initial={{ opacity: 0, y: 28, scale: 0.98 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ delay: 0.2, duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-          className="relative mx-auto w-full max-w-lg lg:max-w-none"
+          className="relative mx-auto w-full max-w-md justify-self-center sm:max-w-lg lg:max-w-[26rem]"
         >
           <div className="absolute -inset-4 rounded-3xl bg-primary/8 blur-2xl" />
 
@@ -127,7 +119,7 @@ export function Hero() {
             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
             className="surface-elevated relative overflow-hidden rounded-2xl"
           >
-            <div className="flex items-center gap-2 border-b border-border/70 bg-muted/50 px-4 py-3">
+            <div className="flex items-center gap-2 border-b border-card-border/80 bg-[oklch(0.94_0.018_252)] px-4 py-3">
               <span className="size-2.5 rounded-full bg-red-400/90" />
               <span className="size-2.5 rounded-full bg-amber-400/90" />
               <span className="size-2.5 rounded-full bg-emerald-400/90" />
@@ -137,7 +129,7 @@ export function Hero() {
             </div>
 
             <div className="grid gap-0 sm:grid-cols-2">
-              <div className="border-b border-border/60 p-4 sm:border-b-0 sm:border-r">
+              <div className="border-b border-card-border/70 bg-card p-4 sm:border-b-0 sm:border-r">
                 <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-card-muted-foreground">
                   Original
                 </p>
@@ -170,7 +162,7 @@ export function Hero() {
               </div>
             </div>
 
-            <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border/60 bg-muted/40 px-4 py-3">
+            <div className="flex flex-wrap items-center justify-between gap-2 border-t border-card-border/80 bg-[oklch(0.94_0.018_252)] px-4 py-3">
               <div className="flex flex-wrap gap-1.5">
                 {MODES.map((mode, i) => (
                   <span
@@ -179,7 +171,7 @@ export function Hero() {
                       "rounded-md px-2 py-0.5 text-[10px] font-semibold",
                       i === 0
                         ? cn("shadow-sm", mode.theme.icon)
-                        : "bg-muted text-card-muted-foreground ring-1 ring-border",
+                        : "bg-card text-card-muted-foreground ring-1 ring-card-border/90",
                     )}
                   >
                     {mode.shortLabel}
