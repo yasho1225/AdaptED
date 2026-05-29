@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Loader2 } from "lucide-react";
+import { Sparkles } from "lucide-react";
 
 interface TransformLoadingProps {
   modeLabel: string;
@@ -10,36 +10,48 @@ interface TransformLoadingProps {
 export function TransformLoading({ modeLabel }: TransformLoadingProps) {
   return (
     <div
-      className="flex h-full min-h-[200px] flex-col items-center justify-center gap-4 py-8"
+      className="flex h-full min-h-[220px] flex-col items-center justify-center gap-5 rounded-xl border border-dashed border-card-border/80 bg-muted/30 py-10"
       aria-busy="true"
       aria-live="polite"
     >
-      <motion.div
-        animate={{ rotate: 360 }}
-        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+      <motion.span
+        className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/15"
+        animate={{ scale: [1, 1.06, 1] }}
+        transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
       >
-        <Loader2 className="size-8 text-primary" />
-      </motion.div>
+        <Sparkles className="size-5 text-primary" aria-hidden />
+      </motion.span>
       <div className="text-center">
-        <p className="text-sm font-medium text-card-foreground">
+        <p className="text-[15px] font-semibold tracking-[-0.02em] text-card-foreground">
           Adapting for {modeLabel}…
         </p>
-        <p className="mt-1 text-xs text-card-muted-foreground">Adapting content…</p>
+        <p className="mt-1.5 text-[13px] text-card-muted-foreground">
+          Restructuring content for this learning need
+        </p>
       </div>
-      <div className="w-full max-w-xs space-y-2 px-4">
-        {[92, 76, 88].map((w, i) => (
+      <div className="w-full max-w-[280px] space-y-2.5 px-4">
+        {[100, 82, 94].map((w, i) => (
           <motion.div
             key={i}
-            className="h-2.5 rounded-md bg-muted"
-            initial={{ opacity: 0.4, scaleX: 0.6 }}
-            animate={{ opacity: [0.4, 0.8, 0.4], scaleX: [0.6, 1, 0.6] }}
+            className="h-2.5 overflow-hidden rounded-full bg-card-border/50"
+            initial={{ opacity: 0.5 }}
+            animate={{ opacity: [0.45, 0.9, 0.45] }}
             transition={{
-              duration: 1.2,
+              duration: 1.1,
               repeat: Infinity,
-              delay: i * 0.15,
+              delay: i * 0.12,
             }}
-            style={{ width: `${w}%`, margin: "0 auto" }}
-          />
+          >
+            <motion.div
+              className="h-full rounded-full bg-primary/50"
+              animate={{ width: ["30%", `${w}%`, "30%"] }}
+              transition={{
+                duration: 1.1,
+                repeat: Infinity,
+                delay: i * 0.12,
+              }}
+            />
+          </motion.div>
         ))}
       </div>
     </div>

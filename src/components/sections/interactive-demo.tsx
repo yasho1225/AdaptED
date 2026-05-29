@@ -25,6 +25,7 @@ import {
 } from "@/lib/generation/build-assignment-text";
 import type { AssignmentInput, MultilingualInput, TargetLanguage } from "@/lib/generation/types";
 import type { AccessibilityMode } from "@/lib/types";
+import { DemoTip } from "@/components/sections/demo-tip";
 import { cn } from "@/lib/utils";
 
 const toolbarSelectClass =
@@ -262,7 +263,11 @@ export function InteractiveDemo() {
   };
 
   return (
-    <section id="demo" className="section-band scroll-mt-[4.25rem] py-24 md:py-32">
+    <section
+      id="demo"
+      className="scroll-mt-[4.25rem] border-t border-white/10 py-20 md:py-28"
+      aria-labelledby="demo-heading"
+    >
       <div className="mx-auto max-w-6xl px-5 sm:px-6">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
@@ -272,68 +277,69 @@ export function InteractiveDemo() {
           className="mb-10 text-center md:mb-12"
         >
           <p className="section-eyebrow">Live demo</p>
-          <h2 className="section-title">Watch accessibility happen in real time</h2>
+          <h2 id="demo-heading" className="section-title">
+            Try it: same assignment, four ways to learn
+          </h2>
           <p className="section-description">
-            Paste any assignment on the left. Pick a mode. See a visibly different
-            output on the right.
+            The example loads instantly. Switch modes on the right — each format
+            is structurally different, not a generic rewrite.
           </p>
         </motion.div>
 
-        <div className="space-y-8">
-          <div className="flex flex-wrap items-center justify-center gap-2 text-[13px] font-medium text-muted-foreground">
-            <span className="rounded-full border border-white/25 bg-white/10 px-3 py-1 text-foreground shadow-sm">
-              1 · Input
-            </span>
-            <span className="text-white/40" aria-hidden>
+        <div className="demo-shell space-y-7">
+          <DemoTip />
+
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            <span className="step-pill-active">1 · Input</span>
+            <span className="text-white/35" aria-hidden>
               →
             </span>
-            <span className="rounded-full border border-white/25 bg-white/10 px-3 py-1 text-foreground shadow-sm">
-              2 · Mode
-            </span>
-            <span className="text-white/40" aria-hidden>
+            <span className="step-pill">2 · Mode</span>
+            <span className="text-white/35" aria-hidden>
               →
             </span>
-            <span className="rounded-full border border-white/30 bg-card px-3 py-1 font-medium text-card-foreground shadow-sm">
-              3 · Output
-            </span>
+            <span className="step-pill">3 · Output</span>
           </div>
 
           <div role="group" aria-label="Accessibility mode">
-            <p className="mb-3 text-center text-[13px] font-medium text-muted-foreground lg:text-left">
+            <p className="mb-3 text-center text-[13px] font-medium text-foreground/80">
               Choose how students should experience this material
             </p>
             <ModeSelector active={mode} onChange={setMode} variant="cards" />
           </div>
 
-          <motion.div layout className="grid gap-6 lg:grid-cols-2 lg:gap-8">
-            <Card className="surface-card-interactive flex flex-col gap-0 overflow-hidden py-0">
-              <div className="border-b border-border/70 bg-muted/50 px-5 py-4">
+          <motion.div
+            layout
+            className="relative grid gap-5 lg:grid-cols-2 lg:gap-6"
+          >
+            <Card className="surface-card-static flex flex-col gap-0 overflow-hidden py-0">
+              <div className="panel-header">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <h3 className="text-[14px] font-semibold tracking-[-0.02em] text-card-foreground">
                     Original Assignment
                   </h3>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="toolbar-cluster">
                     <Button
                       type="button"
-                      variant="outline"
+                      variant="ghost"
                       size="sm"
                       onClick={handlePaste}
-                      className="gap-1.5 border-border font-medium"
+                      className="gap-1.5 h-8 px-2.5 font-medium text-card-foreground hover:bg-muted"
                     >
                       <ClipboardPaste className="size-3.5" />
                       Paste
                     </Button>
                     <Button
                       type="button"
-                      variant="outline"
+                      variant="ghost"
                       size="sm"
                       onClick={loadExample}
-                      className="gap-1.5 font-medium"
+                      className="gap-1.5 h-8 px-2.5 font-medium text-card-foreground hover:bg-muted"
                     >
                       Example
                     </Button>
                     <label className="inline-flex cursor-pointer">
-                      <span className="interactive-hover inline-flex h-8 items-center gap-1.5 rounded-lg border border-border bg-input px-3 text-[13px] font-medium text-card-foreground shadow-sm hover:bg-muted hover:shadow-[var(--shadow-soft)]">
+                      <span className="inline-flex h-8 items-center gap-1.5 rounded-lg px-2.5 text-[13px] font-medium text-card-foreground transition-colors hover:bg-muted">
                         <FileUp className="size-3.5" />
                         Upload
                       </span>
@@ -349,7 +355,7 @@ export function InteractiveDemo() {
                       size="sm"
                       onClick={() => void handleGenerate()}
                       disabled={isGeneratingAssignment}
-                      className="gap-1.5 font-semibold shadow-sm"
+                      className="gap-1.5 h-8 font-semibold shadow-sm"
                     >
                       <Sparkles className="size-3.5" />
                       {isGeneratingAssignment
@@ -383,7 +389,7 @@ export function InteractiveDemo() {
                   className={cn(
                     "mt-2 text-[12px]",
                     briefHint && !parseAssignmentBrief(input)
-                      ? "font-medium text-amber-700 dark:text-amber-200"
+                      ? "font-medium text-warning-foreground"
                       : "text-card-muted-foreground",
                   )}
                 >
@@ -411,12 +417,12 @@ export function InteractiveDemo() {
               )}
               <Card
                 className={cn(
-                  "surface-card-interactive flex flex-col gap-0 overflow-hidden py-0 ring-2 transition-shadow duration-300",
+                  "surface-card-static flex flex-col gap-0 overflow-hidden py-0 ring-2 transition-shadow duration-300",
                   theme.ring,
                   modePulse && "shadow-[var(--shadow-elevated)]",
                 )}
               >
-                <div className={cn("border-b border-border/70 px-5 py-4", theme.tint)}>
+                <div className={cn("panel-header", theme.tint)}>
                   <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                     <div className="flex items-center gap-2">
                       <span
@@ -467,7 +473,7 @@ export function InteractiveDemo() {
                     <ModeSelector active={mode} onChange={setMode} variant="tabs" />
                   </div>
                 </div>
-                <div className="min-h-[300px] flex-1 bg-card p-5 md:min-h-[360px]">
+                <div className="min-h-[300px] flex-1 bg-[oklch(0.99_0.006_252)] p-5 md:min-h-[360px]">
                   <AnimatePresence mode="wait">
                     {outputStatus === "error" ? (
                       <motion.div

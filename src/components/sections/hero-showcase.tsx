@@ -57,7 +57,7 @@ export function HeroShowcase() {
         className="surface-elevated relative overflow-hidden rounded-2xl"
       >
         {/* Step 1 — Upload */}
-        <div className="border-b border-border/60 bg-muted/40 p-4">
+        <div className="panel-header">
           <div className="flex items-center gap-2">
             <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-card shadow-sm">
               <FileText className="size-4 text-card-accent" aria-hidden />
@@ -81,7 +81,7 @@ export function HeroShowcase() {
         </div>
 
         {/* Step 2 — AI */}
-        <div className="border-b border-border/60 px-4 py-3">
+        <div className="border-b border-card-border/70 bg-[oklch(0.99_0.006_252)] px-4 py-3.5">
           <div className="flex items-center gap-2">
             <motion.span
               className="flex h-8 w-8 items-center justify-center rounded-lg bg-card-accent/15"
@@ -113,7 +113,7 @@ export function HeroShowcase() {
         </div>
 
         {/* Step 3 — Four outputs */}
-        <div className="p-4">
+        <div className="bg-[oklch(0.99_0.006_252)] p-4">
           <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-card-muted-foreground">
             Step 3 · Four accessible outputs
           </p>

@@ -29,10 +29,14 @@ export function ModeSelector({
               onClick={() => onChange(mode.id)}
               aria-pressed={isActive}
               className={cn(
-                "relative overflow-hidden rounded-xl border border-white/25 bg-card px-3.5 py-3.5 text-left text-card-foreground transition-shadow duration-200",
+                "relative overflow-hidden rounded-xl border bg-card px-3.5 py-4 text-left text-card-foreground transition-[box-shadow,transform,border-color] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
                 isActive
-                  ? cn("shadow-[var(--shadow-soft)] ring-2 ring-offset-2 ring-offset-background", theme.ring, theme.border)
-                  : "hover:border-white/40 hover:shadow-[var(--shadow-soft)]",
+                  ? cn(
+                      "scale-[1.02] border-white/40 shadow-[var(--shadow-elevated)] ring-2 ring-offset-2 ring-offset-background",
+                      theme.ring,
+                      theme.border,
+                    )
+                  : "border-white/20 hover:border-white/35 hover:shadow-[var(--shadow-soft)]",
               )}
             >
               {isActive && (
@@ -50,7 +54,7 @@ export function ModeSelector({
               >
                 {mode.icon}
               </span>
-              <span className="relative block text-[14px] font-semibold tracking-[-0.01em]">
+              <span className="relative block text-[14px] font-semibold tracking-[-0.02em]">
                 {mode.shortLabel}
               </span>
               <span className="relative mt-0.5 hidden text-[12px] leading-snug text-card-muted-foreground sm:block">
@@ -64,7 +68,7 @@ export function ModeSelector({
   }
 
   return (
-    <div className="flex flex-wrap gap-1 rounded-xl border border-border/80 bg-muted p-1">
+    <div className="toolbar-cluster w-full sm:w-auto">
       {MODES.map((mode) => {
         const isActive = active === mode.id;
         const { theme } = mode;
@@ -75,7 +79,7 @@ export function ModeSelector({
             onClick={() => onChange(mode.id)}
             aria-pressed={isActive}
             className={cn(
-              "relative rounded-lg px-3 py-2 text-[13px] font-medium transition-colors duration-200",
+              "relative rounded-lg px-3 py-2 text-[13px] font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-card",
               isActive
                 ? "text-card-foreground"
                 : "text-card-muted-foreground hover:text-card-foreground",
@@ -93,7 +97,9 @@ export function ModeSelector({
             )}
             <span className="relative flex items-center gap-1.5">
               {isActive && (
-                <span className={cn("size-1.5 shrink-0 rounded-full", theme.icon)} />
+                <span
+                  className={cn("size-1.5 shrink-0 rounded-full", theme.icon)}
+                />
               )}
               {mode.shortLabel}
             </span>

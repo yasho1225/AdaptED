@@ -3,7 +3,7 @@
 import { MODES } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
-import { ArrowRight, ShieldCheck } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -21,7 +21,7 @@ const fadeUp = {
 export function Hero() {
   return (
     <section
-      className="relative overflow-hidden pt-24 pb-6 md:pt-28 md:pb-8"
+      className="relative overflow-hidden pt-24 pb-5 md:pt-28 md:pb-7"
       aria-labelledby="hero-heading"
     >
       <div className="pointer-events-none absolute inset-0 -z-10">
@@ -37,7 +37,7 @@ export function Hero() {
         <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
       </div>
 
-      <div className="mx-auto grid max-w-6xl items-start gap-8 px-5 sm:px-6 lg:grid-cols-[1.08fr_0.92fr] lg:gap-10">
+      <div className="mx-auto grid max-w-6xl items-start gap-8 px-5 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-10">
         <div className="text-center lg:text-left">
           <motion.h1
             id="hero-heading"
@@ -78,30 +78,14 @@ export function Hero() {
             variants={fadeUp}
             initial="hidden"
             animate="show"
-            className="mt-7 flex justify-center lg:justify-start"
-          >
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/[0.07] px-3.5 py-1.5 text-[13px] font-medium text-foreground/90 shadow-sm backdrop-blur-sm">
-              <ShieldCheck
-                className="size-3.5 shrink-0 text-primary"
-                aria-hidden
-              />
-              Built for inclusive classrooms
-            </span>
-          </motion.div>
-
-          <motion.div
-            custom={4}
-            variants={fadeUp}
-            initial="hidden"
-            animate="show"
-            className="mt-5 flex flex-col items-center gap-3 sm:flex-row lg:justify-start"
+            className="mt-8 flex flex-col items-center gap-3 sm:flex-row lg:justify-start"
           >
             <a href="#demo" className="btn-primary group w-full gap-2 sm:w-auto">
-              Try Live Demo
+              Try live demo
               <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
             </a>
-            <a href="#how-it-works" className="btn-secondary w-full sm:w-auto">
-              See How It Works
+            <a href="#features" className="btn-secondary w-full sm:w-auto">
+              See all modes
             </a>
           </motion.div>
         </div>
@@ -110,7 +94,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 28, scale: 0.98 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ delay: 0.2, duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-          className="relative mx-auto w-full max-w-md justify-self-center sm:max-w-lg lg:max-w-[26rem]"
+          className="relative mx-auto w-full max-w-lg justify-self-center lg:max-w-[440px]"
         >
           <div className="absolute -inset-4 rounded-3xl bg-primary/8 blur-2xl" />
 
@@ -119,10 +103,10 @@ export function Hero() {
             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
             className="surface-elevated relative overflow-hidden rounded-2xl"
           >
-            <div className="flex items-center gap-2 border-b border-card-border/80 bg-[oklch(0.94_0.018_252)] px-4 py-3">
-              <span className="size-2.5 rounded-full bg-red-400/90" />
-              <span className="size-2.5 rounded-full bg-amber-400/90" />
-              <span className="size-2.5 rounded-full bg-emerald-400/90" />
+            <div className="flex items-center gap-2 border-b border-card-border/80 bg-[oklch(0.975_0.014_252)] px-4 py-3">
+              <span className="size-2.5 rounded-full bg-red-400/90" aria-hidden />
+              <span className="size-2.5 rounded-full bg-amber-400/90" aria-hidden />
+              <span className="size-2.5 rounded-full bg-emerald-400/90" aria-hidden />
               <span className="ml-2 text-[12px] font-medium text-card-muted-foreground">
                 AdaptED · Live preview
               </span>
@@ -162,7 +146,7 @@ export function Hero() {
               </div>
             </div>
 
-            <div className="flex flex-wrap items-center justify-between gap-2 border-t border-card-border/80 bg-[oklch(0.94_0.018_252)] px-4 py-3">
+            <div className="flex flex-wrap items-center justify-between gap-2 border-t border-card-border/80 bg-[oklch(0.975_0.014_252)] px-4 py-3">
               <div className="flex flex-wrap gap-1.5">
                 {MODES.map((mode, i) => (
                   <span

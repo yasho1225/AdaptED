@@ -69,9 +69,9 @@
 
 /* Blue canvas + white reading surfaces (foreground = on blue, card-* = on white) */
 :root {
-  --background: oklch(0.34 0.09 252);
+  --background: oklch(0.28 0.095 252);
   --foreground: oklch(0.98 0.01 252);
-  --card: oklch(0.96 0.018 252);
+  --card: oklch(0.985 0.012 252);
   --card-foreground: oklch(0.26 0.05 252);
   --card-muted-foreground: oklch(0.46 0.03 252);
   --card-accent: oklch(0.38 0.11 235);
@@ -116,8 +116,11 @@
   --mode-autism-muted: oklch(0.93 0.028 285);
   --mode-autism-border: oklch(0.76 0.065 285);
 
-  --shadow-soft: 0 4px 24px oklch(0.12 0.05 252 / 0.35);
-  --shadow-elevated: 0 16px 48px oklch(0.1 0.05 252 / 0.45);
+  --shadow-soft: 0 2px 8px oklch(0.08 0.06 252 / 0.25),
+    0 12px 32px oklch(0.06 0.08 252 / 0.35);
+  --shadow-elevated: 0 4px 12px oklch(0.08 0.06 252 / 0.2),
+    0 24px 56px oklch(0.05 0.1 252 / 0.45);
+  --shadow-glow: 0 0 0 1px oklch(1 0 0 / 0.08), 0 0 80px oklch(0.65 0.14 235 / 0.25);
 
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
@@ -205,11 +208,22 @@
   body {
     @apply bg-background text-foreground text-[15px] leading-relaxed;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11", "ss01";
-    background-image: radial-gradient(
-      120% 90% at 50% -30%,
-      oklch(0.55 0.12 235 / 0.4),
-      transparent 60%
-    );
+    background-image:
+      radial-gradient(
+        ellipse 80% 50% at 50% -20%,
+        oklch(0.45 0.14 235 / 0.55),
+        transparent 55%
+      ),
+      radial-gradient(
+        ellipse 60% 40% at 100% 0%,
+        oklch(0.38 0.12 280 / 0.35),
+        transparent 50%
+      ),
+      radial-gradient(
+        ellipse 50% 35% at 0% 100%,
+        oklch(0.32 0.1 220 / 0.4),
+        transparent 45%
+      );
   }
 
   h1,
@@ -244,19 +258,23 @@
 
 @layer components {
   .section-eyebrow {
-    @apply text-[11px] font-semibold uppercase tracking-[0.14em] text-primary;
+    @apply inline-flex items-center rounded-full border border-primary/25 bg-primary/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-primary;
   }
 
   .section-title {
-    @apply mt-3 font-bold tracking-[-0.03em] text-foreground;
+    @apply mt-4 font-bold tracking-[-0.035em] text-foreground;
   }
 
   .section-description {
-    @apply mx-auto mt-5 max-w-2xl text-[16px] leading-8 text-muted-foreground md:text-lg md:leading-8;
+    @apply mx-auto mt-4 max-w-2xl text-[16px] leading-[1.75] text-muted-foreground/95 md:text-[17px];
   }
 
   .panel-label {
-    @apply text-[13px] font-semibold tracking-[-0.01em] text-card-foreground;
+    @apply text-[13px] font-semibold tracking-[-0.02em] text-card-foreground;
+  }
+
+  .panel-sublabel {
+    @apply text-[12px] text-card-muted-foreground;
   }
 
   .gradient-text {
@@ -276,26 +294,59 @@
   }
 
   .btn-primary {
-    @apply inline-flex h-12 min-w-[10rem] items-center justify-center rounded-full bg-card px-7 text-[15px] font-semibold text-card-foreground shadow-[var(--shadow-soft)] transition-[transform,box-shadow,background-color,border-color,color] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:shadow-[var(--shadow-elevated)] active:translate-y-0 active:scale-[0.98];
+    @apply inline-flex h-11 min-w-[9.5rem] items-center justify-center gap-2 rounded-full border border-white/40 bg-card px-6 text-[14px] font-semibold text-card-accent shadow-[var(--shadow-soft)] transition-[transform,box-shadow,background-color] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-px hover:shadow-[var(--shadow-elevated)] active:translate-y-0 active:scale-[0.99];
   }
 
   .btn-secondary {
-    @apply inline-flex h-12 items-center justify-center rounded-full border border-white/30 bg-white/10 px-7 text-[15px] font-medium text-foreground shadow-sm transition-[transform,box-shadow,background-color,border-color,color] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:bg-white/18 hover:shadow-[var(--shadow-soft)] active:translate-y-0 active:scale-[0.98];
+    @apply inline-flex h-11 items-center justify-center gap-2 rounded-full border border-white/25 bg-white/[0.08] px-6 text-[14px] font-medium text-foreground backdrop-blur-sm transition-[transform,background-color,border-color] duration-200 hover:border-white/35 hover:bg-white/[0.14] active:scale-[0.99];
+  }
+
+  .trust-pill {
+    @apply inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/[0.06] px-3.5 py-1.5 text-[13px] font-medium text-foreground/90 backdrop-blur-md;
   }
 
   .surface-card {
-    @apply border border-white/20 bg-card text-card-foreground shadow-[var(--shadow-soft)] ring-1 ring-white/10;
+    @apply rounded-2xl border border-white/20 bg-card text-card-foreground shadow-[var(--shadow-soft)] ring-1 ring-white/[0.08];
+    --border: var(--card-border);
+  }
+
+  .surface-card-static {
+    @apply rounded-2xl border border-white/25 bg-card text-card-foreground shadow-[var(--shadow-soft)] ring-1 ring-white/[0.1];
     --border: var(--card-border);
   }
 
   .surface-card-interactive {
-    @apply border border-white/20 bg-card text-card-foreground ring-1 ring-white/10 shadow-[var(--shadow-soft)] transition-[transform,box-shadow,background-color,border-color,color] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:shadow-[var(--shadow-elevated)] active:translate-y-0 active:scale-[0.99];
+    @apply rounded-2xl border border-white/20 bg-card text-card-foreground ring-1 ring-white/[0.08] shadow-[var(--shadow-soft)] transition-[box-shadow,transform] duration-200 hover:shadow-[var(--shadow-elevated)] hover:-translate-y-px;
     --border: var(--card-border);
   }
 
   .surface-elevated {
-    @apply border border-white/25 bg-card text-card-foreground shadow-[var(--shadow-elevated)] ring-1 ring-white/15;
+    @apply rounded-2xl border border-white/30 bg-card text-card-foreground shadow-[var(--shadow-elevated)] ring-1 ring-white/[0.12];
     --border: var(--card-border);
+  }
+
+  .demo-shell {
+    @apply rounded-[1.75rem] border border-white/[0.12] bg-gradient-to-b from-white/[0.09] to-white/[0.04] p-5 shadow-[var(--shadow-elevated)] backdrop-blur-md md:p-7;
+  }
+
+  .panel-header {
+    @apply border-b border-card-border/70 bg-[oklch(0.975_0.014_252)] px-5 py-4;
+  }
+
+  .step-pill {
+    @apply rounded-full border border-white/15 bg-white/[0.06] px-3.5 py-1.5 text-[12px] font-semibold text-foreground/85 backdrop-blur-sm;
+  }
+
+  .step-pill-active {
+    @apply rounded-full border border-white/30 bg-card px-3.5 py-1.5 text-[12px] font-semibold text-card-accent shadow-[var(--shadow-soft)];
+  }
+
+  .toolbar-cluster {
+    @apply inline-flex flex-wrap items-center gap-1 rounded-xl border border-card-border/60 bg-[oklch(0.99_0.008_252)] p-1 shadow-sm;
+  }
+
+  .glass-nav {
+    @apply border-b border-white/10 bg-background/75 backdrop-blur-xl backdrop-saturate-150;
   }
 
   .nav-link {

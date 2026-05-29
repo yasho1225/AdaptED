@@ -57,7 +57,7 @@ export function FeaturesScroll() {
 
   return (
     <section id="features" className="section-band scroll-mt-[4.25rem]">
-      <div className="mx-auto max-w-6xl px-5 pt-12 pb-10 text-center sm:px-6 md:pt-16">
+      <div className="mx-auto max-w-6xl px-5 pt-8 pb-10 text-center sm:px-6 md:pt-10">
         <p className="section-eyebrow">Accessibility modes</p>
         <h2 className="section-title">One lesson, transformed four ways</h2>
         <p className="section-description">
