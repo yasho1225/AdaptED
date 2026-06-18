@@ -1,8 +1,9 @@
 # AdaptED Pitch Deck
 
-**Live demo:** https://adapted-fawn.vercel.app/
+**Live demo:** https://adapted-fawn.vercel.app/  
+**Presentable deck:** https://adapted-fawn.vercel.app/pitch (or `/pitch` locally)
 
-Use this doc as slide-by-slide copy. Each slide has a **headline** (big on screen), **on-slide text** (minimal), **visual** (what to show), and **speaker notes** (what you say).
+Use this doc as speaker-notes reference. The interactive deck at `/pitch` is the primary presentation — arrow keys to navigate, **N** for notes, **F** for fullscreen, print to PDF from the browser. Each slide has a **headline** (big on screen), **on-slide text** (minimal), **visual** (what to show), and **speaker notes** (what you say).
 
 ---
 
