@@ -445,25 +445,4 @@
   .alert-warning {
     @apply border border-warning-border bg-warning text-[13px] leading-snug text-warning-foreground;
   }
-
-  @media print {
-    .pitch-deck-root header,
-    .pitch-deck-root footer {
-      display: none !important;
-    }
-
-    .pitch-deck-root {
-      min-height: auto !important;
-      background: white !important;
-    }
-
-    .pitch-slide-frame {
-      aspect-ratio: auto !important;
-      min-height: 100vh;
-      border: none !important;
-      box-shadow: none !important;
-      backdrop-filter: none !important;
-      page-break-after: always;
-    }
-  }
 }
