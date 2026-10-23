@@ -34,8 +34,8 @@ export function SourceBadge({ result, onRunLive, liveBusy }: { result: AdaptResu
       <p className="flex flex-wrap items-center gap-2 text-sm">
         <span className="inline-flex items-center gap-1.5 rounded-full bg-paper-2 px-3 py-1 font-bold text-ink-2">Pre-made example · not made just now</span>
         {onRunLive && (
-          <button type="button" onClick={onRunLive} disabled={liveBusy} className="font-semibold text-brand-ink underline-offset-4 hover:underline disabled:opacity-60">
-            {liveBusy ? "Making it…" : "Make it with AI now"}
+          <button type="button" onClick={onRunLive} disabled={liveBusy} className="btn btn-ghost btn-sm">
+            <Sparkles className="size-4" aria-hidden /> {liveBusy ? "Making it…" : "Make it with AI now"}
           </button>
         )}
       </p>

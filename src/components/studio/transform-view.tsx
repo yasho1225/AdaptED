@@ -101,7 +101,7 @@ export function TransformView({ source, profile, result, loading, runKey }: Prop
                 const b = barriers[r.index];
                 return (
                   <li key={r.index} tabIndex={0} onMouseEnter={() => setActiveBarrier(r.index)} onMouseLeave={() => setActiveBarrier(null)} onFocus={() => setActiveBarrier(r.index)} onBlur={() => setActiveBarrier(null)} className="flex gap-2.5 rounded">
-                    <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded bg-mark-strong font-mono text-[0.7rem] font-bold text-sheet-ink" aria-hidden>
+                    <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded bg-mark-strong font-mono text-xs font-bold text-sheet-ink" aria-hidden>
                       {i + 1}
                     </span>
                     <span className="text-ink-2">
@@ -110,7 +110,7 @@ export function TransformView({ source, profile, result, loading, runKey }: Prop
                       {b.needs.length > 0 && (
                         <span className="ml-1.5 inline-flex flex-wrap gap-1 align-middle">
                           {b.needs.map((n) => (
-                            <span key={n} className={cn(`need-${n}`, "rounded-full bg-[color:var(--need-soft)] px-1.5 text-[0.7rem] font-bold text-[color:var(--need)]")}>
+                            <span key={n} className={cn(`need-${n}`, "rounded-full bg-[color:var(--need-soft)] px-1.5 text-xs font-bold text-[color:var(--need)]")}>
                               {NEEDS[n].shortLabel}
                             </span>
                           ))}

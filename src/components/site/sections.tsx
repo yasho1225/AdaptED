@@ -22,7 +22,7 @@ export function Problem() {
     <section data-mood="weight" data-relief aria-labelledby="problem-heading" className="py-16 sm:py-24">
       <div className="container-page grid gap-12 lg:grid-cols-12 lg:items-start">
         <div className="lg:col-span-5">
-          <h2 id="problem-heading" className="text-4xl sm:text-5xl">
+          <h2 id="problem-heading" className="text-[2.75rem] sm:text-6xl lg:text-7xl">
             A hard worksheet can stop a student before they start.
           </h2>
           <p className="mt-6 max-w-[46ch] text-lg leading-relaxed text-ink-2">
@@ -70,7 +70,7 @@ export function HowItWorks() {
     <section id="how" data-mood="steady" aria-labelledby="how-heading" className="scroll-mt-16 py-20 sm:py-28">
       <div className="container-page">
         <div className="grid gap-6 lg:grid-cols-12">
-          <h2 id="how-heading" className="text-4xl sm:text-5xl lg:col-span-6">
+          <h2 id="how-heading" className="text-[2.75rem] sm:text-6xl lg:text-7xl lg:col-span-6">
             AI writes. AdaptED checks. You decide.
           </h2>
           <p className="max-w-[48ch] text-lg leading-relaxed text-ink-2 lg:col-span-6 lg:pt-2">
@@ -131,7 +131,7 @@ export function Research() {
     <section id="research" data-mood="grounded" aria-labelledby="research-heading" className="scroll-mt-16 py-20 sm:py-28">
       <div className="container-page">
         <div className="grid gap-6 lg:grid-cols-12">
-          <h2 id="research-heading" className="text-4xl sm:text-5xl lg:col-span-6">
+          <h2 id="research-heading" className="text-[2.75rem] sm:text-6xl lg:text-7xl lg:col-span-6">
             Based on research, not guesses.
           </h2>
           <p className="max-w-[50ch] text-lg leading-relaxed text-ink-2 lg:col-span-6 lg:pt-2">
@@ -207,7 +207,7 @@ export function Principles() {
   return (
     <section data-mood="safe" aria-labelledby="principles-heading" className="py-20 sm:py-28">
       <div className="container-page">
-        <h2 id="principles-heading" className="max-w-[18ch] text-4xl sm:text-5xl">
+        <h2 id="principles-heading" className="max-w-[18ch] text-[2.75rem] sm:text-6xl lg:text-7xl">
           What you can count on.
         </h2>
         <div className="mt-12 grid gap-12 lg:grid-cols-12">
@@ -246,7 +246,7 @@ export function CloseCta() {
     <section aria-labelledby="close-heading" className="bg-brand text-on-brand">
       <div className="container-page flex flex-col items-start justify-between gap-8 py-16 sm:py-20 lg:flex-row lg:items-end">
         <div>
-          <h2 id="close-heading" className="max-w-[16ch] text-4xl text-on-brand sm:text-6xl">
+          <h2 id="close-heading" className="max-w-[16ch] text-[2.75rem] text-on-brand sm:text-6xl lg:text-8xl">
             Try it with tomorrow&apos;s lesson.
           </h2>
           <p className="mt-4 max-w-[48ch] text-lg text-on-brand/80">Paste it in. Pick the student. See what changes in under a minute.</p>

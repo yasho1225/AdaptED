@@ -7,6 +7,7 @@ import { requestAdaptation } from "@/lib/adapt/client";
 import { NEEDS, defaultProfile } from "@/lib/adapt/profile";
 import { SAMPLES } from "@/lib/adapt/samples";
 import { NEED_IDS, type AdaptResult, type LearnerProfile, type NeedId } from "@/lib/adapt/types";
+import { OPEN_IN_STUDIO, type OpenInStudioDetail } from "@/lib/events";
 import { cn } from "@/lib/utils";
 import { CompareAll } from "./compare-all";
 import { ProfilePanel } from "./profile-panel";
@@ -20,7 +21,7 @@ import { WhyPanel } from "./why-panel";
 const MIN_SCAN_MS = 1500;
 
 export function Studio() {
-  const { calm } = useMotion();
+  const { calm, scrollToEl } = useMotion();
   const [source, setSource] = useState(SAMPLES[0].text);
   const [profile, setProfile] = useState<LearnerProfile>(defaultProfile("dyslexia"));
   const [result, setResult] = useState<AdaptResult | null>(null);
@@ -50,7 +51,7 @@ export function Studio() {
       setRan({ source: src, profile: prof });
       setRunKey((k) => k + 1);
       setTab("transform");
-      if (opts.scroll) resultRef.current?.scrollIntoView({ behavior: calm ? "auto" : "smooth", block: "start" });
+      if (opts.scroll && resultRef.current) scrollToEl(resultRef.current);
       const started = performance.now();
       try {
         const r = await requestAdaptation(src, prof, { signal: controller.signal, live: opts.live });
@@ -65,7 +66,7 @@ export function Studio() {
         if (!controller.signal.aborted) setLoading(false);
       }
     },
-    [calm],
+    [calm, scrollToEl],
   );
 
   // Play the first transformation when the studio scrolls into view.
@@ -85,6 +86,23 @@ export function Studio() {
     return () => io.disconnect();
   }, [run]);
 
+  // The hero's "Open the … version" button: load its worksheet, pick that need, and show the result.
+  useEffect(() => {
+    const open = (e: Event) => {
+      const { need } = (e as CustomEvent<OpenInStudioDetail>).detail;
+      const p = defaultProfile(need);
+      autoRan.current = true;
+      setComparing(false);
+      setSource(SAMPLES[0].text);
+      setProfile(p);
+      void run(SAMPLES[0].text, p);
+      // Scroll once the new profile has rendered, since it changes the height above the result.
+      requestAnimationFrame(() => requestAnimationFrame(() => resultRef.current && scrollToEl(resultRef.current)));
+    };
+    window.addEventListener(OPEN_IN_STUDIO, open);
+    return () => window.removeEventListener(OPEN_IN_STUDIO, open);
+  }, [run, scrollToEl]);
+
   const stale = !!ran && !loading && (ran.source !== source || JSON.stringify(ran.profile) !== JSON.stringify(profile));
   const shown = ran && result ? result : null;
   const viewProfile = ran?.profile ?? profile;
@@ -102,7 +120,7 @@ export function Studio() {
     <section id="studio" data-mood="trust" ref={sectionRef} aria-labelledby="studio-heading" className="relative scroll-mt-20 py-20 sm:py-28">
       <div className="container-page">
         <div className="max-w-3xl">
-          <h2 id="studio-heading" className="text-4xl sm:text-5xl">
+          <h2 id="studio-heading" className="text-[2.75rem] sm:text-6xl lg:text-7xl">
             Try it.
           </h2>
           <ol className="mt-5 space-y-1.5 text-lg text-ink-2">
@@ -153,7 +171,7 @@ export function Studio() {
                       aria-pressed={on}
                       disabled={loading}
                       onClick={() => quickSwitch(n)}
-                      className={cn(`need-${n}`, "chip !min-h-0 !py-1 transition-colors", on ? "border-[color:var(--need)] bg-[color:var(--need)] text-[color:var(--on-need)]" : "hover:border-[color:var(--need)]")}
+                      className={cn(`need-${n}`, "chip transition-colors", on ? "border-[color:var(--need)] bg-[color:var(--need)] text-[color:var(--on-need)]" : "hover:border-[color:var(--need)]")}
                     >
                       {NEEDS[n].label}
                     </button>

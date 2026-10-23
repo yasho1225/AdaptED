@@ -66,7 +66,7 @@ export const OriginalDocument = forwardRef<HTMLDivElement, Props>(function Origi
         style={{ backgroundSize: "var(--mark-size, 100%) 100%" }}
       >
         {clean.slice(r.start, r.end)}
-        <sup className="ml-0.5 select-none font-mono text-[0.65em] font-bold text-ink-2" aria-label={`barrier ${i + 1}`}>
+        <sup className="ml-0.5 select-none font-mono text-xs font-bold text-ink-2" aria-label={`barrier ${i + 1}`}>
           {i + 1}
         </sup>
       </mark>,

@@ -21,16 +21,19 @@ for (const [name, width, height] of VPS) {
   await p.waitForTimeout(1500);
   await p.evaluate(() => scrollTo(0, 0));
   await p.screenshot({ path: `${out}/${name}-full.png`, fullPage: true });
-  const report = await p.evaluate(() => {
+  // Touch layouts must meet 44px (Apple/Google guidance); pointer layouts 36px (well above WCAG 2.5.8's 24px).
+  const minTarget = width < 800 ? 44 : 36;
+  const report = await p.evaluate((minTarget) => {
     const vw = innerWidth;
     const overflow = document.documentElement.scrollWidth - vw;
     const small = [];
     for (const el of document.querySelectorAll("a, button, input, select, textarea, summary, [role=tab]")) {
-      const r = el.getBoundingClientRect();
+      // A control wrapped in a <label> is hit through the whole label.
+      const r = (el.matches("input") && el.closest("label")) ? el.closest("label").getBoundingClientRect() : el.getBoundingClientRect();
       const s = getComputedStyle(el);
       if (r.width === 0 || s.visibility === "hidden" || el.closest(".sr-only")) continue;
       if (el.matches("input[type=checkbox], input[type=radio]") && el.classList.contains("sr-only")) continue;
-      if (r.height < 44 && r.width < 44 + 200 && !(el.tagName === "A" && s.display === "inline")) small.push(`${el.tagName.toLowerCase()} "${(el.textContent || el.getAttribute("aria-label") || el.getAttribute("placeholder") || "").trim().slice(0, 30)}" ${Math.round(r.width)}x${Math.round(r.height)}`);
+      if (r.height < minTarget && r.width < minTarget + 200 && !(el.tagName === "A" && s.display === "inline")) small.push(`${el.tagName.toLowerCase()} "${(el.textContent || el.getAttribute("aria-label") || el.getAttribute("placeholder") || "").trim().slice(0, 30)}" ${Math.round(r.width)}x${Math.round(r.height)}`);
     }
     const tiny = new Set();
     for (const el of document.querySelectorAll("body *")) {
@@ -41,12 +44,12 @@ for (const [name, width, height] of VPS) {
     const heads = [...document.querySelectorAll("h1,h2,h3")].map((h) => `${h.tagName}:${h.textContent.trim().slice(0, 40)}`);
     const imgsNoAlt = [...document.querySelectorAll("img:not([alt])")].length;
     return { overflow, small: small.slice(0, 40), smallCount: small.length, tiny: [...tiny].slice(0, 20), heads, imgsNoAlt, title: document.title };
-  });
+  }, minTarget);
   const axe = await new AxeBuilder({ page: p }).withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze();
   console.log(`\n===== ${name} ${width}x${height}`);
   console.log("overflow:", report.overflow, "| imgs without alt:", report.imgsNoAlt, "| console errors:", errors.length ? errors : "none");
   console.log("axe:", axe.violations.map((v) => `${v.id}(${v.nodes.length})`).join(", ") || "none");
-  console.log(`tap targets < 44px tall: ${report.smallCount}`);
+  console.log(`tap targets < ${minTarget}px tall: ${report.smallCount}`);
   report.small.forEach((s) => console.log("   ", s));
   console.log("text < 12px:", report.tiny.length ? report.tiny : "none");
   if (name === "desktop") console.log("headings:", report.heads.join(" | "));

@@ -42,7 +42,7 @@ export function CompareAll({ source, base }: { source: string; base: LearnerProf
               <>
                 <ul className="flex flex-wrap gap-1 border-b border-rule px-4 py-2.5">
                   {slot.result.assignment.changes.slice(0, 3).map((c, i) => (
-                    <li key={i} className="rounded-full bg-paper-2 px-2 py-0.5 text-[0.72rem] font-semibold">
+                    <li key={i} className="rounded-full bg-paper-2 px-2 py-0.5 text-xs font-semibold">
                       {c.title}
                     </li>
                   ))}

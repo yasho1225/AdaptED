@@ -147,7 +147,7 @@ function SupportChip({ id, on, onToggle }: { id: SupportId; on: boolean; onToggl
         aria-pressed={on}
         onClick={() => onToggle(id)}
         title={s.description}
-        className={cn("chip !min-h-0 !py-1 !text-[0.8rem] transition-colors", on ? "border-ink bg-ink text-paper" : "text-ink-2 hover:border-ink-3")}
+        className={cn("chip transition-colors", on ? "border-ink bg-ink text-paper" : "text-ink-2 hover:border-ink-3")}
       >
         {on && <Check className="size-3.5" strokeWidth={3} aria-hidden />}
         {s.label}

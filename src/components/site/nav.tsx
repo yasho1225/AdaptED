@@ -20,7 +20,7 @@ export function Nav() {
         Skip to the studio
       </a>
       <div className="container-page flex h-16 items-center justify-between gap-3">
-        <a href="#top" aria-label="AdaptED home" className="rounded">
+        <a href="#top" aria-label="AdaptED home" className="-mx-1 inline-flex min-h-11 items-center rounded px-1">
           <Logo />
         </a>
         <nav aria-label="Main" className="hidden items-center gap-1 md:flex">
@@ -29,7 +29,7 @@ export function Nav() {
             ["#how", "How it works"],
             ["#research", "Research"],
           ].map(([href, label]) => (
-            <a key={href} href={href} className="rounded-md px-3.5 py-2 text-[0.95rem] font-bold text-ink-2 transition-colors hover:bg-white/10 hover:text-ink">
+            <a key={href} href={href} className="inline-flex min-h-11 items-center rounded-md px-3.5 text-[0.95rem] font-bold text-ink-2 transition-colors hover:bg-white/10 hover:text-ink">
               {label}
             </a>
           ))}

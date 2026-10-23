@@ -1,15 +1,23 @@
 import type { Metadata, Viewport } from "next";
-import { Atkinson_Hyperlegible_Mono, Atkinson_Hyperlegible_Next } from "next/font/google";
+import { Atkinson_Hyperlegible_Mono, Atkinson_Hyperlegible_Next, Bricolage_Grotesque } from "next/font/google";
 import { MotionProvider } from "@/components/motion/motion-provider";
 import "./globals.css";
 
 const body = Atkinson_Hyperlegible_Next({ subsets: ["latin"], variable: "--font-body", display: "swap", adjustFontFallback: false, fallback: ["system-ui", "sans-serif"] });
+// Display face for headlines only: variable width + optical size, so big headings can be set tight and
+// condensed while everything students read stays in Atkinson Hyperlegible.
+const display = Bricolage_Grotesque({ subsets: ["latin"], variable: "--font-display-face", display: "swap", axes: ["opsz", "wdth"], fallback: ["system-ui", "sans-serif"] });
 const mono = Atkinson_Hyperlegible_Mono({ subsets: ["latin"], variable: "--font-mono-face", display: "swap", adjustFontFallback: false, fallback: ["ui-monospace", "monospace"] });
 
+const description =
+  "AdaptED helps teachers turn one assignment into accessible versions for students with dyslexia, ADHD, auditory processing differences, and autism — keeping the learning goals intact and showing exactly what changed and why.";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://adapted-fawn.vercel.app"),
   title: "AdaptED — One lesson. Every learner.",
-  description:
-    "AdaptED helps teachers turn one assignment into accessible versions for students with dyslexia, ADHD, auditory processing differences, and autism — keeping the learning goals intact and showing exactly what changed and why.",
+  description,
+  openGraph: { title: "AdaptED — One lesson. Every learner.", description, type: "website", siteName: "AdaptED" },
+  twitter: { card: "summary_large_image", title: "AdaptED — One lesson. Every learner.", description },
 };
 
 export const viewport: Viewport = {
@@ -21,7 +29,7 @@ const bootScript = `(function(){try{var d=document.documentElement;var c=localSt
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${body.variable} ${mono.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${body.variable} ${display.variable} ${mono.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: bootScript }} />
       </head>

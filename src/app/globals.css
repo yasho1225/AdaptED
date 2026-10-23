@@ -4,13 +4,14 @@
  * AdaptED design system.
  * A committed blue field with white type; worksheets are the only paper objects on it;
  * highlighter yellow marks barriers and the one primary action.
- * One typeface family throughout: Atkinson Hyperlegible (Braille Institute), set heavy
- * for display, with its mono cut reserved for measurements and syllable notation.
+ * Type: Atkinson Hyperlegible (Braille Institute) for everything people read, its mono cut for
+ * measurements and syllable notation, and Bricolage Grotesque — condensed, heavy, optical-size
+ * aware — for headlines on the blue canvas only. Worksheets never use the display face.
  */
 
 @theme inline {
   --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-display-face), var(--font-body), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-mono-face), ui-monospace, monospace;
 
   --color-paper: var(--paper);
@@ -164,9 +165,28 @@
   h3 {
     font-family: var(--font-display);
     font-weight: 800;
-    letter-spacing: -0.025em;
-    line-height: 1.04;
+    font-stretch: 86%;
+    letter-spacing: -0.012em;
+    line-height: 0.98;
     text-wrap: balance;
+  }
+  h1 {
+    font-stretch: 80%;
+    letter-spacing: -0.015em;
+    line-height: 0.88;
+  }
+  h3 {
+    font-weight: 700;
+    font-stretch: 94%;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+  }
+  /* Anything a student reads stays in Atkinson Hyperlegible. */
+  :where(.sheet, .on-paper) :is(h1, h2, h3, h4) {
+    font-family: var(--font-sans);
+    font-stretch: normal;
+    letter-spacing: -0.005em;
+    line-height: 1.25;
   }
   h4 {
     font-weight: 700;
@@ -200,6 +220,7 @@
   [data-calm="true"] *::before,
   [data-calm="true"] *::after {
     animation-duration: 0.001ms !important;
+    animation-delay: 0s !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
@@ -285,7 +306,7 @@
     border-color: var(--ink-3);
   }
   .btn-sm {
-    min-height: 2.25rem;
+    min-height: 2.5rem;
     padding: 0.35rem 0.85rem;
     font-size: 0.875rem;
   }
@@ -300,7 +321,7 @@
     padding: 0.35rem 0.8rem;
     font-size: 0.875rem;
     font-weight: 600;
-    min-height: 2.25rem;
+    min-height: 2.5rem;
   }
   .field {
     width: 100%;
@@ -328,6 +349,14 @@
     background: var(--sheet);
     box-shadow: 0 1px 2px rgb(8 20 70 / 0.25);
   }
+  /* Touch screens: every control is at least 44px tall (WCAG 2.5.8 asks 24; Apple and Google ask 44–48). */
+  @media (pointer: coarse) {
+    .btn-sm,
+    .chip,
+    .tab {
+      min-height: 2.75rem;
+    }
+  }
 }
 
 /*
@@ -348,6 +377,51 @@
 [data-mood="safe"] { --mood: #14532d; }
 /* Calm mode: each section simply shows its color; no fading. */
 [data-calm="true"] [data-mood] { background-color: var(--mood); }
+
+/* Hero: key terms that fly between worksheet versions (see term-flight.ts). */
+.flip-term {
+  white-space: nowrap;
+}
+.flip-clone {
+  --hl: 0;
+  position: absolute;
+  z-index: 1;
+  white-space: nowrap;
+  transform-origin: 0 0;
+  pointer-events: none;
+  border-radius: 0.2em;
+  background: rgb(255 212 59 / calc(var(--hl) * 0.95));
+  box-shadow: 0 0 0 0.14em rgb(255 212 59 / calc(var(--hl) * 0.95)), 0 calc(var(--hl) * 10px) calc(var(--hl) * 24px) -6px rgb(8 20 70 / calc(var(--hl) * 0.35));
+}
+/* Hero headline: each line is a mask the words rise out of (room left for descenders and the underline). */
+.hl-line {
+  display: block;
+  overflow: clip;
+  padding-bottom: 0.2em;
+  margin-bottom: -0.2em;
+}
+.hl-word {
+  display: inline-block;
+  animation: word-rise 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(var(--i, 0) * 70ms + 60ms);
+}
+.hero-underline {
+  transform-origin: left;
+  animation: underline-draw 0.7s cubic-bezier(0.65, 0, 0.35, 1) 0.6s both;
+}
+.hero-rise {
+  animation: rise-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(var(--i, 0) * 90ms + 320ms);
+}
+@keyframes word-rise {
+  from { transform: translateY(115%); }
+}
+@keyframes underline-draw {
+  from { transform: scaleX(0); }
+}
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(18px); }
+}
 
 @keyframes draw {
   from { stroke-dashoffset: 1; }
