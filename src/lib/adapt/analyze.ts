@@ -178,6 +178,8 @@ export function parseAssignment(raw: string): ParsedAssignment {
       flushParagraph();
       continue;
     }
+    // Header fields on worksheets ("Name: ____", "Date:", "Period 3") are not content.
+    if (/^(student\s*)?(name|date|class|period|teacher|hour|block)\s*[:#：]?\s*[_\s.\d]*$/i.test(line) || /^(name|date)\s*[:：]/i.test(line)) continue;
 
     if (title === null && questions.length === 0 && passages.length === 0 && directions.length === 0 && paragraph.length === 0) {
       const wc = words(line).length;

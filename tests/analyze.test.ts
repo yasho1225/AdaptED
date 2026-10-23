@@ -45,3 +45,9 @@ describe("privacy + input hygiene", () => {
     expect(sanitizeProfile({ needs: ["adhd"], supports: ["bogus", "checklist"], language: "klingon" })).toMatchObject({ supports: ["checklist"], language: "english" });
   });
 });
+
+describe("worksheet header fields", () => {
+  it("ignores Name/Date lines when finding the title", () => {
+    expect(parseAssignment("Name: ________\nDate: ____\nThe Water Cycle\n\n1. What is evaporation?").title).toBe("The Water Cycle");
+  });
+});
