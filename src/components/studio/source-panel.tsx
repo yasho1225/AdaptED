@@ -15,11 +15,11 @@ export function SourcePanel({ value, onChange }: { value: string; onChange: (v: 
 
   const onFile = async (file: File | undefined) => {
     if (!file) return;
-    setStatus({ kind: "busy", msg: `Reading ${file.name}…` });
+    setStatus({ kind: "busy", msg: `Opening ${file.name}…` });
     try {
       const text = await extractFileText(file);
       onChange(text.slice(0, MAX));
-      setStatus({ kind: "ok", msg: `Loaded text from ${file.name}${text.length > MAX ? " (trimmed to the first 12,000 characters)" : ""}. Check it below before adapting.` });
+      setStatus({ kind: "ok", msg: `Loaded ${file.name}${text.length > MAX ? " (only the first 12,000 characters fit)" : ""}. Look it over before you continue.` });
     } catch (e) {
       setStatus({ kind: "error", msg: e instanceof Error ? e.message : "Couldn't read that file." });
     } finally {
@@ -33,11 +33,11 @@ export function SourcePanel({ value, onChange }: { value: string; onChange: (v: 
         <span className="grid size-8 place-items-center rounded-full bg-ink text-sm font-bold text-paper" aria-hidden>
           1
         </span>
-        <h3 className="text-xl">The assignment</h3>
+        <h3 className="text-xl">Your assignment</h3>
       </div>
 
       <fieldset className="mt-5">
-        <legend className="text-sm font-semibold text-ink-2">Try a sample</legend>
+        <legend className="text-sm font-semibold text-ink-2">Start with a sample</legend>
         <div className="mt-2 flex flex-wrap gap-2">
           {SAMPLES.map((s) => (
             <button
@@ -56,10 +56,10 @@ export function SourcePanel({ value, onChange }: { value: string; onChange: (v: 
 
       <div className="mt-5 flex items-end justify-between gap-3">
         <label htmlFor="assignment-text" className="text-sm font-semibold text-ink-2">
-          Or paste / upload your own
+          Or use your own
         </label>
         <button type="button" className="btn btn-ghost btn-sm" onClick={() => fileRef.current?.click()} disabled={status.kind === "busy"}>
-          <Upload className="size-4" aria-hidden /> Upload PDF / Word
+          <Upload className="size-4" aria-hidden /> Upload a PDF or Word file
         </button>
         <input ref={fileRef} type="file" accept=".pdf,.docx,.txt,.md,application/pdf,text/plain,application/vnd.openxmlformats-officedocument.wordprocessingml.document" className="sr-only" tabIndex={-1} onChange={(e) => onFile(e.target.files?.[0])} aria-hidden />
       </div>
@@ -78,7 +78,7 @@ export function SourcePanel({ value, onChange }: { value: string; onChange: (v: 
           value={value}
           maxLength={MAX}
           onChange={(e) => onChange(e.target.value)}
-          placeholder={"Paste an assignment here — directions, any reading, and the questions.\n\nYou can also drop a PDF or Word file."}
+          placeholder={"Paste your assignment here: the directions, any reading, and the questions.\n\nYou can also drag a PDF or Word file here."}
           className="field ruled min-h-[18rem] h-full resize-y font-sans text-[0.95rem] leading-8"
           aria-describedby="source-help source-status"
         />
@@ -88,7 +88,7 @@ export function SourcePanel({ value, onChange }: { value: string; onChange: (v: 
       <div className="mt-2 flex flex-wrap items-start justify-between gap-2 text-sm">
         <p id="source-help" className="flex items-start gap-1.5 text-ink-3">
           <ShieldCheck className="mt-0.5 size-4 shrink-0 text-ok" aria-hidden />
-          Files are read in your browser. Don&apos;t include student names — emails and phone numbers are removed automatically.
+          Files open on your computer. Leave out student names. Emails and phone numbers are removed before anything is sent.
         </p>
         <span className="tabular-nums text-ink-3">{value.length.toLocaleString()} / {MAX.toLocaleString()}</span>
       </div>

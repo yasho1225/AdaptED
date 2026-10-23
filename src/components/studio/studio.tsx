@@ -39,7 +39,7 @@ export function Studio() {
   const run = useCallback(
     async (src: string, prof: LearnerProfile, opts: { live?: boolean; scroll?: boolean } = {}) => {
       if (!src.trim()) {
-        setError("Add an assignment first — paste text, upload a file, or pick a sample.");
+        setError("First, add an assignment. Paste it, upload a file, or pick a sample.");
         return;
       }
       abortRef.current?.abort();
@@ -99,15 +99,17 @@ export function Studio() {
   const needLabel = profile.needs.map((n) => NEEDS[n].label).join(" + ");
 
   return (
-    <section id="studio" ref={sectionRef} aria-labelledby="studio-heading" className="relative scroll-mt-20 py-20 sm:py-28">
+    <section id="studio" data-mood="trust" ref={sectionRef} aria-labelledby="studio-heading" className="relative scroll-mt-20 py-20 sm:py-28">
       <div className="container-page">
         <div className="max-w-3xl">
           <h2 id="studio-heading" className="text-4xl sm:text-5xl">
-            Adapt an assignment.
+            Try it.
           </h2>
-          <p className="mt-4 text-lg text-ink-2">
-            Paste or upload any assignment, describe the learner, and AdaptED rewrites the <em className="not-italic font-semibold text-ink">access</em> — not the learning goals. Every change is explained and every question is checked.
-          </p>
+          <ol className="mt-5 space-y-1.5 text-lg text-ink-2">
+            <li><strong className="font-bold text-ink">1.</strong> Add your assignment.</li>
+            <li><strong className="font-bold text-ink">2.</strong> Tell AdaptED what your student needs.</li>
+            <li><strong className="font-bold text-ink">3.</strong> See the new version, what changed, and why.</li>
+          </ol>
         </div>
 
         <div className="mt-10 grid gap-5 lg:grid-cols-2">
@@ -121,7 +123,7 @@ export function Studio() {
             {loading ? "Adapting…" : `Adapt for ${needLabel}`}
             <ArrowRight className="size-4" aria-hidden />
           </button>
-          {stale && <p className="text-sm font-semibold text-warn">You changed the assignment or profile — adapt again to update.</p>}
+          {stale && <p className="text-sm font-semibold text-warn">You made changes. Click the button again to update.</p>}
         </div>
         {error && (
           <p role="alert" className="mx-auto mt-4 max-w-xl rounded-xl border border-warn/40 bg-warn-soft px-4 py-3 text-center font-semibold text-warn">
@@ -134,14 +136,14 @@ export function Studio() {
             <>
               <div className="flex flex-wrap items-end justify-between gap-4">
                 <div>
-                  <h3 className="text-2xl sm:text-3xl">{shown && !loading ? "The transformation" : "Transforming…"}</h3>
+                  <h3 className="text-2xl sm:text-3xl">{shown && !loading ? "Here’s the new version" : "Making the new version…"}</h3>
                   {shown && !loading && <div className="mt-2"><SourceBadge result={shown} liveBusy={liveBusy} onRunLive={async () => { setLiveBusy(true); await run(viewSource, viewProfile, { live: true }); setLiveBusy(false); }} /></div>}
                 </div>
                 {shown && !loading && <ResultActions result={shown} />}
               </div>
 
               <div className="flex flex-wrap items-center gap-2 text-sm">
-                <span className="font-semibold text-ink-2">See it for:</span>
+                <span className="font-semibold text-ink-2">Show it for:</span>
                 {NEED_IDS.map((n) => {
                   const on = viewProfile.needs.length === 1 && viewProfile.needs[0] === n;
                   return (

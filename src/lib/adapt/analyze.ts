@@ -326,30 +326,30 @@ export function detectBarriers(raw: string): Barrier[] {
     const s = sRaw.replace(/\s*\n\s*/g, " ").trim();
     if (!text.includes(s)) continue;
     const wc = words(s).length;
-    if (wc >= 24) add(s, `Long sentence (${wc} words) — a lot to decode and hold in memory at once.`, ["dyslexia", "adhd", "apd"]);
+    if (wc >= 24) add(s, `Long sentence (${wc} words). Hard to read and remember.`, ["dyslexia", "adhd", "apd"]);
     const imperatives = (s.match(new RegExp(IMPERATIVE.source.replace("^", "\\b"), "gi")) ?? []).length;
-    if (MULTI_STEP.test(s) && imperatives >= 2) add(s, "Several steps packed into one instruction — easy to lose track of what comes next.", ["adhd", "apd", "autism"]);
-    if (SPOKEN.test(s)) add(s.match(SPOKEN)![0], "Relies on spoken information or listening — no written backup.", ["apd"]);
+    if (MULTI_STEP.test(s) && imperatives >= 2) add(s, "Several steps in one sentence. Easy to lose track.", ["adhd", "apd", "autism"]);
+    if (SPOKEN.test(s)) add(s.match(SPOKEN)![0], "Depends on listening. Nothing is in writing.", ["apd"]);
     if (OPEN_VERB.test(s) && !LENGTH_HINT.test(s) && /[?.]$/.test(s) && wc < 40) {
       const verb = s.match(OPEN_VERB)![0];
-      add(s.slice(s.indexOf(verb)).split(/[.?]/)[0] || verb, `"${verb}" with no stated length or format — unclear what a complete answer looks like.`, ["autism", "adhd"]);
+      add(s.slice(s.indexOf(verb)).split(/[.?]/)[0] || verb, `"${verb}" without saying how much to write.`, ["autism", "adhd"]);
     }
   }
 
   const lower = text.toLowerCase();
   for (const idiom of Object.keys(IDIOMS)) {
     const at = lower.indexOf(idiom);
-    if (at >= 0) add(text.slice(at, at + idiom.length), `Figurative phrase — means "${IDIOMS[idiom]}". May be read literally.`, ["autism", "apd"]);
+    if (at >= 0) add(text.slice(at, at + idiom.length), `A saying that means "${IDIOMS[idiom]}". It could be taken literally.`, ["autism", "apd"]);
   }
   const vague = text.match(VAGUE);
-  if (vague) add(vague[0], `Vague amount ("${vague[0]}") — how much is enough is not stated.`, ["autism", "adhd"]);
+  if (vague) add(vague[0], `"${vague[0]}" doesn't say how much is enough.`, ["autism", "adhd"]);
 
   // Dense paragraphs
   text.split(/\n\s*\n/).forEach((p) => {
     const wc = words(p).length;
     if (wc >= 90 && (p.match(/^\s*\d+[.)]/gm)?.length ?? 0) < 2) {
       const first = splitSentences(p)[0] ?? p;
-      add(first, `Dense paragraph (${wc} words) with no breaks or headings.`, ["dyslexia", "adhd"]);
+      add(first, `Big block of text (${wc} words) with no breaks.`, ["dyslexia", "adhd"]);
     }
   });
 
@@ -365,7 +365,7 @@ export function detectBarriers(raw: string): Barrier[] {
   [...freq.entries()]
     .sort((a, b) => b[1] - a[1])
     .slice(0, 4)
-    .forEach(([w]) => add(w, `Long academic word (${countSyllables(w)} syllables) — keep it, but pre-teach and break it into parts.`, ["dyslexia"]));
+    .forEach(([w]) => add(w, `Long word (${countSyllables(w)} syllables). Keep it, but teach it first.`, ["dyslexia"]));
 
   return barriers.slice(0, 14);
 }

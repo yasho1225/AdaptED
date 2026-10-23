@@ -22,7 +22,7 @@ export function CompareAll({ source, base }: { source: string; base: LearnerProf
         .then((result) => setSlots((s) => ({ ...s, [n]: { status: "done", result } })))
         .catch((e: unknown) => {
           if (controller.signal.aborted) return;
-          setSlots((s) => ({ ...s, [n]: { status: "error", message: e instanceof Error ? e.message : "Failed" } }));
+          setSlots((s) => ({ ...s, [n]: { status: "error", message: e instanceof Error ? e.message : "Couldn’t make this version." } }));
         });
     });
     return () => controller.abort();

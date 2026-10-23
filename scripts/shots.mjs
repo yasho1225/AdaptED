@@ -20,13 +20,13 @@ await p.locator("#studio").scrollIntoViewIfNeeded();
 await p.waitForTimeout(1500);
 await p.screenshot({ path: `${out}/desktop-full.png`, fullPage: true });
 await p.locator("#studio").screenshot({ path: `${out}/desktop-studio.png` });
-for (const tab of ["Student view", "Why it changed", "Teacher notes"]) {
+for (const tab of ["Student view", "What changed", "Teacher notes"]) {
   await p.locator("#studio").getByRole("tab", { name: tab }).click();
   await p.waitForTimeout(400);
   await p.locator("#studio [role=tabpanel]").screenshot({ path: `${out}/tab-${tab.split(" ")[0].toLowerCase()}.png` });
 }
-await p.locator("#studio").getByRole("tab", { name: "Transformation" }).click();
-await p.getByRole("button", { name: "Compare all four needs" }).click();
+await p.locator("#studio").getByRole("tab", { name: "Before and after" }).click();
+await p.getByRole("button", { name: "Compare all four" }).click();
 await p.waitForTimeout(1200);
 await p.getByRole("heading", { name: "One lesson, four versions" }).scrollIntoViewIfNeeded();
 await p.screenshot({ path: `${out}/compare.png` });

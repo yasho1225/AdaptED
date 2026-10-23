@@ -15,7 +15,7 @@ export function Logo({ className }: { className?: string }) {
 export function Nav() {
   const { calm, setCalm } = useMotion();
   return (
-    <header className="no-print sticky top-0 z-50 border-b border-rule bg-paper">
+    <header className="no-print sticky top-0 z-50 border-b border-rule bg-[var(--canvas)]">
       <a href="#studio" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:z-50 focus:rounded-lg focus:bg-ink focus:px-4 focus:py-2 focus:text-paper">
         Skip to the studio
       </a>

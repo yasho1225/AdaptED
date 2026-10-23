@@ -71,11 +71,11 @@ export function TransformView({ source, profile, result, loading, runKey }: Prop
   );
 
   const steps = [
-    { label: `Scanned the original — ${shownRanges.length} barrier${shownRanges.length === 1 ? "" : "s"} marked`, done: true },
-    { label: `Profile: ${needLabel} · ${profile.supports.length} supports`, done: true },
-    { label: result ? (result.source === "curated" ? "Loaded the pre-built example" : result.source === "ai" ? "Generated the adapted version" : "Built the offline version") : "Writing the adapted version", done: !!result },
+    { label: `Found ${shownRanges.length} thing${shownRanges.length === 1 ? "" : "s"} that could get in the way`, done: true },
+    { label: `Student: ${needLabel} · ${profile.supports.length} kinds of help`, done: true },
+    { label: result ? (result.source === "curated" ? "Opened the pre-made example" : result.source === "ai" ? "Wrote the new version" : "Built a version without AI") : "Writing the new version", done: !!result },
     {
-      label: result ? `Fidelity check: ${result.fidelity.matchedQuestions} of ${result.fidelity.originalQuestions} questions kept` : "Checking every question is kept",
+      label: result ? `Checked: ${result.fidelity.matchedQuestions} of ${result.fidelity.originalQuestions} questions kept` : "Checking that every question is still there",
       done: !!result,
     },
   ];
@@ -86,7 +86,7 @@ export function TransformView({ source, profile, result, loading, runKey }: Prop
         <div className="flex items-center justify-between border-b border-rule px-5 py-3">
           <p className="label !text-ink">Original</p>
           <p className="text-sm text-ink-3">
-            <span className="mark font-semibold text-ink">Highlighted</span> = barrier
+            <span className="mark font-semibold text-ink">Highlighted</span> = could get in the way
           </p>
         </div>
         <div className="relative px-5 py-5 sm:px-7 lg:min-h-0 lg:flex-1 lg:overflow-y-auto" data-lenis-prevent tabIndex={0} aria-label="Original assignment">
@@ -105,7 +105,7 @@ export function TransformView({ source, profile, result, loading, runKey }: Prop
                       {i + 1}
                     </span>
                     <span className="text-ink-2">
-                      <span className="sr-only">Barrier {i + 1}: </span>
+                      <span className="sr-only">Problem {i + 1}: </span>
                       {b.issue}
                       {b.needs.length > 0 && (
                         <span className="ml-1.5 inline-flex flex-wrap gap-1 align-middle">
@@ -127,7 +127,7 @@ export function TransformView({ source, profile, result, loading, runKey }: Prop
 
       <div className={cn("sheet adapted-pane overflow-hidden", `need-${need}`)}>
         <div className="flex items-center justify-between border-b border-rule bg-[color:var(--need-soft)] px-5 py-3">
-          <p className="label !text-[color:var(--need)]">Adapted for {needLabel}</p>
+          <p className="label !text-[color:var(--need)]">New version for {needLabel}</p>
         </div>
         {result && !loading ? (
           <AdaptedDocument assignment={result.assignment} need={need} needs={profile.needs} headingLevel={3} />

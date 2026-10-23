@@ -104,11 +104,14 @@
 
 :root {
   color-scheme: dark;
+  /* The page color is set per section by mood (see [data-mood] below). */
+  --canvas: #1e40af;
   --paper: #1e40af;
   --paper-2: #1a3794;
   --ink: #ffffff;
-  --ink-2: #dce5ff;
-  --ink-3: #bccbf7;
+  /* Translucent whites keep contrast on every mood color: ≥7.1:1 and ≥5.5:1. */
+  --ink-2: rgb(255 255 255 / 0.88);
+  --ink-3: rgb(255 255 255 / 0.74);
   --rule: rgb(255 255 255 / 0.2);
   --rule-strong: rgb(255 255 255 / 0.42);
   --brand: #ffd43b;
@@ -147,7 +150,7 @@
     scroll-padding-top: 5rem;
   }
   body {
-    background-color: var(--paper);
+    background-color: var(--canvas);
     color: var(--ink);
     caret-color: var(--brand);
     scrollbar-color: rgb(255 255 255 / 0.45) var(--paper-2);
@@ -325,6 +328,30 @@
     background: var(--sheet);
     box-shadow: 0 1px 2px rgb(8 20 70 / 0.25);
   }
+}
+
+/*
+ * Color psychology, one feeling per section. All pass WCAG AA with white text,
+ * including every in-between color while the page fades from one to the next.
+ *   trust    blue      — dependable, calm: the tool and the promise
+ *   weight   dusk      — the problem, taken seriously
+ *   steady   navy      — structure: how it works
+ *   grounded deep teal — evidence: blue's trust with green's growth
+ *   safe     green     — reassurance: what you can count on
+ * Highlighter yellow (optimism, attention) marks barriers and actions — never red,
+ * because the barrier is in the worksheet, not the student.
+ */
+[data-mood="trust"] { --mood: #1e40af; }
+[data-mood="weight"] { --mood: #2b2766; }
+[data-mood="steady"] { --mood: #162b6b; }
+[data-mood="grounded"] { --mood: #0e4a5a; }
+[data-mood="safe"] { --mood: #14532d; }
+/* Calm mode: each section simply shows its color; no fading. */
+[data-calm="true"] [data-mood] { background-color: var(--mood); }
+
+@keyframes draw {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
 }
 
 @keyframes grow {

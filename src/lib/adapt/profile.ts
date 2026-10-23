@@ -23,9 +23,9 @@ export const NEEDS: Record<NeedId, NeedConfig> = {
     id: "dyslexia",
     label: "Dyslexia",
     shortLabel: "Dyslexia",
-    tagline: "Removes decoding and spelling as the gatekeeper to the ideas.",
+    tagline: "Makes reading and spelling easier, so the ideas come through.",
     barrier:
-      "Dense text, unfamiliar long words, and heavy writing demands use up effort on decoding and spelling instead of thinking.",
+      "Long words, crowded text, and lots of writing use up energy that should go to thinking.",
     defaultSupports: ["vocab-preview", "chunked-text", "read-aloud", "reduced-writing"],
     evidence: ["ida-definition", "ida-accommodations", "udl-language", "tts-meta"],
   },
@@ -33,9 +33,9 @@ export const NEEDS: Record<NeedId, NeedConfig> = {
     id: "adhd",
     label: "ADHD",
     shortLabel: "ADHD",
-    tagline: "Turns one big task into short, visible, finishable pieces.",
+    tagline: "Breaks big tasks into small steps a student can finish.",
     barrier:
-      "Multi-step instructions, long unbroken work, and no visible progress make it hard to start, stay on track, and finish.",
+      "Many steps at once and long stretches of work make it hard to start and keep going.",
     defaultSupports: ["start-step", "task-chunks", "checklist", "movement-breaks", "highlight-verbs", "self-check"],
     evidence: ["adhd-classroom", "self-regulation", "udl-strategy", "segmenting"],
   },
@@ -43,9 +43,9 @@ export const NEEDS: Record<NeedId, NeedConfig> = {
     id: "apd",
     label: "Auditory Processing",
     shortLabel: "APD",
-    tagline: "Nothing important lives only in the teacher's voice.",
+    tagline: "Puts everything said out loud on paper too.",
     barrier:
-      "Spoken directions, class discussion, and noisy group work carry information the student may not reliably catch or hold.",
+      "Spoken directions and noisy group work are easy to miss or forget.",
     defaultSupports: ["written-directions", "guided-notes", "visual-cues", "check-understanding", "quiet-alternatives"],
     evidence: ["asha-capd", "asha-portal", "udl-perception", "guided-notes"],
   },
@@ -53,9 +53,9 @@ export const NEEDS: Record<NeedId, NeedConfig> = {
     id: "autism",
     label: "Autism",
     shortLabel: "Autism",
-    tagline: "Says exactly what to do, how much, and what finished looks like.",
+    tagline: "Says exactly what to do, how much, and when it's done.",
     barrier:
-      "Ambiguous wording, figurative language, open-ended prompts, and unstated expectations leave the student guessing what is wanted.",
+      "Unclear wording, sayings, and open questions leave students guessing what you want.",
     defaultSupports: ["predictable-structure", "explicit-expectations", "literal-language", "worked-example", "open-ended-scaffold", "sensory-notes"],
     evidence: ["teacch", "ncaep", "figurative", "udl-interests"],
   },
@@ -75,8 +75,8 @@ export interface SupportConfig {
 export const SUPPORTS: Record<SupportId, SupportConfig> = {
   "vocab-preview": {
     id: "vocab-preview",
-    label: "Preview key vocabulary",
-    description: "Academic words broken into syllables with a plain definition — before the reading.",
+    label: "Teach hard words first",
+    description: "Hard words split into parts, with a simple meaning, before the reading.",
     needs: ["dyslexia", "apd"],
     instruction:
       'Add a first section "Words to know" with 3–7 "vocab" blocks for the academic terms the student must read or use. Give "syllables" with middle dots (pho·to·syn·the·sis) and a plain definition taken only from the source or general knowledge at grade level. KEEP every academic term in the assignment itself — never replace it with a simpler word.',
@@ -84,8 +84,8 @@ export const SUPPORTS: Record<SupportId, SupportConfig> = {
   },
   "chunked-text": {
     id: "chunked-text",
-    label: "Short sentences, chunked reading",
-    description: "One idea per sentence, short paragraphs under clear headings.",
+    label: "Short sentences",
+    description: "One idea per sentence. Small chunks with headings.",
     needs: ["dyslexia", "adhd"],
     instruction:
       "Rewrite reading passages as short sentences (aim ≤ 15 words) in paragraphs of 2–3 sentences, each under a short heading. Keep every fact, number, name, and term. Use active voice. Put the single most important idea of each part in a \"keyIdea\" block.",
@@ -93,8 +93,8 @@ export const SUPPORTS: Record<SupportId, SupportConfig> = {
   },
   "read-aloud": {
     id: "read-aloud",
-    label: "Read-aloud ready",
-    description: "Written so text-to-speech reads it naturally (the student view includes a read-aloud button).",
+    label: "Ready to read aloud",
+    description: "Works well with text-to-speech. The student view has a Read aloud button.",
     needs: ["dyslexia"],
     instruction:
       "Write so text-to-speech reads it naturally: spell out symbols and abbreviations the first time (e.g. CO₂ → carbon dioxide (CO₂)), avoid slashes and parenthetical asides mid-sentence.",
@@ -102,8 +102,8 @@ export const SUPPORTS: Record<SupportId, SupportConfig> = {
   },
   "reduced-writing": {
     id: "reduced-writing",
-    label: "Lighter writing load",
-    description: "Sentence starters, a spelling word bank, and other ways to answer — same thinking required.",
+    label: "Less writing, same thinking",
+    description: "Sentence starters, spelling help, and other ways to answer.",
     needs: ["dyslexia"],
     instruction:
       'For every written-response question add supports: 1–2 "starters" that frame the answer without giving it away, a "wordBank" of the hard-to-spell terms the answer will need, and "responseOptions" such as "Write it", "Type it", "Say it and record it", or "Draw and label it" when the objective is not writing itself. Never require copying the question.',
@@ -111,8 +111,8 @@ export const SUPPORTS: Record<SupportId, SupportConfig> = {
   },
   "task-chunks": {
     id: "task-chunks",
-    label: "Timed chunks",
-    description: "Work split into short sections with honest time estimates.",
+    label: "Small timed parts",
+    description: "Work split into short parts, each with a time estimate.",
     needs: ["adhd"],
     instruction:
       'Split the work into 3–6 sections, each one short task with a realistic "minutes" estimate (3–10 min each). Section headings name the outcome ("Find the inputs and outputs"), not "Part 1".',
@@ -120,8 +120,8 @@ export const SUPPORTS: Record<SupportId, SupportConfig> = {
   },
   "start-step": {
     id: "start-step",
-    label: "A tiny first step",
-    description: "A one-minute starter that makes beginning easy.",
+    label: "Easy first step",
+    description: "A one-minute task to get started.",
     needs: ["adhd"],
     instruction:
       'Open with a section "Start here" containing one "direction" that takes under a minute and needs no decision (e.g. "Write your name and circle the word photosynthesis in the reading").',
@@ -129,8 +129,8 @@ export const SUPPORTS: Record<SupportId, SupportConfig> = {
   },
   checklist: {
     id: "checklist",
-    label: "Progress checklist",
-    description: "A tick-box list so progress is visible.",
+    label: "Checklist",
+    description: "Boxes to tick as the work gets done.",
     needs: ["adhd", "autism"],
     instruction:
       'Include a "checklist" block listing every deliverable in order (one item per question or task), so the student can tick them off.',
@@ -138,8 +138,8 @@ export const SUPPORTS: Record<SupportId, SupportConfig> = {
   },
   "movement-breaks": {
     id: "movement-breaks",
-    label: "Planned brain breaks",
-    description: "Short, structured breaks between chunks.",
+    label: "Short breaks",
+    description: "Planned stretch breaks between parts.",
     needs: ["adhd"],
     instruction:
       'Insert one "break" block (1–2 minutes, a concrete instruction such as "Stand, stretch, get water, come back") between larger chunks — at most one break per 10–12 minutes of work.',
@@ -147,8 +147,8 @@ export const SUPPORTS: Record<SupportId, SupportConfig> = {
   },
   "highlight-verbs": {
     id: "highlight-verbs",
-    label: "Bold the action",
-    description: "The verb that says what to do is bolded in every direction.",
+    label: "Bold the action word",
+    description: "The word that says what to do is in bold.",
     needs: ["adhd", "dyslexia"],
     instruction:
       "In every direction and question, wrap the main action verb in **double asterisks** (e.g. **List**, **Explain**). One bolded verb per instruction.",
@@ -156,8 +156,8 @@ export const SUPPORTS: Record<SupportId, SupportConfig> = {
   },
   "self-check": {
     id: "self-check",
-    label: "Self-check before handing in",
-    description: "A short self-monitoring list at the end.",
+    label: "Check-your-work list",
+    description: "A short list to check before turning it in.",
     needs: ["adhd", "autism"],
     instruction:
       'End with a section "Check your work" with a "checklist" of 3–4 concrete self-checks tied to this assignment (e.g. "I named all 3 inputs").',
@@ -165,8 +165,8 @@ export const SUPPORTS: Record<SupportId, SupportConfig> = {
   },
   "written-directions": {
     id: "written-directions",
-    label: "All directions in writing",
-    description: "Every spoken instruction is also on the page, one step per line.",
+    label: "Every direction written down",
+    description: "Anything said out loud is also on the page, one step per line.",
     needs: ["apd"],
     instruction:
       'Put every instruction in writing as numbered "direction" blocks, one action per direction, in the order the student does them. Any instruction that would normally be said aloud ("Listen to…", "As we discussed…", "Your teacher will explain…") must be fully written out with the information itself.',
@@ -174,8 +174,8 @@ export const SUPPORTS: Record<SupportId, SupportConfig> = {
   },
   "guided-notes": {
     id: "guided-notes",
-    label: "Guided notes",
-    description: "An outline with blanks to fill in while listening or reading.",
+    label: "Fill-in notes",
+    description: "Notes with blanks to fill in while listening or reading.",
     needs: ["apd", "adhd"],
     instruction:
       'Add a "notes" block titled for the lesson content: 4–8 "items" that restate key facts from the source with one important word replaced by ____ (blanks only on key terms, answers must be findable in the reading). Put the missing words in a word bank via the block "text".',
@@ -183,8 +183,8 @@ export const SUPPORTS: Record<SupportId, SupportConfig> = {
   },
   "visual-cues": {
     id: "visual-cues",
-    label: "Visual cues",
-    description: "Each step has a picture cue: read, write, talk, look, calculate…",
+    label: "Picture cues",
+    description: "A small picture for each step: read, write, talk, and more.",
     needs: ["apd", "autism"],
     instruction:
       'Give every direction and question an "icon" from: read, write, think, talk, listen, look, move, check, calc, draw — matching what the student physically does.',
@@ -192,8 +192,8 @@ export const SUPPORTS: Record<SupportId, SupportConfig> = {
   },
   "check-understanding": {
     id: "check-understanding",
-    label: "Check-for-understanding prompts",
-    description: "Teacher notes with quick checks that don't rely on 'Any questions?'",
+    label: "Check-in tips for the teacher",
+    description: "Quick ways to check understanding without asking “Any questions?”",
     needs: ["apd"],
     instruction:
       'Add 2–3 teacherNotes that are concrete check-for-understanding prompts the teacher can use after giving directions (e.g. "Ask the student to point to the step they will do first"), plus one note on reducing background noise or facing the student when speaking.',
@@ -201,8 +201,8 @@ export const SUPPORTS: Record<SupportId, SupportConfig> = {
   },
   "quiet-alternatives": {
     id: "quiet-alternatives",
-    label: "Written alternative to listening tasks",
-    description: "Discussion or audio-only tasks get a written path to the same goal.",
+    label: "Written option for listening tasks",
+    description: "A way to do talk or video tasks in writing instead.",
     needs: ["apd"],
     instruction:
       "If any task depends on listening (partner talk, video, discussion, dictation), keep it but add a written alternative that reaches the same objective (e.g. a shared written chat, a transcript, written partner notes).",
@@ -210,8 +210,8 @@ export const SUPPORTS: Record<SupportId, SupportConfig> = {
   },
   "literal-language": {
     id: "literal-language",
-    label: "Literal, exact wording",
-    description: "Idioms, sarcasm, and vague words replaced with exact meaning.",
+    label: "Exact words, no sayings",
+    description: "Sayings and vague words replaced with clear ones.",
     needs: ["autism"],
     instruction:
       'Replace idioms, figurative phrases, rhetorical questions, and vague words ("a few", "briefly", "some") with exact literal wording, and list each swap in "languageReplacements". EXCEPTION: if understanding figurative language IS the learning objective (e.g. an ELA question about a metaphor), keep the original text and add an explicit plain-language explanation of what the question is asking.',
@@ -219,8 +219,8 @@ export const SUPPORTS: Record<SupportId, SupportConfig> = {
   },
   "explicit-expectations": {
     id: "explicit-expectations",
-    label: "Exact expectations",
-    description: "How much to write, how long it takes, and what 'finished' means.",
+    label: "Clear expectations",
+    description: "How much to write, how long it takes, and when it's done.",
     needs: ["autism", "adhd"],
     instruction:
       'Add an "expectations" block near the top whose items answer, in this order: "What I will do:", "How much:", "How long:", "I am finished when:", "Then I will:". Give every open question a concrete "length" (e.g. "2–3 sentences", "1 labeled diagram").',
@@ -228,8 +228,8 @@ export const SUPPORTS: Record<SupportId, SupportConfig> = {
   },
   "worked-example": {
     id: "worked-example",
-    label: "Model of a good answer",
-    description: "Shows the answer format using a different example — never the real answer.",
+    label: "Sample answer",
+    description: "Shows what a good answer looks like, using a different topic.",
     needs: ["autism", "dyslexia"],
     instruction:
       'Add one "example" block that shows what a complete answer looks like using a DIFFERENT topic or item than any real question. It must never contain an answer to a question in the assignment.',
@@ -237,8 +237,8 @@ export const SUPPORTS: Record<SupportId, SupportConfig> = {
   },
   "predictable-structure": {
     id: "predictable-structure",
-    label: "Predictable layout",
-    description: "Same section order every time: What, How much, Work, Finished.",
+    label: "Same order every time",
+    description: "The same four parts in the same order.",
     needs: ["autism"],
     instruction:
       'Use exactly this section order: "What this is about" → "What to do" → "The work" → "When you finish". Do not add surprise sections or change headings mid-assignment.',
@@ -246,8 +246,8 @@ export const SUPPORTS: Record<SupportId, SupportConfig> = {
   },
   "open-ended-scaffold": {
     id: "open-ended-scaffold",
-    label: "Structure for open-ended questions",
-    description: "Opinion, 'imagine', or feelings questions get a clear frame — same objective.",
+    label: "Steps for open questions",
+    description: "Opinion and “imagine” questions broken into clear steps.",
     needs: ["autism"],
     instruction:
       'For open-ended, opinion, imagination, or perspective-taking questions, keep the question and objective but add "steps" that break it into concrete parts (e.g. 1. Name the character. 2. Find one sentence that shows how they feel. 3. Name the feeling.).',
@@ -255,8 +255,8 @@ export const SUPPORTS: Record<SupportId, SupportConfig> = {
   },
   "sensory-notes": {
     id: "sensory-notes",
-    label: "Sensory & transition notes",
-    description: "Teacher notes about noise, lighting, timers, and changes in routine.",
+    label: "Sensory tips for the teacher",
+    description: "Notes about noise, light, and changes in routine.",
     needs: ["autism"],
     instruction:
       "Add 1–2 teacherNotes about sensory or transition considerations specific to this activity (e.g. warn before switching from reading to partner work; offer a quiet workspace for group tasks). Do not assume every autistic student has the same sensitivities — phrase as options to check with the student.",

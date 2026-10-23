@@ -25,7 +25,7 @@ describe("analysis helpers", () => {
   it("detects spoken-only and figurative barriers", () => {
     const b = detectBarriers("As we discussed in class, think outside the box. Briefly explain your answer.");
     expect(b.some((x) => x.needs.includes("apd"))).toBe(true);
-    expect(b.some((x) => /figurative/i.test(x.issue))).toBe(true);
+    expect(b.some((x) => /saying/i.test(x.issue))).toBe(true);
   });
   it("computes plausible readability", () => {
     const m = computeMetrics("The cat sat. The dog ran.");

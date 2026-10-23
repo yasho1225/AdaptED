@@ -21,7 +21,7 @@ function rateLimited(ip: string): boolean {
 export async function POST(request: Request) {
   const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "local";
   if (rateLimited(ip)) {
-    return NextResponse.json({ error: "Too many requests — please wait a minute and try again." }, { status: 429 });
+    return NextResponse.json({ error: "Too many tries at once. Please wait a minute and try again." }, { status: 429 });
   }
 
   let body: unknown;
@@ -33,14 +33,14 @@ export async function POST(request: Request) {
   const { source, profile: rawProfile } = (body ?? {}) as { source?: unknown; profile?: unknown };
 
   if (typeof source !== "string" || !source.trim()) {
-    return NextResponse.json({ error: "Add an assignment to adapt." }, { status: 400 });
+    return NextResponse.json({ error: "Please add an assignment first." }, { status: 400 });
   }
   if (source.length > MAX_CHARS) {
-    return NextResponse.json({ error: `That assignment is too long (max ${MAX_CHARS.toLocaleString()} characters). Try one section at a time.` }, { status: 413 });
+    return NextResponse.json({ error: `That assignment is too long (the limit is ${MAX_CHARS.toLocaleString()} characters). Try one part at a time.` }, { status: 413 });
   }
   const profile = sanitizeProfile(rawProfile);
   if (!profile) {
-    return NextResponse.json({ error: "Choose at least one learning need." }, { status: 400 });
+    return NextResponse.json({ error: "Please pick at least one thing the student needs." }, { status: 400 });
   }
 
   try {
@@ -48,6 +48,6 @@ export async function POST(request: Request) {
     return NextResponse.json(result);
   } catch (error) {
     console.error("[adapt]", error);
-    return NextResponse.json({ error: "Something went wrong while adapting. Please try again." }, { status: 500 });
+    return NextResponse.json({ error: "Something went wrong. Please try again." }, { status: 500 });
   }
 }

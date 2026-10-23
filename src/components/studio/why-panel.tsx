@@ -29,7 +29,7 @@ export function WhyPanel({ result }: { result: AdaptResult }) {
                 <div className="md:col-span-3">
                   {c.barrier && c.barrier !== "—" && (
                     <p className="text-sm">
-                      <span className="block font-bold text-ink-3">Barrier removed</span>
+                      <span className="block font-bold text-ink-3">What it fixes</span>
                       <span className="mark">{c.barrier.length > 140 ? c.barrier.slice(0, 137) + "…" : c.barrier}</span>
                     </p>
                   )}
@@ -50,12 +50,12 @@ export function WhyPanel({ result }: { result: AdaptResult }) {
 
         {a.languageReplacements && a.languageReplacements.length > 0 && (
           <div className="sheet mt-6 overflow-x-auto p-5">
-            <h4 className="font-sans text-base font-bold">Wording made literal</h4>
+            <h4 className="font-sans text-base font-bold">Sayings made clear</h4>
             <table className="mt-3 w-full min-w-[28rem] text-left text-[0.95rem]">
               <thead className="text-sm text-ink-3">
                 <tr>
-                  <th className="pb-2 font-semibold">Original</th>
-                  <th className="pb-2 font-semibold">Now says</th>
+                  <th className="pb-2 font-semibold">Before</th>
+                  <th className="pb-2 font-semibold">After</th>
                 </tr>
               </thead>
               <tbody>
@@ -74,21 +74,21 @@ export function WhyPanel({ result }: { result: AdaptResult }) {
       <aside className="space-y-4">
         <div className="sheet p-5">
           <h4 className="flex items-center gap-2 font-sans text-base font-bold">
-            <ShieldCheck className="size-5 text-ok" aria-hidden /> Academic fidelity
+            <ShieldCheck className="size-5 text-ok" aria-hidden /> Nothing was lost
           </h4>
-          <p className="mt-1 text-xs text-ink-3">Checked by AdaptED&apos;s own code, not claimed by the AI.</p>
+          <p className="mt-1 text-xs text-ink-3">AdaptED checked this itself. It doesn&apos;t just trust the AI.</p>
           <dl className="mt-3 space-y-2 text-sm">
             <Row label="Questions kept" value={`${f.matchedQuestions} / ${f.originalQuestions}`} ok={f.missing.length === 0} />
-            {f.restored.length > 0 && <Row label="Restored word-for-word" value={f.restored.join(", ")} ok={false} />}
+            {f.restored.length > 0 && <Row label="Put back word for word" value={f.restored.join(", ")} ok={false} />}
             <Row label="Answer choices kept" value={f.choicesPreserved ? "All" : "Some missing"} ok={f.choicesPreserved} />
-            {f.altered.length > 0 && <Row label="Reworded — please review" value={f.altered.map((q) => `#${q}`).join(", ")} ok={false} />}
-            <Row label="Academic terms kept" value={f.vocabularyKept.length ? f.vocabularyKept.join(", ") : "—"} ok={f.vocabularyDropped.length === 0} />
-            {f.vocabularyDropped.length > 0 && <Row label="Terms not found" value={f.vocabularyDropped.join(", ")} ok={false} />}
+            {f.altered.length > 0 && <Row label="Reworded, please check" value={f.altered.map((q) => `#${q}`).join(", ")} ok={false} />}
+            <Row label="Key words kept" value={f.vocabularyKept.length ? f.vocabularyKept.join(", ") : "—"} ok={f.vocabularyDropped.length === 0} />
+            {f.vocabularyDropped.length > 0 && <Row label="Key words missing" value={f.vocabularyDropped.join(", ")} ok={false} />}
           </dl>
         </div>
         {a.preserved.objectives.length > 0 && (
           <div className="sheet p-5">
-            <h4 className="font-sans text-base font-bold">Learning goals kept</h4>
+            <h4 className="font-sans text-base font-bold">Same learning goals</h4>
             <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-ink-2">
               {a.preserved.objectives.map((o, i) => (
                 <li key={i}>{o}</li>

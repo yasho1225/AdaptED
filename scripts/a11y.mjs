@@ -11,12 +11,12 @@ for (const theme of ["blue"]) {
   await p.goto(base, { waitUntil: "networkidle" });
   await p.locator("#studio").scrollIntoViewIfNeeded();
   await p.waitForTimeout(1500);
-  const views = [["Transformation"], ["Student view"], ["Why it changed"], ["Teacher notes"]];
+  const views = [["Before and after"], ["Student view"], ["What changed"], ["Teacher notes"]];
   for (const [tab] of views) {
     await p.locator("#studio").getByRole("tab", { name: tab }).click();
     await p.waitForTimeout(300);
     if (tab === "Teacher notes") {
-      await p.getByRole("button", { name: "Compare all four needs" }).click();
+      await p.getByRole("button", { name: "Compare all four" }).click();
       await p.waitForTimeout(800);
     }
     const r = await new AxeBuilder({ page: p }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]).analyze();

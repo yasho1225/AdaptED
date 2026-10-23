@@ -26,11 +26,11 @@ export function ProfilePanel({ profile, onChange }: { profile: LearnerProfile; o
         <span className="grid size-8 place-items-center rounded-full bg-ink text-sm font-bold text-paper" aria-hidden>
           2
         </span>
-        <h3 className="text-xl">The learner</h3>
+        <h3 className="text-xl">Your student</h3>
       </div>
 
       <fieldset className="mt-5">
-        <legend className="text-sm font-semibold text-ink-2">Learning needs <span className="font-normal text-ink-3">(choose one or more)</span></legend>
+        <legend className="text-sm font-semibold text-ink-2">What does this student need? <span className="font-normal text-ink-3">(pick one or more)</span></legend>
         <div className="mt-2 grid grid-cols-2 gap-2">
           {NEED_IDS.map((n) => {
             const on = profile.needs.includes(n);
@@ -61,7 +61,7 @@ export function ProfilePanel({ profile, onChange }: { profile: LearnerProfile; o
 
       <fieldset className="mt-5">
         <legend className="text-sm font-semibold text-ink-2">
-          Supports for this student <span className="font-normal text-ink-3">({profile.supports.length} on — a label is a starting point, not a recipe)</span>
+          Help to include <span className="font-normal text-ink-3">({profile.supports.length} on. Turn any of them off or on.)</span>
         </legend>
         <ul className="mt-2 flex flex-wrap gap-1.5">
           {suggested.map((id) => (
@@ -70,7 +70,7 @@ export function ProfilePanel({ profile, onChange }: { profile: LearnerProfile; o
         </ul>
         {others.length > 0 && (
           <details className="group mt-2">
-            <summary className="cursor-pointer text-sm font-semibold text-brand-ink">More supports ({others.length})</summary>
+            <summary className="cursor-pointer text-sm font-semibold text-brand-ink">More kinds of help ({others.length})</summary>
             <ul className="mt-2 flex flex-wrap gap-1.5">
               {others.map((id) => (
                 <SupportChip key={id} id={id} on={profile.supports.includes(id)} onToggle={toggleSupport} />
@@ -84,7 +84,7 @@ export function ProfilePanel({ profile, onChange }: { profile: LearnerProfile; o
         <label className="text-sm font-semibold text-ink-2">
           Grade
           <select className="field mt-1" value={profile.grade ?? ""} onChange={(e) => onChange({ ...profile, grade: e.target.value || undefined })}>
-            <option value="">Detect from assignment</option>
+            <option value="">Figure it out from the assignment</option>
             {GRADES.map((g) => (
               <option key={g} value={g}>
                 Grade {g}
@@ -93,7 +93,7 @@ export function ProfilePanel({ profile, onChange }: { profile: LearnerProfile; o
           </select>
         </label>
         <label className="text-sm font-semibold text-ink-2">
-          Student&apos;s language
+          Language for the student
           <select className="field mt-1" value={profile.language} onChange={(e) => onChange({ ...profile, language: e.target.value as LearnerProfile["language"] })}>
             {LANGUAGES.map((l) => (
               <option key={l.value} value={l.value}>
@@ -105,12 +105,12 @@ export function ProfilePanel({ profile, onChange }: { profile: LearnerProfile; o
       </div>
 
       <fieldset className="mt-4">
-        <legend className="text-sm font-semibold text-ink-2">Learning goals</legend>
+        <legend className="text-sm font-semibold text-ink-2">What should the student learn?</legend>
         <div className="mt-1.5 grid gap-2 sm:grid-cols-2" role="radiogroup">
           {(
             [
-              ["accommodate", "Keep grade-level goals", "Accommodation — same learning, different access. Recommended."],
-              ["modify", "Allow modified goals", "Only if this student's plan allows it. Items can become optional."],
+              ["accommodate", "The same as everyone (best)", "Same learning goals. Only the way in changes."],
+              ["modify", "Change the goals", "Only if the student's plan allows it. Some questions can become optional."],
             ] as const
           ).map(([v, label, help]) => (
             <label key={v} className={cn("flex cursor-pointer gap-2.5 rounded-xl border-2 p-3", profile.expectations === v ? "border-ink" : "border-rule hover:border-rule-strong")}>
@@ -125,13 +125,13 @@ export function ProfilePanel({ profile, onChange }: { profile: LearnerProfile; o
       </fieldset>
 
       <label className="mt-4 block text-sm font-semibold text-ink-2">
-        Anything else about how this student learns? <span className="font-normal text-ink-3">(optional)</span>
+        Anything else that helps this student? <span className="font-normal text-ink-3">(optional)</span>
         <textarea
           className="field mt-1 min-h-[4.5rem] resize-y text-[0.95rem] font-normal"
           maxLength={300}
           value={profile.notes ?? ""}
           onChange={(e) => onChange({ ...profile, notes: e.target.value })}
-          placeholder="e.g. Loves sports examples. Prefers typing to handwriting. (No names or medical details.)"
+          placeholder="For example: loves sports, likes typing more than writing. (No names or medical details.)"
         />
       </label>
     </div>

@@ -72,7 +72,7 @@ export function Hero() {
   const changes = active === "original" ? [] : CURATED.science[active].changes.slice(0, 4);
 
   return (
-    <section id="top" aria-labelledby="hero-heading" className="relative">
+    <section id="top" data-mood="trust" aria-labelledby="hero-heading" className="relative">
       <div className="container-page pt-10 pb-16 sm:pt-14 lg:pt-14">
         <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
           <h1 id="hero-heading" className="text-[3.25rem] leading-[0.95] tracking-[-0.035em] sm:text-7xl lg:col-span-7 xl:text-[6rem]">
@@ -85,11 +85,11 @@ export function Hero() {
           </h1>
           <div className="lg:col-span-5 lg:pb-3">
             <p className="max-w-[46ch] text-lg leading-relaxed text-ink-2 sm:text-xl">
-              Give AdaptED the assignment you already teach. It finds what would block a specific student and rebuilds the <strong className="font-bold text-ink">access</strong>, not the learning goals, with every change explained.
+              Paste in any assignment. AdaptED makes a version your student can use. They still learn the <strong className="font-bold text-ink">same things</strong>, and you see every change and why.
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
               <a href="#studio" className="btn btn-brand min-h-12 px-6 text-base">
-                Adapt an assignment <ArrowRight className="size-4" aria-hidden />
+                Try it now <ArrowRight className="size-4" aria-hidden />
               </a>
               <a href="#research" className="btn btn-ghost min-h-12 px-6 text-base">
                 See the research
@@ -102,7 +102,7 @@ export function Hero() {
         <div className="mt-12 grid grid-cols-1 gap-6 border-t border-rule pt-8 lg:mt-14 lg:grid-cols-12 lg:gap-10">
           <div className="min-w-0 lg:col-span-4">
             <div className="flex items-center justify-between gap-3">
-              <h2 className="text-xl tracking-[-0.015em]">The same worksheet, five ways</h2>
+              <h2 className="text-xl tracking-[-0.015em]">One worksheet, five versions</h2>
               {!calm && (
                 <button type="button" onClick={() => setPlaying((p) => !p)} className="btn btn-ghost btn-sm !px-2.5" aria-label={playing ? "Pause the tour" : "Play the tour"}>
                   {playing ? <Pause className="size-4" aria-hidden /> : <Play className="size-4" aria-hidden />}
@@ -110,7 +110,7 @@ export function Hero() {
               )}
             </div>
             <p className="mt-1 text-sm text-ink-3">
-              Grade {SAMPLE.grade} {SAMPLE.subject.toLowerCase()} · pre-built example
+              A grade {SAMPLE.grade} {SAMPLE.subject.toLowerCase()} worksheet · pre-made example. Tap a version.
             </p>
 
             <div role="tablist" aria-label="Version of the worksheet" aria-orientation="vertical" className="mt-5 -mx-4 flex gap-1 overflow-x-auto px-4 pb-1 lg:mx-0 lg:flex-col lg:overflow-visible lg:px-0">
@@ -159,7 +159,7 @@ export function Hero() {
             <div className="mt-6 border-t border-rule pt-5" aria-live="polite">
               {active === "original" ? (
                 <>
-                  <p className="font-bold">{barriers.length} barriers marked in the original</p>
+                  <p className="font-bold">{barriers.length} things that could get in the way</p>
                   <ul className="mt-3 space-y-2.5 text-[0.95rem] text-ink-2">
                     {barriers.slice(0, 4).map((b, i) => (
                       <li key={i} className="flex gap-2.5">
@@ -206,7 +206,7 @@ export function Hero() {
               </div>
               <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-sheet via-sheet/90 to-transparent" />
               <a href="#studio" className="absolute bottom-4 left-1/2 inline-flex -translate-x-1/2 items-center gap-1.5 rounded-md bg-sheet-ink px-4 py-2 text-sm font-bold text-white shadow-[var(--shadow-lift)]">
-                Open the full version <ArrowDown className="size-4" aria-hidden />
+                See the whole worksheet <ArrowDown className="size-4" aria-hidden />
               </a>
             </div>
           </div>
