@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { AdaptedDocument } from "@/components/doc/adapted-document";
 import { requestAdaptation } from "@/lib/adapt/client";
-import { NEEDS, defaultProfile } from "@/lib/adapt/profile";
+import { NEEDS, defaultProfile, writtenIn } from "@/lib/adapt/profile";
 import { NEED_IDS, type AdaptResult, type LearnerProfile, type NeedId } from "@/lib/adapt/types";
 import { cn } from "@/lib/utils";
 
@@ -48,7 +48,7 @@ export function CompareAll({ source, base }: { source: string; base: LearnerProf
                   ))}
                 </ul>
                 <div className="max-h-[34rem] overflow-y-auto" data-lenis-prevent tabIndex={0} aria-label={`${NEEDS[n].label} adapted assignment, scrollable`}>
-                  <AdaptedDocument assignment={slot.result.assignment} need={n} compact headingLevel={3} />
+                  <AdaptedDocument assignment={slot.result.assignment} need={n} compact headingLevel={3} language={writtenIn(slot.result)} />
                 </div>
               </>
             ) : slot.status === "error" ? (

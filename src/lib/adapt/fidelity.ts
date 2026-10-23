@@ -3,6 +3,7 @@
  * claimed by the model — so the teacher can trust the "nothing was lost" badge.
  */
 import { keyVocabulary, parseAssignment, words, type ParsedQuestion } from "./analyze";
+import { isEnglish } from "./profile";
 import type { AdaptedAssignment, Block, FidelityReport, OutputLanguage } from "./types";
 
 const STOP = new Set(
@@ -92,7 +93,7 @@ export function checkFidelity(
       return;
     }
     if (q.choices.length && (match.items?.length ?? 0) < q.choices.length) choicesPreserved = false;
-    if (language === "english") {
+    if (isEnglish(language)) {
       const orig = contentWords(q.text);
       if (orig.size >= 3) {
         const got = contentWords(blockText(match));
@@ -106,7 +107,7 @@ export function checkFidelity(
   const haystack = studentText(adapted).toLowerCase();
   const kept: string[] = [];
   const dropped: string[] = [];
-  if (language === "english") {
+  if (isEnglish(language)) {
     vocab.forEach((v) => (haystack.includes(v.toLowerCase()) ? kept : dropped).push(v));
   } else {
     kept.push(...vocab.filter((v) => haystack.includes(v.toLowerCase())));

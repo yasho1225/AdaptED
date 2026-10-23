@@ -161,7 +161,7 @@ export function Hero() {
               Grade {SAMPLE.grade} {SAMPLE.subject.toLowerCase()} · pre-made example
             </p>
 
-            <div role="tablist" aria-label="Version of the worksheet" aria-orientation="vertical" className="mt-5 -mx-4 flex gap-1 overflow-x-auto px-4 pb-1 lg:mx-0 lg:flex-col lg:overflow-visible lg:px-0">
+            <div role="tablist" aria-label="Version of the worksheet" aria-orientation="vertical" className="mt-5 flex flex-wrap gap-1 lg:flex-col">
               {VERSIONS.map((v) => {
                 const on = v === active;
                 return (

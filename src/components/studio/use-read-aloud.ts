@@ -7,6 +7,7 @@ import { stripMarkers } from "@/components/doc/rich-text";
 
 const LANG: Record<OutputLanguage, string> = {
   english: "en-US",
+  "simple-english": "en-US",
   spanish: "es-ES",
   french: "fr-FR",
   hindi: "hi-IN",

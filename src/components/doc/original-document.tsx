@@ -76,7 +76,7 @@ export const OriginalDocument = forwardRef<HTMLDivElement, Props>(function Origi
   if (cursor < clean.length) pieces.push(clean.slice(cursor));
 
   return (
-    <div ref={ref} className={cn("whitespace-pre-wrap break-words leading-relaxed", className)} data-shown={shown.size}>
+    <div ref={ref} className={cn("whitespace-pre-wrap break-words leading-relaxed first-line:text-[1.15em] first-line:font-bold first-line:text-ink", className)} data-shown={shown.size}>
       {pieces}
     </div>
   );

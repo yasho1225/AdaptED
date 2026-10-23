@@ -2,7 +2,8 @@
 
 import { useId, useMemo, useState } from "react";
 import { Lightbulb, Timer } from "lucide-react";
-import type { AdaptedAssignment, Block, NeedId, Section } from "@/lib/adapt/types";
+import { languageAttrs } from "@/lib/adapt/profile";
+import type { AdaptedAssignment, Block, NeedId, OutputLanguage, Section } from "@/lib/adapt/types";
 import { cn } from "@/lib/utils";
 import { CueIcon } from "./cue-icon";
 import { RichText } from "./rich-text";
@@ -29,6 +30,8 @@ interface Props {
   focusIndex?: number | null;
   headingLevel?: 2 | 3;
   id?: string;
+  /** Sets lang/dir so screen readers pronounce translations correctly and Arabic reads right to left. */
+  language?: OutputLanguage;
 }
 
 const TINTS: Record<DisplayPrefs["tint"], string> = {
@@ -42,7 +45,7 @@ export function blockId(si: number, bi: number) {
   return `${si}-${bi}`;
 }
 
-export function AdaptedDocument({ assignment, need, needs, compact = false, interactive = false, prefs = DEFAULT_PREFS, activeBlock, focusIndex = null, headingLevel = 2, id }: Props) {
+export function AdaptedDocument({ assignment, need, needs, compact = false, interactive = false, prefs = DEFAULT_PREFS, activeBlock, focusIndex = null, headingLevel = 2, id, language = "english" }: Props) {
   const all = needs?.length ? needs : [need];
   const dyslexiaStyle = all.includes("dyslexia");
   const predictable = all.includes("autism");
@@ -61,6 +64,7 @@ export function AdaptedDocument({ assignment, need, needs, compact = false, inte
   return (
     <article
       id={id}
+      {...languageAttrs(language)}
       className={cn(
         `need-${need}`,
         prefs.tint !== "paper" && "force-light",

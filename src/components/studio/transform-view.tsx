@@ -8,7 +8,7 @@ import { AdaptedDocument } from "@/components/doc/adapted-document";
 import { OriginalDocument, barrierRanges } from "@/components/doc/original-document";
 import { useMotion } from "@/components/motion/motion-provider";
 import { detectBarriers, normalize } from "@/lib/adapt/analyze";
-import { NEEDS } from "@/lib/adapt/profile";
+import { NEEDS, writtenIn } from "@/lib/adapt/profile";
 import type { AdaptResult, Barrier, LearnerProfile } from "@/lib/adapt/types";
 import { cn } from "@/lib/utils";
 
@@ -130,7 +130,7 @@ export function TransformView({ source, profile, result, loading, runKey }: Prop
           <p className="label !text-[color:var(--need)]">New version for {needLabel}</p>
         </div>
         {result && !loading ? (
-          <AdaptedDocument assignment={result.assignment} need={need} needs={profile.needs} headingLevel={3} />
+          <AdaptedDocument assignment={result.assignment} need={need} needs={profile.needs} headingLevel={3} language={writtenIn(result)} />
         ) : (
           <div className="p-6 sm:p-8" aria-live="polite">
             <ol className="space-y-3">

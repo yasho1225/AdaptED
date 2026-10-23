@@ -266,15 +266,32 @@ export const SUPPORTS: Record<SupportId, SupportConfig> = {
 
 export const SUPPORT_IDS = Object.keys(SUPPORTS) as SupportId[];
 
-export const LANGUAGES: { value: OutputLanguage; label: string }[] = [
-  { value: "english", label: "English" },
-  { value: "spanish", label: "Spanish · Español" },
-  { value: "chinese", label: "Chinese · 中文" },
-  { value: "vietnamese", label: "Vietnamese · Tiếng Việt" },
-  { value: "arabic", label: "Arabic · العربية" },
-  { value: "french", label: "French · Français" },
-  { value: "hindi", label: "Hindi · हिन्दी" },
+export const LANGUAGES: { value: OutputLanguage; label: string; code: string; rtl?: boolean }[] = [
+  { value: "english", label: "English", code: "en" },
+  { value: "simple-english", label: "Simpler English (for English learners)", code: "en" },
+  { value: "spanish", label: "Spanish · Español", code: "es" },
+  { value: "chinese", label: "Chinese · 中文", code: "zh" },
+  { value: "vietnamese", label: "Vietnamese · Tiếng Việt", code: "vi" },
+  { value: "arabic", label: "Arabic · العربية", code: "ar", rtl: true },
+  { value: "french", label: "French · Français", code: "fr" },
+  { value: "hindi", label: "Hindi · हिन्दी", code: "hi" },
 ];
+
+/** English or Simpler English: same script, so English-only checks (wording overlap, vocabulary) still apply. */
+export function isEnglish(language: OutputLanguage): boolean {
+  return language === "english" || language === "simple-english";
+}
+
+/** The language a result is actually written in: only the AI translates; offline versions stay in English. */
+export function writtenIn(result: { source: string; profile: { language: OutputLanguage } }): OutputLanguage {
+  return result.source === "ai" ? result.profile.language : "english";
+}
+
+/** lang/dir attributes for a document written in this language. */
+export function languageAttrs(language: OutputLanguage): { lang: string; dir: "ltr" | "rtl" } {
+  const l = LANGUAGES.find((x) => x.value === language);
+  return { lang: l?.code ?? "en", dir: l?.rtl ? "rtl" : "ltr" };
+}
 
 export const GRADES = ["3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
 

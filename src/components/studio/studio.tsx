@@ -1,13 +1,14 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ArrowRight, RotateCcw, Wand2 } from "lucide-react";
+import { ArrowRight, Languages, RotateCcw, Wand2 } from "lucide-react";
 import { CalmMagnet } from "@/components/motion/calm-magnet";
 import { useMotion } from "@/components/motion/motion-provider";
 import { requestAdaptation } from "@/lib/adapt/client";
-import { NEEDS, defaultProfile } from "@/lib/adapt/profile";
+import type { CreateRequest, CreateResult } from "@/lib/adapt/create";
+import { LANGUAGES, NEEDS, defaultProfile } from "@/lib/adapt/profile";
 import { SAMPLES } from "@/lib/adapt/samples";
-import { NEED_IDS, type AdaptResult, type LearnerProfile, type NeedId } from "@/lib/adapt/types";
+import { NEED_IDS, type AdaptResult, type LearnerProfile, type NeedId, type OutputLanguage } from "@/lib/adapt/types";
 import { OPEN_IN_STUDIO, type OpenInStudioDetail } from "@/lib/events";
 import { cn } from "@/lib/utils";
 import { CompareAll } from "./compare-all";
@@ -115,7 +116,25 @@ export function Studio() {
     void run(source, p);
   };
 
+  const switchLanguage = (language: OutputLanguage) => {
+    const p = { ...viewProfile, language };
+    setProfile(p);
+    void run(viewSource, p);
+  };
+
+  // A new assignment from "Create one with AI": load it, match the grade, and adapt it right away.
+  // A starter outline (no AI) needs the teacher's reading first, so it waits for the Adapt button.
+  const onCreated = (r: CreateResult, req: CreateRequest) => {
+    autoRan.current = true;
+    const p = { ...profile, grade: req.grade };
+    setSource(r.text);
+    setProfile(p);
+    setComparing(false);
+    if (r.source === "ai") void run(r.text, p, { scroll: true });
+  };
+
   const needLabel = profile.needs.map((n) => NEEDS[n].label).join(" + ");
+  const untranslated = shown && shown.source !== "ai" && viewProfile.language !== "english";
 
   return (
     <section id="studio" data-mood="trust" ref={sectionRef} aria-labelledby="studio-heading" className="relative scroll-mt-20 py-20 sm:py-28">
@@ -124,15 +143,13 @@ export function Studio() {
           <h2 id="studio-heading" data-reveal className="text-[2.75rem] sm:text-6xl lg:text-7xl">
             Try it.
           </h2>
-          <ol className="mt-5 space-y-1.5 text-lg text-ink-2">
-            <li><strong className="font-bold text-ink">1.</strong> Add your assignment.</li>
-            <li><strong className="font-bold text-ink">2.</strong> Tell AdaptED what your student needs.</li>
-            <li><strong className="font-bold text-ink">3.</strong> See the new version, what changed, and why.</li>
-          </ol>
+          <p className="mt-5 max-w-[52ch] text-lg leading-relaxed text-ink-2">
+            Bring an assignment, or have AI write a new one. Tell AdaptED about your student. See the new version, what changed, and why, in English or another language.
+          </p>
         </div>
 
         <div className="mt-10 grid gap-5 lg:grid-cols-2">
-          <SourcePanel value={source} onChange={setSource} />
+          <SourcePanel value={source} onChange={setSource} onCreated={onCreated} />
           <ProfilePanel profile={profile} onChange={setProfile} />
         </div>
 
@@ -163,7 +180,8 @@ export function Studio() {
                 {shown && !loading && <ResultActions result={shown} />}
               </div>
 
-              <div className="flex flex-wrap items-center gap-2 text-sm">
+              <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-sm">
+              <div className="flex flex-wrap items-center gap-2">
                 <span className="font-semibold text-ink-2">Show it for:</span>
                 {NEED_IDS.map((n) => {
                   const on = viewProfile.needs.length === 1 && viewProfile.needs[0] === n;
@@ -181,6 +199,23 @@ export function Studio() {
                   );
                 })}
               </div>
+              <label className="flex items-center gap-2">
+                <Languages className="size-4 text-ink-2" aria-hidden />
+                <span className="font-semibold text-ink-2">Language:</span>
+                <select className="field on-paper !w-auto !py-1.5" value={viewProfile.language} disabled={loading} onChange={(e) => switchLanguage(e.target.value as OutputLanguage)}>
+                  {LANGUAGES.map((l) => (
+                    <option key={l.value} value={l.value}>
+                      {l.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              </div>
+              {untranslated && (
+                <p className="-mt-2 text-sm font-semibold text-warn">
+                  {viewProfile.language === "simple-english" ? "Simpler English needs AI, which isn’t available right now, so this version keeps the original wording." : "Translating needs AI, which isn’t available right now, so this version is in English."}
+                </p>
+              )}
 
               {shown && !loading && <MetricsStrip result={shown} />}
 

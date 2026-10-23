@@ -7,7 +7,7 @@
 - **Secondary: students**, who use the adapted version (student view, read-aloud, checklists).
 
 ## Core flow
-1. Provide an assignment (paste, sample, PDF/DOCX/TXT upload — parsed in browser).
+1. Provide an assignment (paste, sample, PDF/DOCX/TXT upload — parsed in browser), or create one with AI from a topic, grade, level, question count, and reading/questions-only choice.
 2. Build a learner profile: needs (multi-select), individual supports, grade, language, accommodation vs. modification, optional preference note (no names/medical info).
 3. Adapt → Barrier Lens scan → AI generation → fidelity check.
 4. Review: Transformation, Student view, Why it changed, Teacher notes, Compare all four.
@@ -25,6 +25,8 @@
 | Privacy | No storage; redaction of contact details/names before AI; files parsed client-side | Done |
 | Accessibility | WCAG 2.2 AA; calm mode; keyboard; screen readers; mobile | axe: 0 violations |
 | Reliability | Offline engine when AI unavailable; rate limiting; input limits | Done |
+| Create | New grade-level assignment from a topic; accuracy rules (no invented facts, quotes, or sources); answers never shown; result flows into the normal adapt + fidelity pipeline; labelled starter outline without AI | Done, tested (mocked model) |
+| Languages | 8 output languages incl. Simpler English; switchable from results; key terms paired with English; lang/dir set on documents (Arabic RTL); honest notice when translation isn't possible | Done, tested (mocked model) |
 
 ## Non-goals
 Accounts, LMS integration, grading, storing student data, diagnosing.

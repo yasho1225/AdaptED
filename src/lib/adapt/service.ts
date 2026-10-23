@@ -37,7 +37,8 @@ function finalize(
 
 function offline(source: string, profile: LearnerProfile, reason: FallbackReason, notices: string[]): AdaptResult {
   const extra = [...notices];
-  if (profile.language !== "english") extra.push("Translation needs the AI engine, so this offline version is in English.");
+  if (profile.language === "simple-english") extra.push("Simpler English needs the AI engine, so this offline version keeps the original wording.");
+  else if (profile.language !== "english") extra.push("Translation needs the AI engine, so this offline version is in English.");
   return finalize(source, adaptOffline(source, profile), profile, { source: "offline", fallbackReason: reason }, extra);
 }
 

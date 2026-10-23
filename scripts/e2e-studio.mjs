@@ -71,6 +71,25 @@ await studio.getByRole("button", { name: "Make it with AI now" }).click();
 await studio.getByText(/Made without AI|Made just now by AI/).first().waitFor({ timeout: 30000 });
 check("live AI request is labelled honestly", true, await studio.getByText(/Made without AI|Made just now by AI/).first().innerText());
 
+// Language switch: without AI on the server it must say the version stayed in English.
+await studio.getByRole("combobox", { name: /Language:/ }).selectOption("spanish");
+await studio.getByText(/Translating needs AI|New version for/).first().waitFor({ timeout: 30000 });
+await p.waitForTimeout(2500);
+const translated = await studio.locator('article[lang="es"]').count();
+const note = await studio.getByText(/Translating needs AI/).isVisible().catch(() => false);
+check("language switch: translated, or says plainly that it couldn't", translated > 0 || note, translated ? "Spanish version shown" : "English kept, with a note");
+await studio.getByRole("combobox", { name: /Language:/ }).selectOption("english");
+await p.waitForTimeout(2500);
+
+// Create one with AI (or the labelled starter outline when AI isn't set up).
+await studio.getByRole("tab", { name: "Create one with AI" }).click();
+await studio.getByLabel("What should it be about?").fill("the water cycle");
+await studio.getByRole("button", { name: "Create assignment" }).click();
+await studio.locator("#source-status").getByText(/Created just now by AI|starter outline/).waitFor({ timeout: 45000 });
+const made = await p.locator("#assignment-text").inputValue();
+const status = await studio.locator("#source-status").innerText();
+check("create: fills the assignment box and labels where it came from", /^the water cycle|^The water cycle|\n1\. /i.test(made) && made.includes("1. "), status.slice(0, 70));
+
 // Hero → studio hand-off.
 await p.evaluate(() => scrollTo(0, 0));
 await p.waitForTimeout(600);

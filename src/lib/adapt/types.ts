@@ -39,7 +39,7 @@ export type SupportId =
 /** Accommodate = same learning targets, different access. Modify = teacher-approved change to the targets. */
 export type Expectations = "accommodate" | "modify";
 
-export type OutputLanguage = "english" | "spanish" | "french" | "hindi" | "chinese" | "arabic" | "vietnamese";
+export type OutputLanguage = "english" | "simple-english" | "spanish" | "french" | "hindi" | "chinese" | "arabic" | "vietnamese";
 
 export interface LearnerProfile {
   needs: NeedId[];

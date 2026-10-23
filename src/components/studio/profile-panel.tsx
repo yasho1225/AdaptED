@@ -48,7 +48,7 @@ export function ProfilePanel({ profile, onChange }: { profile: LearnerProfile; o
               >
                 <span className="flex w-full items-center justify-between gap-2 font-bold">
                   <span className={on ? "text-[color:var(--need)]" : ""}>{NEEDS[n].label}</span>
-                  <span className={cn("grid size-5 place-items-center rounded-full border-2", on ? "border-[color:var(--need)] bg-[color:var(--need)] text-[color:var(--on-need)]" : "border-rule-strong")} aria-hidden>
+                  <span className={cn("grid size-5 shrink-0 place-items-center rounded-full border-2", on ? "border-[color:var(--need)] bg-[color:var(--need)] text-[color:var(--on-need)]" : "border-rule-strong")} aria-hidden>
                     {on && <Check className="size-3" strokeWidth={3.5} />}
                   </span>
                 </span>

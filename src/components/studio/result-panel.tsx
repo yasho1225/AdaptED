@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Copy, Download, Info, LayoutGrid, Printer, Sparkles } from "lucide-react";
 import { AdaptedDocument } from "@/components/doc/adapted-document";
-import { NEEDS } from "@/lib/adapt/profile";
+import { NEEDS, writtenIn } from "@/lib/adapt/profile";
 import type { AdaptResult, FallbackReason } from "@/lib/adapt/types";
 import { PDF_UNSUPPORTED_LANGUAGES, assignmentToPlainText, downloadAdaptedPdf } from "@/lib/export-pdf";
 import { cn } from "@/lib/utils";
@@ -102,11 +102,11 @@ export function ResultActions({ result }: { result: AdaptResult }) {
   const [busy, setBusy] = useState(false);
   const printOnly = PDF_UNSUPPORTED_LANGUAGES.has(result.profile.language);
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="grid w-full grid-cols-2 gap-2 sm:flex sm:w-auto sm:flex-wrap">
       {!printOnly && (
         <button
           type="button"
-          className="btn btn-primary btn-sm"
+          className="btn btn-primary btn-sm col-span-2"
           disabled={busy}
           onClick={async () => {
             setBusy(true);
@@ -204,7 +204,7 @@ export function ResultTabs({ tab, onTab, onCompare, comparing }: { tab: ResultTa
   ];
   return (
     <div className="flex flex-wrap items-center justify-between gap-3">
-      <div role="tablist" aria-label="Result views" className="-mx-1 flex gap-1 overflow-x-auto rounded-full bg-paper-2 p-1">
+      <div role="tablist" aria-label="Result views" className="grid w-full grid-cols-2 gap-1 rounded-xl bg-paper-2 p-1 sm:inline-flex sm:w-auto sm:rounded-full">
         {tabs.map(([id, label]) => (
           <button
             key={id}
@@ -240,7 +240,7 @@ export function ResultTabs({ tab, onTab, onCompare, comparing }: { tab: ResultTa
 export function PrintCopy({ result }: { result: AdaptResult }) {
   return (
     <div id="print-root" className="on-paper hidden print:block" aria-hidden>
-      <AdaptedDocument assignment={result.assignment} need={result.profile.needs[0]} needs={result.profile.needs} headingLevel={3} />
+      <AdaptedDocument assignment={result.assignment} need={result.profile.needs[0]} needs={result.profile.needs} headingLevel={3} language={writtenIn(result)} />
     </div>
   );
 }

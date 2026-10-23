@@ -382,6 +382,18 @@
 /* Calm mode: each section simply shows its color; no fading. */
 [data-calm="true"] [data-mood] { background-color: var(--mood); }
 
+/* How it works: the step numbers not in focus become outlines (dimming yellow by opacity turned it olive). */
+.step-num {
+  transition: color 500ms ease, -webkit-text-stroke-color 500ms ease;
+  -webkit-text-stroke: 2px transparent;
+}
+@media (min-width: 1024px) {
+  [data-dim] .step-num {
+    color: transparent;
+    -webkit-text-stroke-color: rgb(255 255 255 / 0.45);
+  }
+}
+
 /* Hero: key terms that fly between worksheet versions (see term-flight.ts). */
 .flip-term {
   white-space: nowrap;

@@ -19,6 +19,7 @@ const STEPS = [
   {
     title: "Write the new version",
     body: "AI rewrites the assignment with strict rules. It keeps every question and never gives away answers. It keeps important words, and it never changes a text students are studying.",
+    note: "No AI available? AdaptED still builds a simpler version on its own, and says so clearly.",
     Visual: WriteVisual,
   },
   {
@@ -109,7 +110,7 @@ export function HowItWorks() {
                   !calm && "lg:flex lg:min-h-[58vh] lg:flex-col lg:justify-center lg:border-t-0 lg:py-0",
                 )}
               >
-                <p className="font-display text-7xl leading-none font-extrabold text-brand transition-opacity duration-500 [font-stretch:80%] sm:text-8xl lg:group-data-dim:opacity-35" aria-hidden>
+                <p className="step-num font-display text-7xl leading-none font-extrabold text-brand [font-stretch:80%] sm:text-8xl" aria-hidden>
                   {i + 1}
                 </p>
                 <h3 className="mt-3 text-3xl transition-colors duration-500 sm:text-4xl lg:group-data-dim:text-ink-3">
@@ -117,6 +118,7 @@ export function HowItWorks() {
                   {s.title}
                 </h3>
                 <p className="mt-3 max-w-[44ch] text-lg leading-relaxed text-ink-2 transition-colors duration-500 lg:group-data-dim:text-ink-3">{s.body}</p>
+                {"note" in s && <p className="mt-3 max-w-[44ch] text-ink-3">{s.note}</p>}
                 <div className={cn(!calm && "lg:hidden")}>
                   <InlineVisual index={i} near={near} />
                 </div>
@@ -143,9 +145,6 @@ export function HowItWorks() {
           )}
         </div>
 
-        <p className="mt-4 max-w-[60ch] text-ink-3">
-          No AI available? AdaptED still builds a simpler version on its own, and tells you clearly that AI wasn&apos;t used.
-        </p>
       </div>
     </section>
   );

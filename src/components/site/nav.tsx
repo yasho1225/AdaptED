@@ -39,14 +39,14 @@ export function Nav() {
             type="button"
             onClick={() => setCalm(!calm)}
             aria-pressed={calm}
-            className={cn("btn btn-sm !px-3", calm ? "btn-primary" : "btn-ghost")}
+            className={cn("btn btn-ghost btn-sm !px-3", calm && "!border-ink !bg-white/15")}
             title="Calm mode turns off smooth scrolling and animations"
           >
             <Wind className="size-4" aria-hidden />
             <span className="hidden sm:inline">Calm mode</span>
             <span className="sr-only sm:hidden">Calm mode</span>
           </button>
-          <a href="#studio" className="btn btn-primary btn-sm hidden sm:inline-flex">
+          <a href="#studio" className="btn btn-brand btn-sm hidden sm:inline-flex">
             Try it
           </a>
         </div>

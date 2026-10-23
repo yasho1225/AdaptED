@@ -1,26 +1,14 @@
 import { NextResponse } from "next/server";
 import { sanitizeProfile } from "@/lib/adapt/profile";
 import { adaptAssignment } from "@/lib/adapt/service";
+import { rateLimited } from "@/lib/rate-limit";
 
 export const maxDuration = 60;
 
 const MAX_CHARS = 12_000;
-const WINDOW_MS = 60_000;
-const MAX_PER_WINDOW = 12;
-const hits = new Map<string, number[]>();
-
-function rateLimited(ip: string): boolean {
-  const now = Date.now();
-  const recent = (hits.get(ip) ?? []).filter((t) => now - t < WINDOW_MS);
-  recent.push(now);
-  hits.set(ip, recent);
-  if (hits.size > 5000) hits.clear();
-  return recent.length > MAX_PER_WINDOW;
-}
 
 export async function POST(request: Request) {
-  const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "local";
-  if (rateLimited(ip)) {
+  if (rateLimited(request)) {
     return NextResponse.json({ error: "Too many tries at once. Please wait a minute and try again." }, { status: 429 });
   }
 

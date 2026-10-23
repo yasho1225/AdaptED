@@ -95,7 +95,9 @@ export function buildUserPrompt(source: string, profile: LearnerProfile): string
   const languageRule =
     profile.language === "english"
       ? "Write in English."
-      : `Write ALL student-facing text (title, studentIntro, sections) in ${language}. The first time each subject-specific term appears, follow it with the English term in parentheses. Keep teacher-facing fields (changes, teacherNotes, preserved) in English, and keep barrier quotes verbatim from the English original.`;
+      : profile.language === "simple-english"
+        ? "Write ALL student-facing text in clear, simple English for English language learners: common everyday words, short sentences (about 12 words or fewer), no idioms or phrasal verbs. Keep every academic term, and the first time each appears add a short plain definition in parentheses. Keep teacher-facing fields in standard English and barrier quotes verbatim."
+        : `Write ALL student-facing text (title, studentIntro, sections) in ${language}. The first time each subject-specific term appears, follow it with the English term in parentheses. Keep teacher-facing fields (changes, teacherNotes, preserved) in English, and keep barrier quotes verbatim from the English original.`;
 
   return `LEARNER PROFILE
 - Needs: ${needs}

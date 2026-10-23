@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ChevronLeft, ChevronRight, Minus, Pause, Plus, Square, Volume2 } from "lucide-react";
 import { AdaptedDocument, DEFAULT_PREFS, type DisplayPrefs } from "@/components/doc/adapted-document";
+import { writtenIn } from "@/lib/adapt/profile";
 import type { AdaptResult } from "@/lib/adapt/types";
 import { cn } from "@/lib/utils";
 import { useReadAloud } from "./use-read-aloud";
@@ -18,7 +19,7 @@ export function StudentView({ result }: { result: AdaptResult }) {
   const needs = result.profile.needs;
   const [prefs, setPrefs] = useState<DisplayPrefs>({ ...DEFAULT_PREFS, tint: needs.includes("dyslexia") ? "cream" : "paper" });
   const [focus, setFocus] = useState<number | null>(needs.includes("adhd") ? 0 : null);
-  const tts = useReadAloud(result.assignment, result.profile.language);
+  const tts = useReadAloud(result.assignment, writtenIn(result));
   const total = result.assignment.sections.length;
 
   return (
@@ -100,7 +101,7 @@ export function StudentView({ result }: { result: AdaptResult }) {
       )}
 
       <div className="sheet overflow-hidden">
-        <AdaptedDocument assignment={result.assignment} need={needs[0]} needs={needs} interactive prefs={prefs} activeBlock={tts.active} focusIndex={focus} headingLevel={3} />
+        <AdaptedDocument assignment={result.assignment} need={needs[0]} needs={needs} interactive prefs={prefs} activeBlock={tts.active} focusIndex={focus} headingLevel={3} language={writtenIn(result)} />
       </div>
     </div>
   );

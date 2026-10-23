@@ -8,8 +8,9 @@ Built for the 2026 Congressional App Challenge.
 
 ## What it does
 
-1. **Input** — paste text, pick a sample, or upload a PDF / Word / text file. Files are parsed in the browser.
+1. **Input** — paste text, pick a sample, or upload a PDF / Word / text file (parsed in the browser). Or **create a new assignment with AI**: give a topic, grade, level, number of questions, and whether to include a reading; AdaptED writes a grade-level assignment and adapts it for the chosen student right away. Without AI it gives a clearly labelled starter outline (question stems and a marked spot for the teacher's reading — no made-up facts).
 2. **Learner profile** — choose one or more needs, then turn individual supports on or off (vocabulary preview, timed chunks, guided notes, literal wording, and 17 more). Set grade, language, and whether goals stay grade-level (accommodation, the default) or may be modified.
+   **Languages:** English, Simpler English (for English learners), Spanish, French, Hindi, Chinese, Vietnamese, and Arabic (right to left). Switch language from the results bar at any time. Student-facing text is translated with each key term followed by the English word; teacher notes stay in English. Translation needs AI; without it the version stays in English and says so.
 3. **Barrier Lens** — deterministic analysis highlights the exact phrases in the original that could block this learner: long sentences, multi-step directions, figurative language, spoken-only instructions, open prompts with no length.
 4. **Adaptation** — Gemini writes a structured assignment (JSON schema-constrained) under nine non-negotiable rules: keep every question, never give answers, keep academic vocabulary, never rewrite a text being studied, no invented facts, and more.
 5. **Fidelity check** — AdaptED's own code counts every original question, answer choice, and key term. If something is missing it asks the model to fix it once; as a last resort it restores the question word-for-word. The result shows this check.
@@ -35,13 +36,13 @@ Without a key, the three samples show **pre-made example outputs** (labelled "Pr
 ## Quality checks
 
 ```bash
-npm test          # 48 unit tests: analysis, offline engine, curated outputs, mocked AI pipeline
+npm test          # 60 unit tests: analysis, offline engine, curated outputs, mocked AI pipeline, creation, languages
 npm run eval:ai   # live AI evaluation (needs GEMINI_API_KEY): 3 samples × 6 profiles
 npm run lint
 npm run build
 npm run a11y      # axe-core WCAG 2.2 AA audit (needs `npm start` on :3100)
 npm run audit:ui -- <outDir>   # 4 breakpoints: overflow, tap targets, text size, headings, axe, console errors
-npm run e2e:studio -- false    # studio end to end with motion on (pass `true` for calm mode)
+npm run e2e:studio -- false    # 17 studio checks with motion on (pass `true` for calm mode), incl. create + language
 ```
 
 Measured on a local production build (Lighthouse 12.8, October 2026): mobile (simulated slow 4G, 4× slower CPU) Performance 89–90, Accessibility 100, Best Practices 100, SEO 100; desktop 100 in all four.
@@ -62,7 +63,9 @@ src/lib/adapt/
   service.ts         pipeline: redact → generate → validate → fidelity → fallback
   offline-engine.ts  rule-based fallback driven by the selected supports
   samples.ts, curated/   three samples and their pre-built reference outputs
+  create.ts, create-server.ts   "create an assignment": request checks, model prompt, starter outline
 src/app/api/adapt/   POST endpoint (input limits, rate limiting)
+src/app/api/create/  POST endpoint for new assignments (same rate limiting)
 src/components/      studio (the tool), doc renderers, site sections, motion (GSAP + Lenis)
 docs/                PRD and research basis
 ```

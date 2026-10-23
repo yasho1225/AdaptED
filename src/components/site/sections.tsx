@@ -211,7 +211,7 @@ export function CloseCta() {
 
 export function Footer() {
   return (
-    <footer data-mood="trust" className="no-print border-t border-rule py-12">
+    <footer className="no-print relative bg-[#0f1f5c] py-14">
       <div className="container-page grid gap-10 md:grid-cols-12">
         <div className="md:col-span-7">
           <Logo />

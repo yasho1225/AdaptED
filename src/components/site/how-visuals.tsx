@@ -59,9 +59,9 @@ export function FindVisual({ play }: { play: boolean }) {
 
   return (
     <div ref={ref} className="sheet relative overflow-hidden">
-      <div className="flex items-center justify-between border-b border-rule px-5 py-3 text-sm">
+      <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1.5 border-b border-rule px-5 py-3 text-sm">
         <span className="font-bold">Original · grade {SAMPLE.grade} science</span>
-        <span className="tnum rounded-full bg-mark-strong px-2.5 py-0.5 font-bold text-sheet-ink">{shown.length} found in the reading</span>
+        <span className="tnum shrink-0 rounded-full bg-mark-strong px-2.5 py-0.5 font-bold text-sheet-ink">{shown.length} found in the reading</span>
       </div>
       <div className="relative px-5 pt-4 pb-2 sm:px-6">
         <div aria-hidden className="scan pointer-events-none absolute inset-x-0 top-0 z-10 h-12 -translate-y-1/2 bg-[linear-gradient(to_bottom,transparent,color-mix(in_oklch,var(--brand)_22%,transparent),transparent)] opacity-0" />
