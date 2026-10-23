@@ -46,61 +46,6 @@ export function Problem() {
 
 /* ------------------------------------------------------------------ */
 
-const STEPS = [
-  {
-    title: "Find what's hard",
-    body: "AdaptED reads the assignment. It marks the parts that could get in the way, like long sentences, too many steps at once, or sayings.",
-  },
-  {
-    title: "Learn about the student",
-    body: "You pick what the student needs and which kinds of help to include. You never type names or medical details.",
-  },
-  {
-    title: "Write the new version",
-    body: "AI rewrites the assignment with strict rules. It keeps every question and never gives away answers. It keeps important words, and it never changes a text students are studying.",
-  },
-  {
-    title: "Check the work",
-    body: "AdaptED counts every question, answer choice, and key word. If something is missing, it puts it back.",
-  },
-];
-
-export function HowItWorks() {
-  return (
-    <section id="how" data-mood="steady" aria-labelledby="how-heading" className="scroll-mt-16 py-20 sm:py-28">
-      <div className="container-page">
-        <div className="grid gap-6 lg:grid-cols-12">
-          <h2 id="how-heading" className="text-[2.75rem] sm:text-6xl lg:text-7xl lg:col-span-6">
-            AI writes. AdaptED checks. You decide.
-          </h2>
-          <p className="max-w-[48ch] text-lg leading-relaxed text-ink-2 lg:col-span-6 lg:pt-2">
-            AdaptED doesn&apos;t just ask AI to &ldquo;make it easier.&rdquo; It follows research. It sets strict rules. And it checks the work before you see it.
-          </p>
-        </div>
-        <ol className="mt-14 grid gap-x-8 sm:grid-cols-2 lg:grid-cols-4">
-          {STEPS.map((s, i) => (
-            <li key={s.title} className="border-t-2 border-ink pt-5 pb-10">
-              <p className="tnum text-5xl font-extrabold leading-none text-brand" aria-hidden>
-                {i + 1}
-              </p>
-              <h3 className="mt-4 text-xl tracking-[-0.015em]">
-                <span className="sr-only">Step {i + 1}: </span>
-                {s.title}
-              </h3>
-              <p className="mt-2 text-ink-2">{s.body}</p>
-            </li>
-          ))}
-        </ol>
-        <p className="max-w-[60ch] text-ink-3">
-          No AI available? AdaptED still builds a simpler version on its own, and tells you clearly that AI wasn&apos;t used.
-        </p>
-      </div>
-    </section>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-
 const RESEARCH_BY_NEED: Record<NeedId, { moves: string[]; sources: string[] }> = {
   dyslexia: {
     moves: [
