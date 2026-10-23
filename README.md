@@ -97,7 +97,7 @@ See [docs/PRD.md](docs/PRD.md) and [docs/RESEARCH.md](docs/RESEARCH.md).
 ## Credits and licenses
 
 - The button "magnet" effect is the Magnet component from [React Bits](https://reactbits.dev) by David Haz (MIT + Commons Clause), in `src/components/vendor/magnet.tsx` with its notice.
-- Fonts: Atkinson Hyperlegible Next and Mono (Braille Institute) and Bricolage Grotesque, all SIL Open Font License 1.1.
+- Fonts: Atkinson Hyperlegible Next (Braille Institute) and Bricolage Grotesque, both SIL Open Font License 1.1.
 - Animation by [GSAP](https://gsap.com) (standard no-charge license) and smooth scrolling by [Lenis](https://lenis.darkroom.engineering) (MIT).
 
 Full texts and the dependency list: [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

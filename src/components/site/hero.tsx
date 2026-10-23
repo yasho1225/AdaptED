@@ -151,7 +151,13 @@ export function Hero() {
   );
 
   return (
-    <section id="top" aria-labelledby="hero-heading" className="field-blue relative overflow-hidden">
+    <section
+      id="top"
+      aria-labelledby="hero-heading"
+      className="field-blue relative overflow-hidden"
+      // Keyboard focus inside the hero ends the tour, so nothing changes under it.
+      onFocus={(e) => playing && e.target.matches(":focus-visible") && setPlaying(false)}
+    >
       <div className="container-page grid lg:min-h-[max(46rem,calc(100svh-4rem))] lg:grid-cols-[minmax(0,38fr)_minmax(0,62fr)] lg:grid-rows-[auto_1fr] lg:gap-x-10">
         {/* Words rise out of their lines on first paint (pure CSS, so no flash before hydration); calm mode shows them still. */}
         <div className="pt-12 sm:pt-16 lg:col-span-2 lg:pt-20">

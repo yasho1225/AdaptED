@@ -44,20 +44,21 @@ Two faces.
 - **Display — Bricolage Grotesque** (variable, self-hosted subset, weights 700–800): headings only, on blue, navy, paper and yellow fields. Weight 800, width 80% (h1) / 86% (h2), tracking −0.015em, leading 0.9.
 - **Text — Atkinson Hyperlegible Next** (Braille Institute): everything people read, including every heading inside a worksheet. Tabular figures for numbers. No monospace anywhere.
 
-Five steps do the visible work:
+Six steps do the visible work (outside the product fragments the page uses eight sizes in all at 1440px: 14, 16, 18, 24, 32, 77, 131, and the footer mark):
 
 | Step | Size | Use |
 | --- | --- | --- |
 | display | `clamp(4rem, 2.4rem + 6.4vw, 8.5rem)` | The hero headline, the footer wordmark |
 | head | `clamp(2.5rem, 1.6rem + 3.6vw, 5rem)` | Section headings (two lines or fewer at every width) |
-| lead | `clamp(1.25rem, 1.05rem + 0.8vw, 1.75rem)` | Statements, supporting sentences, tile names |
+| title | `2rem` | The statement, step and version headings |
+| lead | `clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem)` | The hero sentence, tile names, list headings |
 | body | `1.125rem` / 1.6 | Running text, max 60ch |
 | small | `0.875rem` | Captions, sources, notes. Nothing anyone reads goes below 13px |
 
 ## Layout
 
 - One container: max 76rem, side margins 16px (phone) / 24px (tablet) / 32px (desktop); equal on both sides everywhere.
-- 12-column grid; text starts on two anchor lines (column 1 and column 7).
+- 12-column grid with 40px gutters in every section, so all splits land on the same column lines: text starts on column 1, and second columns start on column 5, 6, 7, or 8.
 - Sections are 128–192px apart on desktop, 96px on phones; nothing inside a section is spaced that far.
 - Neighbouring sections never share a composition.
 
@@ -66,14 +67,14 @@ Page order and blueprint per section:
 | Section | Field | Blueprint |
 | --- | --- | --- |
 | Hero | blue | Fragment on a shaped stage: headline top-left, one action, the yellow chisel stage from 42% down holding the live worksheet |
-| Where students get stuck | blue | Statement with inline thumbnails (36px max, three lines) |
+| Where students get stuck | blue | Statement with inline thumbnails (32px max), starting on column 6 |
 | One idea at a time | blue | Square plate, spare text: the before/after reading on a paper plate; tabs, title, two action cells |
 | Try it (studio) | blue | The working product; panels are `data-ui` fragments |
 | How it works | navy | Stages as one bar: four segments sized by how long each stage really takes, then the pictures for each stage |
 | Built on research | paper | Large marks on tiles: one yellow heading tile, sources set large |
-| What each version does | paper | Two-column menu with picture bullets: each need, its supports, the source of each |
-| What you can count on | blue | Two columns of plain statements |
-| Close | yellow | The object returns: the four versions, cropped by the section edge, with the closing line |
+| What each version adds | paper | Two-column menu with picture bullets: each need, its supports, the source of each |
+| What you can count on | blue | Heading across the top, then two columns of plain statements |
+| Close | yellow | The object returns: the four versions on a blue chisel slab, cropped by the section edges, with the closing line |
 | Footer | navy | The mark, built large: the wordmark knocked out of chisel blocks |
 
 ## Elevation & Depth
@@ -114,6 +115,7 @@ Emil Kowalski's rules with tasteskill's budget.
 - **Entrances:** each section's parts arrive in reading order, 70ms apart, rising 24px with opacity, once, when 85% of the way up the viewport. Lists arrive row by row; tiles in sequence; headings rise out of line masks.
 - **Feedback:** every control responds to press; hover only behind `(hover: hover) and (pointer: fine)`.
 - **Never:** ease-in on anything the visitor waits for, `transition: all`, scale from 0, bounce, layout-property animation, scroll hijacking, content left hidden if a script fails.
+- **Smooth scrolling:** Lenis at `lerp: 0.12`. A native scroll during a glide (scrollbar drag, keyboard, find-in-page) hands the scroll straight back to the browser.
 - **Calm mode** (and `prefers-reduced-motion`) shows the finished page: no travel, no smoothing, no autoplay.
 
 ## Do's and Don'ts

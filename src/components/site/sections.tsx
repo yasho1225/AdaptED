@@ -165,7 +165,7 @@ export function VersionsMenu() {
                           <span className="flex flex-wrap items-baseline justify-between gap-x-4">
                             <span className="text-lg font-bold">{s.label}</span>
                             {source && (
-                              <ExternalLink href={source.url} className="text-sm font-bold text-[color:var(--need)] underline decoration-current/30 underline-offset-[0.2em] hover:decoration-current">
+                              <ExternalLink href={source.url} className="-my-1.5 inline-block py-1.5 text-sm font-bold text-[color:var(--need)] underline decoration-current/30 underline-offset-[0.2em] hover:decoration-current">
                                 {source.label}
                               </ExternalLink>
                             )}

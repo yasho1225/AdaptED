@@ -370,6 +370,7 @@
   /* A clip-path would cut the focus ring off, so a focused button squares up and shows the ring whole. */
   .btn:focus-visible {
     clip-path: none;
+    border-radius: 0;
   }
   .btn:active:not(:disabled) {
     transform: scale(0.97);

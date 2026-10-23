@@ -42,10 +42,10 @@ SOFTWARE.
 
 ### Fonts (SIL Open Font License 1.1)
 
-- **Atkinson Hyperlegible Next** and **Atkinson Hyperlegible Mono**, by the Braille Institute of America. Body text, measurements, and syllable notation.
-- **Bricolage Grotesque**, by Mathieu Triay. Headlines on the blue page only.
+- **Atkinson Hyperlegible Next**, by the Braille Institute of America. Body text, measurements, and syllable notation.
+- **Bricolage Grotesque**, by Mathieu Triay. Headlines and the wordmark.
 
-The site loads the Atkinson faces through `next/font/google`. Bricolage Grotesque is self-hosted as `src/app/fonts/BricolageGrotesque-Variable-subset.woff2`: the Google Fonts variable font (optical size, width, weight) reduced with fontTools to basic Latin plus curly quotes and dashes, and weights 700–800, as the OFL permits. Static copies of the cuts used by the share image (`src/app/opengraph-image.tsx`) are in `assets/fonts/`, each with its license file (`OFL-*.txt`).
+The site loads Atkinson Hyperlegible Next through `next/font/google`. Bricolage Grotesque is self-hosted as `src/app/fonts/BricolageGrotesque-Variable-subset.woff2`: the Google Fonts variable font (optical size, width, weight) reduced with fontTools to basic Latin plus curly quotes and dashes, and weights 700–800, as the OFL permits. Static copies of the cuts used by the share image (`src/app/opengraph-image.tsx`) are in `assets/fonts/`, each with its license file (`OFL-*.txt`).
 
 ## Dependencies (installed from npm, not copied here)
 
