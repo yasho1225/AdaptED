@@ -41,7 +41,7 @@ const txt = await p.locator("#assignment-text").inputValue();
 console.log("docx text:", JSON.stringify(txt));
 await p.getByRole("button", { name: /^Adapt for/ }).click();
 await p.waitForTimeout(2500);
-console.log("result badge:", await p.locator("#studio").getByText(/Offline rule-based|Generated live|Pre-built/).first().innerText());
+console.log("result badge:", await p.locator("#studio").getByText(/Made without AI|Made just now by AI|Pre-made example/).first().innerText());
 console.log("questions kept:", await p.getByText(/of 2/).first().innerText().catch(() => "n/a"));
 console.log("page errors:", errors.length ? errors : "none");
 await b.close();

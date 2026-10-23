@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowRight, RotateCcw, Wand2 } from "lucide-react";
+import { CalmMagnet } from "@/components/motion/calm-magnet";
 import { useMotion } from "@/components/motion/motion-provider";
 import { requestAdaptation } from "@/lib/adapt/client";
 import { NEEDS, defaultProfile } from "@/lib/adapt/profile";
@@ -120,7 +121,7 @@ export function Studio() {
     <section id="studio" data-mood="trust" ref={sectionRef} aria-labelledby="studio-heading" className="relative scroll-mt-20 py-20 sm:py-28">
       <div className="container-page">
         <div className="max-w-3xl">
-          <h2 id="studio-heading" className="text-[2.75rem] sm:text-6xl lg:text-7xl">
+          <h2 id="studio-heading" data-reveal className="text-[2.75rem] sm:text-6xl lg:text-7xl">
             Try it.
           </h2>
           <ol className="mt-5 space-y-1.5 text-lg text-ink-2">
@@ -136,11 +137,13 @@ export function Studio() {
         </div>
 
         <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-          <button type="button" className="btn btn-brand min-h-[3.25rem] px-7 text-base" onClick={() => void run(source, profile, { scroll: true })} disabled={loading}>
-            <Wand2 className="size-5" aria-hidden />
-            {loading ? "Adapting…" : `Adapt for ${needLabel}`}
-            <ArrowRight className="size-4" aria-hidden />
-          </button>
+          <CalmMagnet>
+            <button type="button" className="btn btn-brand min-h-[3.25rem] px-7 text-base" onClick={() => void run(source, profile, { scroll: true })} disabled={loading}>
+              <Wand2 className="size-5" aria-hidden />
+              {loading ? "Adapting…" : `Adapt for ${needLabel}`}
+              <ArrowRight className="size-4" aria-hidden />
+            </button>
+          </CalmMagnet>
           {stale && <p className="text-sm font-semibold text-warn">You made changes. Click the button again to update.</p>}
         </div>
         {error && (

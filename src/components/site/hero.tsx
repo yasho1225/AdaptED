@@ -5,9 +5,10 @@ import gsap from "gsap";
 import { ArrowDown, ArrowRight, Pause, Play } from "lucide-react";
 import { AdaptedDocument } from "@/components/doc/adapted-document";
 import { OriginalDocument, barrierRanges } from "@/components/doc/original-document";
+import { CalmMagnet } from "@/components/motion/calm-magnet";
 import { useMotion } from "@/components/motion/motion-provider";
 import { detectBarriers, normalize } from "@/lib/adapt/analyze";
-import { CURATED } from "@/lib/adapt/curated";
+import { SCIENCE } from "@/lib/adapt/curated/science";
 import { NEEDS } from "@/lib/adapt/profile";
 import { getResearch } from "@/lib/adapt/research";
 import { SAMPLES } from "@/lib/adapt/samples";
@@ -20,6 +21,7 @@ type Version = "original" | NeedId;
 const VERSIONS: Version[] = ["original", ...NEED_IDS];
 const SAMPLE = SAMPLES[0];
 const CYCLE_MS = 5200;
+const TITLE = SCIENCE.dyslexia.title;
 
 function Word({ i, children }: { i: number; children: React.ReactNode }) {
   return (
@@ -59,7 +61,8 @@ export function Hero() {
 
   const go = (v: Version) => {
     const doc = sheetRef.current?.querySelector<HTMLElement>("[data-version]");
-    before.current = !calm && doc ? captureTerms(doc) : null;
+    // Tag lazily, on the first switch, so hydration never repaints the sheet (it is the LCP element).
+    before.current = !calm && doc ? (tagTerms(doc, TITLE), captureTerms(doc)) : null;
     setActive(v);
   };
 
@@ -79,10 +82,10 @@ export function Hero() {
     const stage = sheetRef.current;
     const doc = stage?.querySelector<HTMLElement>("[data-version]");
     if (!stage || !doc || !overlayRef.current) return;
-    const terms = tagTerms(doc, CURATED.science.dyslexia.title);
     const prev = before.current;
     before.current = null;
     if (calm || !prev) return;
+    const terms = tagTerms(doc, TITLE);
     const fade = gsap.from(doc, { opacity: 0, y: 10, duration: 0.6, delay: 0.1, ease: "power2.out", clearProps: "opacity,transform" });
     const stop = flyTerms(stage, overlayRef.current, terms, prev);
     return () => {
@@ -104,7 +107,7 @@ export function Hero() {
     window.dispatchEvent(new CustomEvent<OpenInStudioDetail>(OPEN_IN_STUDIO, { detail: { need: active === "original" ? "dyslexia" : active } }));
   };
 
-  const changes = active === "original" ? [] : CURATED.science[active].changes.slice(0, 4);
+  const changes = active === "original" ? [] : SCIENCE[active].changes.slice(0, 4);
 
   return (
     <section ref={root} id="top" data-mood="trust" aria-labelledby="hero-heading" className="relative">
@@ -127,9 +130,11 @@ export function Hero() {
               Paste in any assignment. AdaptED makes a version your student can use. They still learn the <strong className="font-bold text-ink">same things</strong>, and you see every change and why.
             </p>
             <div className="hero-rise mt-7 flex flex-wrap gap-3" style={{ "--i": 1 } as React.CSSProperties}>
-              <a href="#studio" className="btn btn-brand min-h-12 px-6 text-base">
-                Try it now <ArrowRight className="size-4" aria-hidden />
-              </a>
+              <CalmMagnet>
+                <a href="#studio" className="btn btn-brand min-h-12 px-6 text-base">
+                  Try it now <ArrowRight className="size-4" aria-hidden />
+                </a>
+              </CalmMagnet>
               <a href="#research" className="btn btn-ghost min-h-12 px-6 text-base">
                 See the research
               </a>
@@ -216,7 +221,7 @@ export function Hero() {
                     <OriginalDocument text={SAMPLE.text} barriers={barriers} className="mt-3 text-[0.98rem] text-ink-2" />
                   </div>
                 ) : (
-                  <AdaptedDocument assignment={CURATED.science[active]} need={active} headingLevel={3} />
+                  <AdaptedDocument assignment={SCIENCE[active]} need={active} headingLevel={3} />
                 )}
               </div>
               <div ref={overlayRef} aria-hidden className="pointer-events-none absolute inset-0" />

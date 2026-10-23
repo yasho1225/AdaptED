@@ -33,7 +33,7 @@ for (const [name, width, height] of VPS) {
       const s = getComputedStyle(el);
       if (r.width === 0 || s.visibility === "hidden" || el.closest(".sr-only")) continue;
       if (el.matches("input[type=checkbox], input[type=radio]") && el.classList.contains("sr-only")) continue;
-      if (r.height < minTarget && r.width < minTarget + 200 && !(el.tagName === "A" && s.display === "inline")) small.push(`${el.tagName.toLowerCase()} "${(el.textContent || el.getAttribute("aria-label") || el.getAttribute("placeholder") || "").trim().slice(0, 30)}" ${Math.round(r.width)}x${Math.round(r.height)}`);
+      if (r.height < minTarget && !(el.tagName === "A" && s.display === "inline")) small.push(`${el.tagName.toLowerCase()} "${(el.textContent || el.getAttribute("aria-label") || el.getAttribute("placeholder") || "").trim().slice(0, 30)}" ${Math.round(r.width)}x${Math.round(r.height)}`);
     }
     const tiny = new Set();
     for (const el of document.querySelectorAll("body *")) {

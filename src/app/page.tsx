@@ -1,3 +1,4 @@
+import { HeadingReveal } from "@/components/motion/heading-reveal";
 import { MoodController } from "@/components/motion/mood-controller";
 import { Hero } from "@/components/site/hero";
 import { Nav } from "@/components/site/nav";
@@ -9,6 +10,7 @@ export default function Home() {
   return (
     <>
       <MoodController />
+      <HeadingReveal />
       <Nav />
       <main>
         <Hero />

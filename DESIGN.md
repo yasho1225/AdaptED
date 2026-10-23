@@ -27,18 +27,29 @@ Text on the canvas uses translucent white (`--ink-2` 88%, `--ink-3` 74%) so cont
 Paper surfaces (`.sheet`, `.on-paper`) keep dark ink on warm paper (BDA: avoid stark white).
 
 ## Type
-One family: **Atkinson Hyperlegible Next** (Braille Institute) for display (800, −0.025em) and body (17px, 1.6); **Atkinson Hyperlegible Mono** only for measurements and syllable notation. Display max 6rem; body measure ≤ 70ch.
+Two jobs, two faces:
+- **Bricolage Grotesque** (variable width and optical size) for headlines on the blue page only: weight 800, condensed (h1 80% width, h2 86%), tight leading. Hero up to 9rem, section heads up to 4.5rem. It gives the page a confident, poster-like voice.
+- **Atkinson Hyperlegible Next** (Braille Institute) for everything people read: body (17px, 1.6), labels, and every heading inside a worksheet. **Atkinson Hyperlegible Mono** only for measurements and syllable notation. Body measure ≤ 70ch; nothing under 12px.
+
+Worksheets never use the display face: a student's page is for reading, not for personality.
+
+## Touch and targets
+Controls are at least 40px tall with a mouse and 44px on touch screens (`pointer: coarse`); a radio inside a card is hit through the whole card.
 
 ## Layout
 12-column Swiss grid, flush-left. Sections are separated by full-width rules and alternating bands — not rows of identical cards. No labels above headings. Radii: 4 / 8 / 12px.
 
 ## Motion (emotional arc)
-Three moments, each tied to a feeling, all removed by Calm mode and `prefers-reduced-motion`:
-1. **Mood fade** — the page color eases between section moods as you scroll (GSAP on `--canvas`). Calm mode shows each section's color still, with no fading.
-2. **Stuck → can start** — in the problem section, the real 139-word sample passage loosens into the real adapted chunks while the section holds in place (large screens) or as it scrolls past (small screens).
-3. **Relief** — when every question is confirmed kept, a check mark draws itself in the results.
+Every moment is tied to a feeling or a fact, and all of it is removed by Calm mode and `prefers-reduced-motion`:
+1. **"The key words stay"** (hero, the signature moment) — switching versions of the real worksheet lifts its science vocabulary off as highlighted copies that land where the same words sit in the new version, while the new layout fades in around them. It shows the product's promise — the vocabulary is kept, only the way in changes — instead of claiming it. Auto-tours once, with a visible pause button. The headline rises out of line masks in pure CSS on first paint.
+2. **Mood fade** — the page color eases between section moods as you scroll (GSAP on `--canvas`). Calm mode shows each section's color still.
+3. **Stuck → can start** — in the problem section, the real 139-word passage loosens into the real adapted chunks while the section holds (large screens) or as it scrolls past (small screens). This is the only pinned section.
+4. **How it works** — the picture beside the steps stays put (CSS sticky) and changes with each step: barriers highlighted under a scan, the student profile, the four real versions dealt out as a fan, then a ledger of fidelity checks computed live. Small screens and Calm mode show each picture under its step.
+5. **Relief** — when every question is confirmed kept, a check mark draws itself; ticking a student checklist box springs and draws its check.
+6. **Pull** — the three main buttons lean slightly toward the pointer (React Bits Magnet); off on touch and in Calm mode.
 
-The hero worksheet still wipes between versions like a highlighter stroke, with a visible pause control.
+## Imagery
+The product is the imagery: every picture on the page is a real worksheet, a real adapted version, or a number the code computed. No stock photos of classrooms, no illustrations of "AI". See `IMAGES.md` for where photography could be added and the rules for it.
 
 ## Writing
 Plain language, short sentences, everyday words. Site copy measured with AdaptED's own scorer: about grade 8.8 → grade 3.9 (Flesch–Kincaid), excluding citations and sample worksheet text.

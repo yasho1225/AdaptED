@@ -1,12 +1,22 @@
 import type { Metadata, Viewport } from "next";
-import { Atkinson_Hyperlegible_Mono, Atkinson_Hyperlegible_Next, Bricolage_Grotesque } from "next/font/google";
+import { Atkinson_Hyperlegible_Mono, Atkinson_Hyperlegible_Next } from "next/font/google";
+import localFont from "next/font/local";
 import { MotionProvider } from "@/components/motion/motion-provider";
 import "./globals.css";
 
 const body = Atkinson_Hyperlegible_Next({ subsets: ["latin"], variable: "--font-body", display: "swap", adjustFontFallback: false, fallback: ["system-ui", "sans-serif"] });
 // Display face for headlines only: variable width + optical size, so big headings can be set tight and
 // condensed while everything students read stays in Atkinson Hyperlegible.
-const display = Bricolage_Grotesque({ subsets: ["latin"], variable: "--font-display-face", display: "swap", axes: ["opsz", "wdth"], fallback: ["system-ui", "sans-serif"] });
+// Bricolage Grotesque (OFL), subset to ASCII + curly quotes/dashes and weights 700–800: 75 KB instead of 131 KB.
+// Rebuild with fontTools if headlines ever need other characters (missing glyphs fall back to Atkinson).
+const display = localFont({
+  src: "./fonts/BricolageGrotesque-Variable-subset.woff2",
+  variable: "--font-display-face",
+  display: "swap",
+  weight: "700 800",
+  declarations: [{ prop: "font-stretch", value: "75% 100%" }],
+  fallback: ["system-ui", "sans-serif"],
+});
 const mono = Atkinson_Hyperlegible_Mono({ subsets: ["latin"], variable: "--font-mono-face", display: "swap", adjustFontFallback: false, fallback: ["ui-monospace", "monospace"] });
 
 const description =

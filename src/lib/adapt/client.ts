@@ -1,6 +1,5 @@
 "use client";
 
-import { curatedResult } from "./curated";
 import type { AdaptResult, LearnerProfile } from "./types";
 
 const cache = new Map<string, AdaptResult>();
@@ -15,6 +14,8 @@ export async function requestAdaptation(source: string, profile: LearnerProfile,
   if (hit) return hit;
 
   if (!opts.live) {
+    // Loaded on first use, so the three samples' pre-made versions stay out of the initial bundle.
+    const { curatedResult } = await import("./curated");
     const curated = curatedResult(source, profile);
     if (curated) {
       cache.set(k, curated);

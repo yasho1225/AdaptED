@@ -26,14 +26,14 @@ export function StudentView({ result }: { result: AdaptResult }) {
       <div className="sheet mb-4 flex flex-wrap items-center gap-x-5 gap-y-3 px-4 py-3" role="toolbar" aria-label="Display options">
         <div className="flex items-center gap-1.5">
           <span className="text-sm font-semibold text-ink-2">Text</span>
-          <button type="button" className="btn btn-ghost btn-sm !px-2.5" aria-label="Smaller text" disabled={prefs.size === 0} onClick={() => setPrefs((p) => ({ ...p, size: Math.max(0, p.size - 1) as DisplayPrefs["size"] }))}>
+          <button type="button" className="btn btn-ghost btn-sm size-11 !p-0" aria-label="Smaller text" disabled={prefs.size === 0} onClick={() => setPrefs((p) => ({ ...p, size: Math.max(0, p.size - 1) as DisplayPrefs["size"] }))}>
             <Minus className="size-4" aria-hidden />
           </button>
-          <button type="button" className="btn btn-ghost btn-sm !px-2.5" aria-label="Larger text" disabled={prefs.size === 2} onClick={() => setPrefs((p) => ({ ...p, size: Math.min(2, p.size + 1) as DisplayPrefs["size"] }))}>
+          <button type="button" className="btn btn-ghost btn-sm size-11 !p-0" aria-label="Larger text" disabled={prefs.size === 2} onClick={() => setPrefs((p) => ({ ...p, size: Math.min(2, p.size + 1) as DisplayPrefs["size"] }))}>
             <Plus className="size-4" aria-hidden />
           </button>
         </div>
-        <label className="flex items-center gap-2 text-sm font-semibold text-ink-2">
+        <label className="flex min-h-11 cursor-pointer items-center gap-2 text-sm font-semibold text-ink-2">
           <input type="checkbox" checked={prefs.wide || needs.includes("dyslexia")} disabled={needs.includes("dyslexia")} onChange={(e) => setPrefs((p) => ({ ...p, wide: e.target.checked }))} className="size-4 accent-[var(--ink)]" />
           Wide spacing
         </label>
@@ -43,14 +43,14 @@ export function StudentView({ result }: { result: AdaptResult }) {
             Background
           </span>
           {TINT_OPTIONS.map((t) => (
-            <label key={t.v} className="cursor-pointer" title={t.label}>
+            <label key={t.v} className="grid size-11 cursor-pointer place-items-center" title={t.label}>
               <input type="radio" name="tint" className="peer sr-only" checked={prefs.tint === t.v} onChange={() => setPrefs((p) => ({ ...p, tint: t.v }))} />
               <span className={cn("block size-7 rounded-full border-2 border-rule-strong peer-checked:border-ink peer-checked:ring-2 peer-checked:ring-ink peer-checked:ring-offset-2 peer-checked:ring-offset-sheet peer-focus-visible:outline peer-focus-visible:outline-3 peer-focus-visible:outline-brand", t.swatch)} />
               <span className="sr-only">{t.label}</span>
             </label>
           ))}
         </fieldset>
-        <label className="flex items-center gap-2 text-sm font-semibold text-ink-2">
+        <label className="flex min-h-11 cursor-pointer items-center gap-2 text-sm font-semibold text-ink-2">
           <input type="checkbox" checked={focus !== null} onChange={(e) => setFocus(e.target.checked ? 0 : null)} className="size-4 accent-[var(--ink)]" />
           One section at a time
         </label>
@@ -66,7 +66,7 @@ export function StudentView({ result }: { result: AdaptResult }) {
               </button>
             )}
             {tts.state !== "idle" && (
-              <button type="button" className="btn btn-ghost btn-sm !px-2.5" aria-label="Stop reading" onClick={tts.stop}>
+              <button type="button" className="btn btn-ghost btn-sm size-11 !p-0" aria-label="Stop reading" onClick={tts.stop}>
                 <Square className="size-3.5" aria-hidden />
               </button>
             )}

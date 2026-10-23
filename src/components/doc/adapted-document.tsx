@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useMemo, useState } from "react";
-import { Check, Lightbulb, Timer } from "lucide-react";
+import { Lightbulb, Timer } from "lucide-react";
 import type { AdaptedAssignment, Block, NeedId, Section } from "@/lib/adapt/types";
 import { cn } from "@/lib/utils";
 import { CueIcon } from "./cue-icon";
@@ -258,11 +258,16 @@ function BlockView({
                     <span
                       className={cn(
                         "mt-0.5 grid size-6 shrink-0 place-items-center rounded-md border-2 border-[color:var(--need)] transition-colors peer-focus-visible:outline peer-focus-visible:outline-3 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-brand",
-                        on && "bg-[color:var(--need)] text-[color:var(--on-need)]",
+                        on && "animate-[check-pop_420ms_cubic-bezier(0.34,1.56,0.64,1)] bg-[color:var(--need)] text-[color:var(--on-need)]",
                       )}
                       aria-hidden
                     >
-                      {on && <Check className="size-4" strokeWidth={3} />}
+                      {/* Ticking a box is a small win: the box springs and the check draws itself. */}
+                      {on && (
+                        <svg viewBox="0 0 24 24" className="size-4">
+                          <path d="M20 6 9 17l-5-5" fill="none" stroke="currentColor" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" pathLength={1} strokeDasharray={1} style={{ animation: "draw 0.3s cubic-bezier(0.16, 1, 0.3, 1) 0.06s both" }} />
+                        </svg>
+                      )}
                     </span>
                     <span className={cn(on && "text-ink-3 line-through decoration-2")}>{item}</span>
                   </label>

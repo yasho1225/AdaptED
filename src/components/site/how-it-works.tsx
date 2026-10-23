@@ -42,12 +42,12 @@ function useSeen<T extends HTMLElement>(margin = "0px 0px -20% 0px") {
   return [ref, seen] as const;
 }
 
-function InlineVisual({ index }: { index: number }) {
+function InlineVisual({ index, near }: { index: number; near: boolean }) {
   const [ref, seen] = useSeen<HTMLDivElement>();
   const { Visual } = STEPS[index];
   return (
-    <div ref={ref} aria-hidden className="mt-6">
-      <Visual play={seen} />
+    <div ref={ref} aria-hidden className="mt-6 min-h-[20rem]">
+      {near && <Visual play={seen} />}
     </div>
   );
 }
@@ -61,6 +61,9 @@ export function HowItWorks() {
   const [active, setActive] = useState(0);
   const [reached, setReached] = useState(0);
   const stepRefs = useRef<(HTMLLIElement | null)[]>([]);
+  // The pictures run real analysis code; build them only when the section is about a screen away,
+  // so it doesn't add to the work done while the page first loads.
+  const [sectionRef, near] = useSeen<HTMLElement>("100% 0px 100% 0px");
 
   useEffect(() => {
     if (calm) return;
@@ -80,10 +83,10 @@ export function HowItWorks() {
   }, [calm]);
 
   return (
-    <section id="how" data-mood="steady" aria-labelledby="how-heading" className="scroll-mt-16 overflow-x-clip py-20 sm:py-28">
+    <section ref={sectionRef} id="how" data-mood="steady" aria-labelledby="how-heading" className="scroll-mt-16 overflow-x-clip py-20 sm:py-28">
       <div className="container-page">
         <div className="grid gap-6 lg:grid-cols-12">
-          <h2 id="how-heading" className="text-[2.75rem] sm:text-6xl lg:col-span-6 lg:text-7xl">
+          <h2 id="how-heading" data-reveal className="text-[2.75rem] sm:text-6xl lg:col-span-6 lg:text-7xl">
             AI writes. AdaptED checks. You decide.
           </h2>
           <p className="max-w-[48ch] text-lg leading-relaxed text-ink-2 lg:col-span-6 lg:pt-2">
@@ -97,25 +100,25 @@ export function HowItWorks() {
               <li
                 key={s.title}
                 data-step={i}
+                data-dim={!calm && i !== active ? "" : undefined}
                 ref={(el) => {
                   stepRefs.current[i] = el;
                 }}
                 className={cn(
-                  "border-t-2 border-ink pt-6 pb-12 transition-opacity duration-500",
+                  "group border-t-2 border-ink pt-6 pb-12",
                   !calm && "lg:flex lg:min-h-[58vh] lg:flex-col lg:justify-center lg:border-t-0 lg:py-0",
-                  !calm && i !== active && "lg:opacity-40",
                 )}
               >
-                <p className="font-display text-7xl leading-none font-extrabold text-brand [font-stretch:80%] sm:text-8xl" aria-hidden>
+                <p className="font-display text-7xl leading-none font-extrabold text-brand transition-opacity duration-500 [font-stretch:80%] sm:text-8xl lg:group-data-dim:opacity-35" aria-hidden>
                   {i + 1}
                 </p>
-                <h3 className="mt-3 text-3xl sm:text-4xl">
+                <h3 className="mt-3 text-3xl transition-colors duration-500 sm:text-4xl lg:group-data-dim:text-ink-3">
                   <span className="sr-only">Step {i + 1}: </span>
                   {s.title}
                 </h3>
-                <p className="mt-3 max-w-[44ch] text-lg leading-relaxed text-ink-2">{s.body}</p>
+                <p className="mt-3 max-w-[44ch] text-lg leading-relaxed text-ink-2 transition-colors duration-500 lg:group-data-dim:text-ink-3">{s.body}</p>
                 <div className={cn(!calm && "lg:hidden")}>
-                  <InlineVisual index={i} />
+                  <InlineVisual index={i} near={near} />
                 </div>
               </li>
             ))}
@@ -132,7 +135,7 @@ export function HowItWorks() {
                       i === active ? "visible translate-y-0 opacity-100" : "invisible translate-y-6 opacity-0",
                     )}
                   >
-                    <Visual play={reached >= i && i === active} />
+                    {near && <Visual play={reached >= i && i === active} />}
                   </div>
                 ))}
               </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { Check } from "lucide-react";
+import { Check, ChevronRight } from "lucide-react";
 import { GRADES, LANGUAGES, NEEDS, SUPPORTS, SUPPORT_IDS, supportsForNeeds } from "@/lib/adapt/profile";
 import { NEED_IDS, type LearnerProfile, type NeedId, type SupportId } from "@/lib/adapt/types";
 import { cn } from "@/lib/utils";
@@ -70,7 +70,10 @@ export function ProfilePanel({ profile, onChange }: { profile: LearnerProfile; o
         </ul>
         {others.length > 0 && (
           <details className="group mt-2">
-            <summary className="cursor-pointer text-sm font-semibold text-brand-ink">More kinds of help ({others.length})</summary>
+            <summary className="flex min-h-11 cursor-pointer list-none items-center gap-1.5 text-sm font-semibold text-brand-ink [&::-webkit-details-marker]:hidden">
+              <ChevronRight className="size-4 transition-transform group-open:rotate-90" aria-hidden />
+              More kinds of help ({others.length})
+            </summary>
             <ul className="mt-2 flex flex-wrap gap-1.5">
               {others.map((id) => (
                 <SupportChip key={id} id={id} on={profile.supports.includes(id)} onToggle={toggleSupport} />

@@ -25,7 +25,7 @@ cp .env.example .env.local   # add GEMINI_API_KEY (https://aistudio.google.com/a
 npm run dev
 ```
 
-Without a key, the three samples show **pre-built example outputs** (labelled "Pre-built example · not generated live"), and everything else uses the offline engine.
+Without a key, the three samples show **pre-made example outputs** (labelled "Pre-made example · not made just now"), and everything else uses the offline engine.
 
 | Variable | Purpose |
 | --- | --- |
@@ -40,7 +40,11 @@ npm run eval:ai   # live AI evaluation (needs GEMINI_API_KEY): 3 samples × 6 pr
 npm run lint
 npm run build
 npm run a11y      # axe-core WCAG 2.2 AA audit (needs `npm start` on :3100)
+npm run audit:ui -- <outDir>   # 4 breakpoints: overflow, tap targets, text size, headings, axe, console errors
+npm run e2e:studio -- false    # studio end to end with motion on (pass `true` for calm mode)
 ```
+
+Measured on a local production build (Lighthouse 12.8, October 2026): mobile (simulated slow 4G, 4× slower CPU) Performance 89–90, Accessibility 100, Best Practices 100, SEO 100; desktop 100 in all four.
 
 The tests enforce, for every curated and offline output: all questions preserved, answer choices kept, barrier quotes verbatim from the original, citations that resolve, no leaked answers, and structural distinctness between needs.
 
@@ -69,7 +73,7 @@ No accounts, no database, no analytics. Uploaded files are read in the browser. 
 
 ## Accessibility of the site itself
 
-Designed to WCAG 2.2 AA and audited with axe-core (0 violations across all views). Keyboard operable, visible focus, semantic structure, text alternatives for icon cues. **Calm mode** (and the OS reduced-motion setting) turns off smooth scrolling and all decorative motion. Body type is Atkinson Hyperlegible Next.
+Designed to WCAG 2.2 AA and audited with axe-core (0 violations at 1440, 1024, 768, and 390px). Keyboard operable, visible focus, semantic structure, text alternatives for icon cues, 44px touch targets, no text under 12px. **Calm mode** (and the OS reduced-motion setting) turns off smooth scrolling and all decorative motion, and swaps animated pictures for still ones. Body type is Atkinson Hyperlegible Next; headlines use Bricolage Grotesque. Design decisions are in [DESIGN.md](DESIGN.md).
 
 ## Limitations
 
@@ -86,3 +90,11 @@ Designed to WCAG 2.2 AA and audited with axe-core (0 violations across all views
 AI coding assistants (including Anthropic's Claude) were used to help write and review code, draft the research summaries, and author the pre-built sample outputs, under the team's direction and review. At runtime, the app uses Google's Gemini model to generate adaptations; those outputs are labelled as AI-generated in the interface.
 
 See [docs/PRD.md](docs/PRD.md) and [docs/RESEARCH.md](docs/RESEARCH.md).
+
+## Credits and licenses
+
+- The button "magnet" effect is the Magnet component from [React Bits](https://reactbits.dev) by David Haz (MIT + Commons Clause), in `src/components/vendor/magnet.tsx` with its notice.
+- Fonts: Atkinson Hyperlegible Next and Mono (Braille Institute) and Bricolage Grotesque, all SIL Open Font License 1.1.
+- Animation by [GSAP](https://gsap.com) (standard no-charge license) and smooth scrolling by [Lenis](https://lenis.darkroom.engineering) (MIT).
+
+Full texts and the dependency list: [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

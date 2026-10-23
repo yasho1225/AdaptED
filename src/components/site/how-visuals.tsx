@@ -7,7 +7,7 @@ import { Check, Lock } from "lucide-react";
 import { OriginalDocument, barrierRanges } from "@/components/doc/original-document";
 import { useMotion } from "@/components/motion/motion-provider";
 import { detectBarriers, normalize, parseAssignment } from "@/lib/adapt/analyze";
-import { CURATED } from "@/lib/adapt/curated";
+import { SCIENCE } from "@/lib/adapt/curated/science";
 import { checkFidelity } from "@/lib/adapt/fidelity";
 import { NEEDS, SUPPORTS } from "@/lib/adapt/profile";
 import { SAMPLES } from "@/lib/adapt/samples";
@@ -143,7 +143,7 @@ export function WriteVisual({ play }: { play: boolean }) {
   const cards = useMemo(
     () =>
       NEED_IDS.map((n) => {
-        const a = CURATED.science[n];
+        const a = SCIENCE[n];
         const section = a.sections.find((s) => s.blocks.some((b) => b.text)) ?? a.sections[0];
         const lines = section.blocks.map((b) => b.text).filter(Boolean).slice(0, 5) as string[];
         return { n, title: a.title, heading: section.heading, lines };
@@ -196,7 +196,7 @@ export function CheckVisual({ play }: { play: boolean }) {
   const rows = useMemo(
     () =>
       NEED_IDS.map((n) => {
-        const f = checkFidelity(SAMPLE.text, CURATED.science[n]);
+        const f = checkFidelity(SAMPLE.text, SCIENCE[n]);
         const vocab = f.vocabularyKept.length + f.vocabularyDropped.length;
         return { n, f, vocab };
       }),

@@ -334,6 +334,9 @@
   .field:focus-visible {
     outline-offset: 1px;
   }
+  select.field {
+    min-height: 2.5rem;
+  }
   .tab {
     position: relative;
     padding: 0.6rem 0.9rem;
@@ -353,7 +356,8 @@
   @media (pointer: coarse) {
     .btn-sm,
     .chip,
-    .tab {
+    .tab,
+    select.field {
       min-height: 2.75rem;
     }
   }
@@ -400,6 +404,11 @@
   padding-bottom: 0.2em;
   margin-bottom: -0.2em;
 }
+/* Section headline reveal (heading-reveal.tsx): same room for descenders. */
+.rv-line-mask {
+  padding-bottom: 0.2em;
+  margin-bottom: -0.2em;
+}
 .hl-word {
   display: inline-block;
   animation: word-rise 1s cubic-bezier(0.16, 1, 0.3, 1) both;
@@ -426,6 +435,11 @@
 @keyframes draw {
   from { stroke-dashoffset: 1; }
   to { stroke-dashoffset: 0; }
+}
+
+@keyframes check-pop {
+  from { transform: scale(0.7); }
+  to { transform: scale(1); }
 }
 
 @keyframes grow {

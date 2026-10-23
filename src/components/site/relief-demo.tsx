@@ -7,7 +7,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { RichText } from "@/components/doc/rich-text";
 import { useMotion } from "@/components/motion/motion-provider";
 import { parseAssignment, words } from "@/lib/adapt/analyze";
-import { CURATED } from "@/lib/adapt/curated";
+import { SCIENCE } from "@/lib/adapt/curated/science";
 import { SAMPLES } from "@/lib/adapt/samples";
 import { cn } from "@/lib/utils";
 
@@ -26,7 +26,7 @@ export function ReliefDemo() {
   const beforeWords = words(before).length;
   const after = useMemo(
     () =>
-      CURATED.science.dyslexia.sections
+      SCIENCE.dyslexia.sections
         .filter((s) => s.heading.startsWith("Read"))
         .slice(0, 2)
         .flatMap((s) => [{ heading: s.heading.replace(/^Read:\s*/, ""), text: "", key: false }, ...s.blocks.map((b) => ({ heading: "", text: b.text ?? "", key: b.type === "keyIdea" }))]),
