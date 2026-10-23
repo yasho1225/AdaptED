@@ -69,7 +69,7 @@ No accounts, no database, no analytics. Uploaded files are read in the browser. 
 
 ## Accessibility of the site itself
 
-Designed to WCAG 2.2 AA and audited with axe-core (0 violations across all views, light and dark). Keyboard operable, visible focus, semantic structure, text alternatives for icon cues. **Calm mode** (and the OS reduced-motion setting) turns off smooth scrolling and all decorative motion. Body type is Atkinson Hyperlegible Next.
+Designed to WCAG 2.2 AA and audited with axe-core (0 violations across all views). Keyboard operable, visible focus, semantic structure, text alternatives for icon cues. **Calm mode** (and the OS reduced-motion setting) turns off smooth scrolling and all decorative motion. Body type is Atkinson Hyperlegible Next.
 
 ## Limitations
 

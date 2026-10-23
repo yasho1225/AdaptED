@@ -7,23 +7,19 @@ import Lenis from "lenis";
 
 gsap.registerPlugin(ScrollTrigger);
 
-type Theme = "light" | "dark";
-
 interface MotionContextValue {
   /** Calm mode: no smooth scrolling, no scroll-driven or decorative motion. */
   calm: boolean;
   setCalm: (v: boolean) => void;
-  theme: Theme;
-  setTheme: (t: Theme) => void;
 }
 
-const MotionContext = createContext<MotionContextValue>({ calm: true, setCalm: () => {}, theme: "light", setTheme: () => {} });
+const MotionContext = createContext<MotionContextValue>({ calm: true, setCalm: () => {} });
 
 export function useMotion() {
   return useContext(MotionContext);
 }
 
-function readAttr(name: "calm" | "theme"): string | undefined {
+function readAttr(name: "calm"): string | undefined {
   if (typeof document === "undefined") return undefined;
   return document.documentElement.dataset[name];
 }
@@ -31,13 +27,11 @@ function readAttr(name: "calm" | "theme"): string | undefined {
 export function MotionProvider({ children }: { children: React.ReactNode }) {
   // Start calm on the server; the boot script has already set the real value on <html>.
   const [calm, setCalmState] = useState(true);
-  const [theme, setThemeState] = useState<Theme>("light");
 
   useEffect(() => {
     // Sync React state with what the pre-paint boot script decided.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setCalmState(readAttr("calm") === "true");
-    setThemeState(readAttr("theme") === "dark" ? "dark" : "light");
   }, []);
 
   const setCalm = useCallback((v: boolean) => {
@@ -51,15 +45,6 @@ export function MotionProvider({ children }: { children: React.ReactNode }) {
     ScrollTrigger.refresh();
   }, []);
 
-  const setTheme = useCallback((t: Theme) => {
-    setThemeState(t);
-    document.documentElement.dataset.theme = t;
-    try {
-      localStorage.setItem("adapted-theme", t);
-    } catch {
-      /* storage unavailable */
-    }
-  }, []);
 
   useEffect(() => {
     if (calm) return;
@@ -74,5 +59,5 @@ export function MotionProvider({ children }: { children: React.ReactNode }) {
     };
   }, [calm]);
 
-  return <MotionContext.Provider value={{ calm, setCalm, theme, setTheme }}>{children}</MotionContext.Provider>;
+  return <MotionContext.Provider value={{ calm, setCalm }}>{children}</MotionContext.Provider>;
 }

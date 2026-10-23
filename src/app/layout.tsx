@@ -13,14 +13,11 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#fbf7ee" },
-    { media: "(prefers-color-scheme: dark)", color: "#1b1e28" },
-  ],
+  themeColor: "#14318a",
 };
 
-/** Applies saved theme + calm mode before paint (no flash, no motion surprise). */
-const bootScript = `(function(){try{var d=document.documentElement;var t=localStorage.getItem('adapted-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}d.dataset.theme=t;var c=localStorage.getItem('adapted-calm');if(c===null){c=matchMedia('(prefers-reduced-motion: reduce)').matches?'true':'false'}d.dataset.calm=c}catch(e){}})();`;
+/** Applies saved calm mode before paint (no flash, no motion surprise). */
+const bootScript = `(function(){try{var d=document.documentElement;var c=localStorage.getItem('adapted-calm');if(c===null){c=matchMedia('(prefers-reduced-motion: reduce)').matches?'true':'false'}d.dataset.calm=c}catch(e){}})();`;
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (

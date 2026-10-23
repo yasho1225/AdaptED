@@ -7,7 +7,6 @@
  * for legibility; display: Fraunces.
  */
 
-@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 @theme inline {
   --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
@@ -25,6 +24,8 @@
   --color-brand: var(--brand);
   --color-brand-ink: var(--brand-ink);
   --color-brand-soft: var(--brand-soft);
+  --color-on-brand: var(--on-brand);
+  --color-sheet-ink: var(--sheet-ink);
   --color-mark: var(--mark);
   --color-mark-strong: var(--mark-strong);
   --color-ok: var(--ok);
@@ -48,8 +49,17 @@
   --radius-2xl: 1.75rem;
 }
 
-:root {
-  color-scheme: light;
+/*
+ * Two surfaces:
+ *  • Paper — every reading surface (worksheets, forms, adapted documents): dark ink on warm paper,
+ *    per BDA guidance against stark white. Applied with .sheet / .on-paper.
+ *  • Canvas — the page itself: deep "blueprint" blue with white type and a highlighter-yellow accent.
+ */
+:root,
+.sheet,
+.on-paper,
+.force-light {
+  
   --paper: oklch(0.975 0.012 85);
   --paper-2: oklch(0.955 0.016 85);
   --sheet: oklch(0.993 0.006 90);
@@ -79,40 +89,50 @@
   --autism-soft: oklch(0.955 0.03 305);
 
   --on-need: oklch(0.995 0 0);
+  --on-brand: oklch(0.995 0 0);
+  --sheet-ink: oklch(0.24 0.03 265);
   --shadow-sheet: 0 1px 0 oklch(0.85 0.02 85), 0 2px 4px oklch(0.4 0.03 85 / 0.06), 0 18px 40px -12px oklch(0.35 0.04 85 / 0.18);
   --shadow-lift: 0 1px 0 oklch(0.85 0.02 85), 0 30px 60px -20px oklch(0.3 0.05 265 / 0.3);
 }
 
-[data-theme="dark"] {
+.sheet,
+.on-paper,
+.force-light {
+  color: var(--ink);
+  color-scheme: light;
+}
+
+:root {
   color-scheme: dark;
-  --paper: oklch(0.2 0.015 265);
-  --paper-2: oklch(0.235 0.018 265);
-  --sheet: oklch(0.265 0.018 265);
-  --ink: oklch(0.95 0.01 85);
-  --ink-2: oklch(0.82 0.015 85);
-  --ink-3: oklch(0.72 0.015 85);
-  --rule: oklch(0.34 0.02 265);
-  --rule-strong: oklch(0.44 0.025 265);
-  --brand: oklch(0.74 0.13 268);
-  --brand-ink: oklch(0.82 0.1 268);
-  --brand-soft: oklch(0.3 0.06 268);
-  --mark: oklch(0.42 0.09 85 / 0.75);
-  --mark-strong: oklch(0.8 0.13 92);
-  --ok: oklch(0.78 0.12 155);
-  --ok-soft: oklch(0.3 0.05 155);
-  --warn: oklch(0.82 0.12 75);
-  --warn-soft: oklch(0.32 0.05 75);
-  --dyslexia: oklch(0.78 0.1 235);
-  --dyslexia-soft: oklch(0.3 0.04 235);
-  --adhd: oklch(0.8 0.12 55);
-  --adhd-soft: oklch(0.31 0.045 55);
-  --apd: oklch(0.78 0.1 165);
-  --apd-soft: oklch(0.3 0.04 165);
-  --autism: oklch(0.8 0.1 305);
-  --autism-soft: oklch(0.31 0.045 305);
-  --on-need: oklch(0.18 0.03 265);
-  --shadow-sheet: 0 1px 0 oklch(0.3 0.02 265), 0 18px 40px -12px oklch(0 0 0 / 0.5);
-  --shadow-lift: 0 30px 60px -20px oklch(0 0 0 / 0.6);
+  --paper: oklch(0.3 0.135 262);
+  --paper-2: oklch(0.345 0.14 262);
+  --ink: oklch(0.985 0.004 260);
+  --ink-2: oklch(0.9 0.035 258);
+  --ink-3: oklch(0.82 0.05 258);
+  --rule: oklch(1 0 0 / 0.14);
+  --rule-strong: oklch(1 0 0 / 0.3);
+  --brand: oklch(0.87 0.155 92);
+  --brand-ink: oklch(0.89 0.14 92);
+  --brand-soft: oklch(1 0 0 / 0.1);
+  --on-brand: oklch(0.24 0.09 262);
+  --sheet-ink: oklch(0.24 0.09 262);
+  --mark: oklch(0.87 0.155 92 / 0.9);
+  --mark-strong: oklch(0.87 0.155 92);
+  --ok: oklch(0.86 0.13 158);
+  --ok-soft: oklch(0.86 0.13 158 / 0.14);
+  --warn: oklch(0.88 0.13 75);
+  --warn-soft: oklch(0.88 0.13 75 / 0.14);
+  --dyslexia: oklch(0.84 0.09 230);
+  --dyslexia-soft: oklch(0.84 0.09 230 / 0.16);
+  --adhd: oklch(0.85 0.11 60);
+  --adhd-soft: oklch(0.85 0.11 60 / 0.16);
+  --apd: oklch(0.85 0.11 165);
+  --apd-soft: oklch(0.85 0.11 165 / 0.16);
+  --autism: oklch(0.85 0.09 305);
+  --autism-soft: oklch(0.85 0.09 305 / 0.16);
+  --on-need: oklch(0.24 0.09 262);
+  --shadow-sheet: 0 1px 0 oklch(1 0 0 / 0.25) inset, 0 2px 6px oklch(0.15 0.1 262 / 0.25), 0 24px 50px -18px oklch(0.12 0.12 262 / 0.6);
+  --shadow-lift: 0 30px 70px -20px oklch(0.1 0.12 262 / 0.7);
 }
 
 @layer base {
@@ -127,7 +147,13 @@
     scroll-padding-top: 5rem;
   }
   body {
-    background: var(--paper);
+    background-color: var(--paper);
+    background-image:
+      radial-gradient(ellipse 70% 45% at 70% -5%, oklch(0.48 0.16 258 / 0.55), transparent 70%),
+      linear-gradient(oklch(1 0 0 / 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, oklch(1 0 0 / 0.035) 1px, transparent 1px);
+    background-size: auto, 32px 32px, 32px 32px;
+    background-attachment: scroll;
     color: var(--ink);
     font-family: var(--font-sans);
     font-size: 1.0625rem;
@@ -147,8 +173,8 @@
     text-wrap: pretty;
   }
   ::selection {
-    background: var(--mark-strong);
-    color: oklch(0.2 0.03 265);
+    background: oklch(0.87 0.155 92);
+    color: oklch(0.2 0.06 262);
   }
   :focus-visible {
     outline: 3px solid var(--brand);
@@ -186,7 +212,7 @@
     color: var(--ink-3);
   }
   .sheet {
-    background: var(--sheet);
+    background-color: var(--sheet);
     border: 1px solid var(--rule);
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow-sheet);
@@ -227,22 +253,20 @@
     color: var(--paper);
   }
   .btn-primary:hover:not(:disabled) {
-    background: var(--brand-ink);
+    background: color-mix(in oklch, var(--ink) 86%, var(--brand));
   }
   .btn-brand {
     background: var(--brand);
-    color: white;
-    box-shadow: 0 10px 30px -10px color-mix(in oklch, var(--brand) 70%, transparent);
-  }
-  [data-theme="dark"] .btn-brand {
-    color: oklch(0.18 0.04 268);
+    color: var(--on-brand);
+    box-shadow: 0 0 0 1px oklch(1 0 0 / 0.25) inset, 0 12px 30px -12px color-mix(in oklch, var(--brand) 80%, transparent);
   }
   .btn-brand:hover:not(:disabled) {
-    background: var(--brand-ink);
+    background: color-mix(in oklch, var(--brand) 88%, white);
+    transform: translateY(-1px);
   }
   .btn-ghost {
     border: 1px solid var(--rule-strong);
-    background: var(--sheet);
+    background: color-mix(in oklch, var(--ink) 5%, transparent);
     color: var(--ink);
   }
   .btn-ghost:hover:not(:disabled) {
@@ -258,7 +282,8 @@
     align-items: center;
     gap: 0.4rem;
     border: 1px solid var(--rule-strong);
-    background: var(--sheet);
+    background: color-mix(in oklch, var(--ink) 5%, transparent);
+    color: var(--ink);
     border-radius: 999px;
     padding: 0.35rem 0.8rem;
     font-size: 0.875rem;
@@ -287,46 +312,10 @@
     white-space: nowrap;
   }
   .tab[aria-selected="true"] {
-    color: var(--ink);
+    color: var(--sheet-ink);
     background: var(--sheet);
     box-shadow: 0 1px 2px oklch(0.3 0.03 85 / 0.12), inset 0 0 0 1px var(--rule-strong);
   }
-}
-
-/* A chosen page tint is a light surface even in dark mode: restore light tokens inside it. */
-.force-light {
-  
-  --paper: oklch(0.975 0.012 85);
-  --paper-2: oklch(0.955 0.016 85);
-  --sheet: oklch(0.993 0.006 90);
-  --ink: oklch(0.24 0.03 265);
-  --ink-2: oklch(0.4 0.03 265);
-  --ink-3: oklch(0.5 0.025 265);
-  --rule: oklch(0.89 0.018 85);
-  --rule-strong: oklch(0.8 0.022 85);
-  --brand: oklch(0.47 0.19 268);
-  --brand-ink: oklch(0.38 0.17 268);
-  --brand-soft: oklch(0.94 0.035 268);
-  --mark: oklch(0.92 0.1 95 / 0.7);
-  --mark-strong: oklch(0.87 0.13 92);
-  --ok: oklch(0.47 0.12 155);
-  --ok-soft: oklch(0.95 0.04 155);
-  --warn: oklch(0.5 0.13 60);
-  --warn-soft: oklch(0.96 0.045 75);
-
-  /* Need accents: AA (4.5:1+) on paper for text use. */
-  --dyslexia: oklch(0.48 0.12 235);
-  --dyslexia-soft: oklch(0.95 0.03 235);
-  --adhd: oklch(0.52 0.15 45);
-  --adhd-soft: oklch(0.955 0.04 60);
-  --apd: oklch(0.47 0.11 165);
-  --apd-soft: oklch(0.95 0.035 165);
-  --autism: oklch(0.47 0.15 305);
-  --autism-soft: oklch(0.955 0.03 305);
-
-  --on-need: oklch(0.995 0 0);
-  --shadow-sheet: 0 1px 0 oklch(0.85 0.02 85), 0 2px 4px oklch(0.4 0.03 85 / 0.06), 0 18px 40px -12px oklch(0.35 0.04 85 / 0.18);
-  --shadow-lift: 0 1px 0 oklch(0.85 0.02 85), 0 30px 60px -20px oklch(0.3 0.05 265 / 0.3);
 }
 
 /* Need themes for the adapted document */

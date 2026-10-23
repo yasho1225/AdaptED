@@ -1,21 +1,21 @@
 "use client";
 
-import { Moon, Sun, Wind } from "lucide-react";
+import { Wind } from "lucide-react";
 import { useMotion } from "@/components/motion/motion-provider";
 import { cn } from "@/lib/utils";
 
 export function Logo({ className }: { className?: string }) {
   return (
     <span className={cn("font-display text-xl font-semibold tracking-tight", className)}>
-      Adapt<span className="mark !px-[0.08em]">ED</span>
+      Adapt<span className="ml-0.5 rounded-[0.2em] bg-brand px-[0.14em] text-on-brand">ED</span>
     </span>
   );
 }
 
 export function Nav() {
-  const { calm, setCalm, theme, setTheme } = useMotion();
+  const { calm, setCalm } = useMotion();
   return (
-    <header className="no-print sticky top-0 z-50 border-b border-rule/70 bg-paper/85 backdrop-blur-md">
+    <header className="no-print sticky top-0 z-50 border-b border-rule/70 bg-paper/80 backdrop-blur-md">
       <a href="#studio" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:z-50 focus:rounded-lg focus:bg-ink focus:px-4 focus:py-2 focus:text-paper">
         Skip to the studio
       </a>
@@ -45,9 +45,6 @@ export function Nav() {
             <Wind className="size-4" aria-hidden />
             <span className="hidden sm:inline">Calm mode</span>
             <span className="sr-only sm:hidden">Calm mode</span>
-          </button>
-          <button type="button" onClick={() => setTheme(theme === "dark" ? "light" : "dark")} className="btn btn-ghost btn-sm !px-2.5" aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}>
-            {theme === "dark" ? <Sun className="size-4" aria-hidden /> : <Moon className="size-4" aria-hidden />}
           </button>
           <a href="#studio" className="btn btn-primary btn-sm hidden sm:inline-flex">
             Try it

@@ -28,7 +28,7 @@ const CARD_POS = [
 
 function MiniCard({ need, label, children, i }: { need: string; label: string; children: React.ReactNode; i: number }) {
   return (
-    <div className={cn(`need-${need}`, "hero-card sheet w-full overflow-hidden lg:absolute lg:w-[15.5rem]", CARD_POS[i])} data-i={i}>
+    <div className={cn(`need-${need}`, "hero-card sheet w-full overflow-hidden lg:absolute lg:z-20 lg:w-[15.5rem]", CARD_POS[i])} data-i={i}>
       <p className="bg-[color:var(--need-soft)] px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-[color:var(--need)]">{label}</p>
       <div className="space-y-1.5 px-3 py-2.5 text-[0.78rem] leading-snug">{children}</div>
     </div>
@@ -71,7 +71,7 @@ export function Hero() {
             },
             ">0.1",
           )
-          .to(".hero-original", { scale: 0.82, opacity: 0.35, duration: 1, ease: "power2.out" }, "<");
+          .to(".hero-original", { scale: 0.84, filter: "brightness(0.92)", duration: 1, ease: "power2.out" }, "<");
       });
       // Gentle intro on load (all sizes)
       gsap.from(".hero-copy > *", { y: 20, opacity: 0, duration: 0.8, stagger: 0.08, ease: "power3.out", delay: 0.35 });

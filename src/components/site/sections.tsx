@@ -247,6 +247,17 @@ export function Principles() {
             </li>
           ))}
         </ul>
+        <div data-reveal className="mt-20 flex flex-col items-start justify-between gap-6 rounded-2xl border border-rule-strong bg-paper-2 p-8 sm:flex-row sm:items-center sm:p-10">
+          <div>
+            <h2 className="text-3xl font-semibold sm:text-4xl">
+              Try it with tomorrow&apos;s assignment.
+            </h2>
+            <p className="mt-2 text-lg text-ink-2">Paste it, pick the learner, and see exactly what changes — in under a minute.</p>
+          </div>
+          <a href="#studio" className="btn btn-brand min-h-12 shrink-0 px-6 text-base">
+            Open the studio
+          </a>
+        </div>
       </div>
     </Reveal>
   );

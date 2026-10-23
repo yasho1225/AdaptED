@@ -228,7 +228,7 @@ export function ResultTabs({ tab, onTab, onCompare, comparing }: { tab: ResultTa
 /** Hidden copy of the student document used by window.print(). */
 export function PrintCopy({ result }: { result: AdaptResult }) {
   return (
-    <div id="print-root" className="hidden print:block" aria-hidden>
+    <div id="print-root" className="on-paper hidden print:block" aria-hidden>
       <AdaptedDocument assignment={result.assignment} need={result.profile.needs[0]} needs={result.profile.needs} headingLevel={3} />
     </div>
   );

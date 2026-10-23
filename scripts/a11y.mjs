@@ -1,10 +1,10 @@
-// Usage: node scripts/a11y.mjs [baseUrl]  — axe-core WCAG 2.2 AA audit of every main view, light + dark.
+// Usage: node scripts/a11y.mjs [baseUrl]  — axe-core WCAG 2.2 AA audit of every main view, blue canvas.
 import { chromium } from "playwright";
 import { AxeBuilder } from "@axe-core/playwright";
 const base = process.argv[2] ?? "http://localhost:3100";
 const b = await chromium.launch({ executablePath: "/opt/pw-browsers/chromium-1194/chrome-linux/chrome" });
 let total = 0;
-for (const theme of ["light", "dark"]) {
+for (const theme of ["blue"]) {
   const ctx = await b.newContext({ viewport: { width: 1280, height: 900 } });
   await ctx.addInitScript((t) => { localStorage.setItem("adapted-calm", "true"); localStorage.setItem("adapted-theme", t); }, theme);
   const p = await ctx.newPage();

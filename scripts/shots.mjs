@@ -55,9 +55,6 @@ await p.screenshot({ path: `${out}/mobile-full.png`, fullPage: true });
 const overflow = await p.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
 console.log("mobile horizontal overflow px:", overflow);
 
-// Dark
-p = await page({ width: 1440, height: 900 }, { theme: "dark" });
-await p.screenshot({ path: `${out}/dark-hero.png` });
 
 console.log("console errors:", errors.length ? errors.join("\n") : "none");
 await browser.close();
