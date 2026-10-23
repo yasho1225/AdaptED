@@ -148,7 +148,13 @@ export function Hero() {
             </MiniCard>
           </div>
           <p className="mt-4 hidden items-center justify-center gap-2 text-sm text-ink-3 lg:flex">
-            <ArrowDown className="size-4" aria-hidden /> Scroll to see one worksheet become four
+            {calm ? (
+              "One worksheet, four versions — each built for a different barrier."
+            ) : (
+              <>
+                <ArrowDown className="size-4" aria-hidden /> Scroll to see one worksheet become four
+              </>
+            )}
           </p>
         </div>
       </div>

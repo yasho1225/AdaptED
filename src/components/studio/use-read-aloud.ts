@@ -74,7 +74,7 @@ export function useReadAloud(assignment: AdaptedAssignment, language: OutputLang
       u.onend = () => speakRef.current(i + 1, run);
       u.onerror = () => speakRef.current(i + 1, run);
       window.speechSynthesis.speak(u);
-      if (item.id) document.querySelector(`[data-block="${item.id}"]`)?.scrollIntoView({ block: "center", behavior: "smooth" });
+      if (item.id) document.querySelector(`[data-block="${item.id}"]`)?.scrollIntoView({ block: "center", behavior: document.documentElement.dataset.calm === "true" ? "auto" : "smooth" });
     },
     [items, language, rate],
   );

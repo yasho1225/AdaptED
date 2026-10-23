@@ -96,8 +96,8 @@
   --brand: oklch(0.74 0.13 268);
   --brand-ink: oklch(0.82 0.1 268);
   --brand-soft: oklch(0.3 0.06 268);
-  --mark: oklch(0.6 0.12 100 / 0.45);
-  --mark-strong: oklch(0.7 0.14 98);
+  --mark: oklch(0.42 0.09 85 / 0.75);
+  --mark-strong: oklch(0.8 0.13 92);
   --ok: oklch(0.78 0.12 155);
   --ok-soft: oklch(0.3 0.05 155);
   --warn: oklch(0.82 0.12 75);
@@ -359,5 +359,15 @@
   }
   .no-print {
     display: none !important;
+  }
+}
+
+/* Hero, static (calm) arrangement on large screens: cards sit above a slightly smaller original. */
+@media (min-width: 1024px) {
+  [data-calm="true"] .hero-original {
+    scale: 0.84;
+  }
+  [data-calm="true"] .hero-card {
+    z-index: 20;
   }
 }
