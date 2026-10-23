@@ -34,7 +34,7 @@ export function CueIcon({ icon, compact = false }: { icon: CueIconId; compact?: 
       <span className="grid size-8 place-items-center rounded-lg bg-[color:var(--need-soft,var(--brand-soft))]">
         <Icon className="size-4" aria-hidden />
       </span>
-      {!compact && <span className="text-[0.65rem] font-bold uppercase tracking-wide">{label}</span>}
+      {!compact && <span className="text-xs font-bold">{label}</span>}
       {compact && <span className="sr-only">{label}</span>}
     </span>
   );

@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { Copy, Download, Info, LayoutGrid, Printer, Sparkles } from "lucide-react";
 import { AdaptedDocument } from "@/components/doc/adapted-document";
-import { CountUp } from "@/components/motion/count-up";
 import { NEEDS } from "@/lib/adapt/profile";
 import type { AdaptResult, FallbackReason } from "@/lib/adapt/types";
 import { PDF_UNSUPPORTED_LANGUAGES, assignmentToPlainText, downloadAdaptedPdf } from "@/lib/export-pdf";
@@ -54,33 +53,34 @@ export function SourceBadge({ result, onRunLive, liveBusy }: { result: AdaptResu
 
 function Metric({ label, before, after, decimals = 0, suffix, note }: { label: string; before?: number; after: number; decimals?: number; suffix?: string; note?: string }) {
   return (
-    <div className="min-w-0 border-rule px-4 py-3 sm:border-l first:sm:border-l-0">
-      <dt className="text-xs font-semibold uppercase tracking-wide text-ink-3">{label}</dt>
-      <dd className="mt-1 flex items-baseline gap-1.5 font-display text-2xl font-semibold tabular-nums">
+    <div className="min-w-0 px-5 py-4">
+      <dt className="text-sm font-bold text-ink-2">{label}</dt>
+      <dd className="tnum mt-1 flex items-baseline gap-2 font-mono text-xl font-bold">
         {before !== undefined && (
           <>
             <span className="text-ink-3 line-through decoration-1">{before.toFixed(decimals)}</span>
-            <span className="text-base text-ink-3" aria-label="changed to">
+            <span className="font-sans text-base text-ink-3" aria-label="changed to">
               →
             </span>
           </>
         )}
-        <CountUp value={after} decimals={decimals} />
-        {suffix && <span className="font-sans text-sm font-semibold text-ink-2">{suffix}</span>}
+        <span>{after.toFixed(decimals)}</span>
+        {suffix && <span className="font-sans text-sm font-bold text-ink-2">{suffix}</span>}
       </dd>
-      {note && <dd className="mt-0.5 text-xs text-ink-3">{note}</dd>}
+      {note && <dd className="mt-0.5 text-sm text-ink-3">{note}</dd>}
     </div>
   );
 }
 
+/** A ledger of measured before/after values (computed by code, not claimed by the AI). */
 export function MetricsStrip({ result }: { result: AdaptResult }) {
   const { before, after } = result.metrics;
   const f = result.fidelity;
   return (
-    <dl className="sheet grid grid-cols-2 divide-rule sm:grid-cols-4">
+    <dl className="sheet grid grid-cols-1 divide-y divide-rule sm:grid-cols-2 sm:divide-y-0 lg:grid-cols-4 lg:divide-x">
       <Metric label="Reading grade" before={before.gradeLevel} after={after.gradeLevel} decimals={1} note="Flesch–Kincaid estimate" />
-      <Metric label="Words / sentence" before={before.avgSentenceLength} after={after.avgSentenceLength} decimals={1} note="Average sentence length" />
-      <Metric label="Questions kept" after={f.matchedQuestions} suffix={`of ${f.originalQuestions}`} note={f.restored.length ? `${f.restored.length} restored word-for-word` : "Checked automatically"} />
+      <Metric label="Words per sentence" before={before.avgSentenceLength} after={after.avgSentenceLength} decimals={1} note="Average sentence length" />
+      <Metric label="Questions kept" after={f.matchedQuestions} suffix={`of ${f.originalQuestions}`} note={f.restored.length ? `${f.restored.length} restored word for word` : "Checked by code"} />
       <Metric label="Changes explained" after={result.assignment.changes.length} suffix="with sources" note="See “Why it changed”" />
     </dl>
   );

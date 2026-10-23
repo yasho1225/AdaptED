@@ -73,7 +73,7 @@ export function AdaptedDocument({ assignment, need, needs, compact = false, inte
       aria-label={`Adapted assignment: ${assignment.title}`}
     >
       <header className={cn("border-b border-rule", compact ? "mb-3 pb-3" : "mb-6 pb-5")}>
-        <H className={cn("font-display font-semibold text-ink", compact ? "text-base" : "text-2xl sm:text-[1.75rem]")}>{assignment.title}</H>
+        <H className={cn("font-semibold text-ink", compact ? "text-base" : "text-2xl sm:text-[1.75rem]")}>{assignment.title}</H>
         {assignment.studentIntro && <p className={cn("mt-2 text-ink-2", compact && "line-clamp-2")}>{assignment.studentIntro}</p>}
         {assignment.estimatedMinutes && !compact && (
           <p className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-[color:var(--need-soft)] px-3 py-1 text-sm font-bold text-[color:var(--need)]">
@@ -131,8 +131,8 @@ function SectionView({
   return (
     <section aria-label={section.heading}>
       <div className={cn("flex flex-wrap items-baseline gap-x-3 gap-y-1", compact ? "mb-2" : "mb-4")}>
-        {predictable && !compact && <span className="eyebrow !text-[color:var(--need)]">Part {si + 1} of {total}</span>}
-        <Heading className={cn("font-display font-semibold text-ink", compact ? "text-[0.9rem]" : "text-xl")}>{section.heading}</Heading>
+        {predictable && !compact && <span className="text-sm font-bold text-[color:var(--need)]">Part {si + 1} of {total}</span>}
+        <Heading className={cn("font-semibold text-ink", compact ? "text-[0.9rem]" : "text-xl")}>{section.heading}</Heading>
         {section.minutes ? (
           <span className="inline-flex items-center gap-1 rounded-full border border-[color:var(--need)]/30 px-2 py-0.5 text-xs font-bold text-[color:var(--need)]">
             <Timer className="size-3.5" aria-hidden /> {section.minutes} min
@@ -190,8 +190,8 @@ function BlockView({
       );
     case "keyIdea":
       return (
-        <div className="rounded-xl border-l-4 border-[color:var(--need)] bg-[color:var(--need-soft)] px-4 py-3">
-          <p className="text-[0.7em] font-bold uppercase tracking-[0.12em] text-[color:var(--need)]">Key idea</p>
+        <div className="rounded-lg bg-[color:var(--need-soft)] px-4 py-3">
+          <p className="text-[0.85em] font-bold text-[color:var(--need)]">Key idea</p>
           <p className="font-semibold">
             <RichText text={b.text ?? ""} />
           </p>
@@ -280,7 +280,7 @@ function BlockView({
     case "example":
       return (
         <figure className="rounded-xl border border-dashed border-ink-3/50 bg-paper/50 px-4 py-3">
-          <figcaption className="text-[0.7em] font-bold uppercase tracking-[0.12em] text-ink-3">Model — a different example</figcaption>
+          <figcaption className="text-[0.85em] font-bold text-ink-3">Model answer, using a different example</figcaption>
           <p className="mt-1 font-semibold">
             <RichText text={b.text ?? ""} />
           </p>
@@ -305,7 +305,7 @@ function BlockView({
       return <GuidedNotes block={b} interactive={interactive && !compact} />;
     case "tip":
       return (
-        <p className="ml-4 border-l-2 border-rule-strong pl-3 text-[0.92em] text-ink-2">
+        <p className="ml-4 rounded-md bg-paper-2 px-3 py-2 text-[0.92em] text-ink-2">
           <RichText text={b.text ?? ""} />
         </p>
       );
@@ -319,7 +319,7 @@ function QuestionView({ block: b, compact }: { block: Block; compact: boolean })
   return (
     <div className={cn("rounded-xl border border-rule bg-sheet", compact ? "p-3" : "p-4 sm:p-5")}>
       <div className="flex items-start gap-3">
-        <span className="grid size-8 shrink-0 place-items-center rounded-lg border-2 border-ink font-display text-base font-bold" aria-hidden>
+        <span className="grid size-8 shrink-0 place-items-center rounded-lg border-2 border-ink text-base font-bold" aria-hidden>
           {b.number ?? "?"}
         </span>
         <div className="min-w-0 flex-1">

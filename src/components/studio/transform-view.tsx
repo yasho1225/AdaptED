@@ -84,7 +84,7 @@ export function TransformView({ source, profile, result, loading, runKey }: Prop
     <div ref={root} className="grid gap-5 lg:grid-cols-2">
       <div className="sheet relative self-start overflow-hidden lg:sticky lg:top-20 lg:flex lg:max-h-[calc(100svh-6rem)] lg:flex-col">
         <div className="flex items-center justify-between border-b border-rule px-5 py-3">
-          <p className="eyebrow">Original</p>
+          <p className="label !text-ink">Original</p>
           <p className="text-sm text-ink-3">
             <span className="mark font-semibold text-ink">Highlighted</span> = barrier
           </p>
@@ -101,7 +101,7 @@ export function TransformView({ source, profile, result, loading, runKey }: Prop
                 const b = barriers[r.index];
                 return (
                   <li key={r.index} tabIndex={0} onMouseEnter={() => setActiveBarrier(r.index)} onMouseLeave={() => setActiveBarrier(null)} onFocus={() => setActiveBarrier(r.index)} onBlur={() => setActiveBarrier(null)} className="flex gap-2.5 rounded">
-                    <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded bg-mark-strong font-mono text-[0.7rem] font-bold text-[oklch(0.22_0.03_265)]" aria-hidden>
+                    <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded bg-mark-strong font-mono text-[0.7rem] font-bold text-sheet-ink" aria-hidden>
                       {i + 1}
                     </span>
                     <span className="text-ink-2">
@@ -127,7 +127,7 @@ export function TransformView({ source, profile, result, loading, runKey }: Prop
 
       <div className={cn("sheet adapted-pane overflow-hidden", `need-${need}`)}>
         <div className="flex items-center justify-between border-b border-rule bg-[color:var(--need-soft)] px-5 py-3">
-          <p className="eyebrow !text-[color:var(--need)]">Adapted for {needLabel}</p>
+          <p className="label !text-[color:var(--need)]">Adapted for {needLabel}</p>
         </div>
         {result && !loading ? (
           <AdaptedDocument assignment={result.assignment} need={need} needs={profile.needs} headingLevel={3} />

@@ -102,8 +102,7 @@ export function Studio() {
     <section id="studio" ref={sectionRef} aria-labelledby="studio-heading" className="relative scroll-mt-20 py-20 sm:py-28">
       <div className="container-page">
         <div className="max-w-3xl">
-          <p className="eyebrow">The studio</p>
-          <h2 id="studio-heading" className="mt-3 text-4xl font-semibold sm:text-5xl">
+          <h2 id="studio-heading" className="text-4xl sm:text-5xl">
             Adapt an assignment.
           </h2>
           <p className="mt-4 text-lg text-ink-2">
@@ -135,7 +134,7 @@ export function Studio() {
             <>
               <div className="flex flex-wrap items-end justify-between gap-4">
                 <div>
-                  <h3 className="font-display text-2xl font-semibold sm:text-3xl">{shown && !loading ? "The transformation" : "Transforming…"}</h3>
+                  <h3 className="text-2xl sm:text-3xl">{shown && !loading ? "The transformation" : "Transforming…"}</h3>
                   {shown && !loading && <div className="mt-2"><SourceBadge result={shown} liveBusy={liveBusy} onRunLive={async () => { setLiveBusy(true); await run(viewSource, viewProfile, { live: true }); setLiveBusy(false); }} /></div>}
                 </div>
                 {shown && !loading && <ResultActions result={shown} />}
@@ -179,7 +178,7 @@ export function Studio() {
               {comparing && (
                 <div className="pt-6">
                   <div className="mb-4 flex items-center justify-between gap-3">
-                    <h3 className="font-display text-2xl font-semibold">One lesson, four versions</h3>
+                    <h3 className="text-2xl">One lesson, four versions</h3>
                     <button type="button" className="btn btn-ghost btn-sm" onClick={() => setComparing(false)}>
                       <RotateCcw className="size-4" aria-hidden /> Close comparison
                     </button>

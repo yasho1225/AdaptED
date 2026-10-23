@@ -14,8 +14,11 @@ interface Range {
 /** Non-overlapping highlight ranges for barrier quotes (earliest, then longest wins). */
 export function barrierRanges(text: string, barriers: Barrier[]): Range[] {
   const found: Range[] = [];
+  // Single words are marked where they appear in the body, not in the title line.
+  const bodyStart = Math.max(0, text.indexOf("\n"));
   barriers.forEach((b, index) => {
-    const at = text.indexOf(b.quote);
+    const single = !/\s/.test(b.quote);
+    const at = text.indexOf(b.quote, single ? bodyStart : 0);
     if (at >= 0) found.push({ start: at, end: at + b.quote.length, index });
   });
   found.sort((a, b) => a.start - b.start || b.end - b.start - (a.end - a.start));

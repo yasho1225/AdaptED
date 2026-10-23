@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 
 export function Logo({ className }: { className?: string }) {
   return (
-    <span className={cn("font-display text-xl font-semibold tracking-tight", className)}>
+    <span className={cn("text-xl font-semibold tracking-tight", className)}>
       Adapt<span className="ml-0.5 rounded-[0.2em] bg-brand px-[0.14em] text-on-brand">ED</span>
     </span>
   );
@@ -15,7 +15,7 @@ export function Logo({ className }: { className?: string }) {
 export function Nav() {
   const { calm, setCalm } = useMotion();
   return (
-    <header className="no-print sticky top-0 z-50 border-b border-rule/70 bg-paper/80 backdrop-blur-md">
+    <header className="no-print sticky top-0 z-50 border-b border-rule bg-paper">
       <a href="#studio" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:z-50 focus:rounded-lg focus:bg-ink focus:px-4 focus:py-2 focus:text-paper">
         Skip to the studio
       </a>
@@ -29,7 +29,7 @@ export function Nav() {
             ["#how", "How it works"],
             ["#research", "Research"],
           ].map(([href, label]) => (
-            <a key={href} href={href} className="rounded-full px-3.5 py-2 text-[0.95rem] font-semibold text-ink-2 transition-colors hover:bg-paper-2 hover:text-ink">
+            <a key={href} href={href} className="rounded-md px-3.5 py-2 text-[0.95rem] font-bold text-ink-2 transition-colors hover:bg-white/10 hover:text-ink">
               {label}
             </a>
           ))}

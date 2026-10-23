@@ -8,32 +8,34 @@ export function WhyPanel({ result }: { result: AdaptResult }) {
   const a = result.assignment;
   const f = result.fidelity;
   return (
-    <div className="grid gap-6 lg:grid-cols-[1fr_20rem]">
+    <div className="grid gap-6 xl:grid-cols-[1fr_20rem]">
       <div>
-        <ol className="grid gap-3 md:grid-cols-2">
+        <ol className="sheet divide-y divide-rule">
           {a.changes.map((c, i) => {
             const src = getResearch(c.evidence);
             const tone = c.need === "all" ? "" : `need-${c.need}`;
             return (
-              <li key={i} className={cn("sheet flex flex-col p-5", tone)}>
-                <div className="flex items-start gap-3">
-                  <span className="font-display text-2xl font-semibold text-[color:var(--need,var(--brand))]" aria-hidden>
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <div>
-                    <h4 className="font-sans text-base font-bold leading-snug">{c.title}</h4>
-                    {c.need !== "all" && <p className="text-xs font-bold uppercase tracking-wide text-[color:var(--need)]">{NEEDS[c.need].label}</p>}
-                  </div>
+              <li key={i} className={cn("grid gap-3 p-5 sm:p-6 md:grid-cols-12 md:gap-6", tone)}>
+                <div className="md:col-span-5">
+                  <h4 className="text-base leading-snug">{c.title}</h4>
+                  {c.need !== "all" && (
+                    <p className="mt-1 inline-flex items-center gap-1.5 text-sm font-bold text-[color:var(--need)]">
+                      <span aria-hidden className="size-2 rounded-full bg-[color:var(--need)]" />
+                      {NEEDS[c.need].label}
+                    </p>
+                  )}
+                  <p className="mt-2 text-[0.95rem] text-ink-2">{c.detail}</p>
                 </div>
-                <p className="mt-2 text-[0.95rem] text-ink-2">{c.detail}</p>
-                {c.barrier && c.barrier !== "—" && (
-                  <p className="mt-3 text-sm">
-                    <span className="font-semibold">Barrier removed: </span>
-                    <span className="mark">{c.barrier.length > 140 ? c.barrier.slice(0, 137) + "…" : c.barrier}</span>
-                  </p>
-                )}
+                <div className="md:col-span-3">
+                  {c.barrier && c.barrier !== "—" && (
+                    <p className="text-sm">
+                      <span className="block font-bold text-ink-3">Barrier removed</span>
+                      <span className="mark">{c.barrier.length > 140 ? c.barrier.slice(0, 137) + "…" : c.barrier}</span>
+                    </p>
+                  )}
+                </div>
                 {src && (
-                  <a href={src.url} target="_blank" rel="noreferrer" className="group mt-auto pt-4 text-sm">
+                  <a href={src.url} target="_blank" rel="noreferrer" className="group text-sm md:col-span-4">
                     <span className="flex items-center gap-1 font-bold text-brand-ink group-hover:underline">
                       {src.label} <ArrowUpRight className="size-3.5" aria-hidden />
                       <span className="sr-only">(opens in a new tab)</span>

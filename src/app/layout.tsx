@@ -1,10 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { Atkinson_Hyperlegible_Next, Fraunces } from "next/font/google";
+import { Atkinson_Hyperlegible_Mono, Atkinson_Hyperlegible_Next } from "next/font/google";
 import { MotionProvider } from "@/components/motion/motion-provider";
 import "./globals.css";
 
 const body = Atkinson_Hyperlegible_Next({ subsets: ["latin"], variable: "--font-body", display: "swap", adjustFontFallback: false, fallback: ["system-ui", "sans-serif"] });
-const display = Fraunces({ subsets: ["latin"], variable: "--font-display-face", display: "swap", axes: ["opsz", "SOFT"] });
+const mono = Atkinson_Hyperlegible_Mono({ subsets: ["latin"], variable: "--font-mono-face", display: "swap", adjustFontFallback: false, fallback: ["ui-monospace", "monospace"] });
 
 export const metadata: Metadata = {
   title: "AdaptED — One lesson. Every learner.",
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#14318a",
+  themeColor: "#1E40AF",
 };
 
 /** Applies saved calm mode before paint (no flash, no motion surprise). */
@@ -21,7 +21,7 @@ const bootScript = `(function(){try{var d=document.documentElement;var c=localSt
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${body.variable} ${display.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${body.variable} ${mono.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: bootScript }} />
       </head>

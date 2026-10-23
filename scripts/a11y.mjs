@@ -13,7 +13,7 @@ for (const theme of ["blue"]) {
   await p.waitForTimeout(1500);
   const views = [["Transformation"], ["Student view"], ["Why it changed"], ["Teacher notes"]];
   for (const [tab] of views) {
-    await p.getByRole("tab", { name: tab }).click();
+    await p.locator("#studio").getByRole("tab", { name: tab }).click();
     await p.waitForTimeout(300);
     if (tab === "Teacher notes") {
       await p.getByRole("button", { name: "Compare all four needs" }).click();

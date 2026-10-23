@@ -1,61 +1,50 @@
-"use client";
-
-import { useRef } from "react";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ArrowUpRight, Ban, BookCheck, Cpu, ListChecks, Lock, ScanLine, ShieldCheck, SlidersHorizontal, Target } from "lucide-react";
-import { useMotion } from "@/components/motion/motion-provider";
-import { Reveal } from "@/components/motion/reveal";
+import { ArrowRight, ArrowUpRight, Check, X } from "lucide-react";
 import { NEEDS } from "@/lib/adapt/profile";
 import { RESEARCH } from "@/lib/adapt/research";
 import { NEED_IDS, type NeedId } from "@/lib/adapt/types";
 import { cn } from "@/lib/utils";
 import { Logo } from "./nav";
 
-gsap.registerPlugin(useGSAP, ScrollTrigger);
+function ExternalLink({ href, children, className }: { href: string; children: React.ReactNode; className?: string }) {
+  return (
+    <a href={href} target="_blank" rel="noreferrer" className={cn("group", className)}>
+      {children}
+      <span className="sr-only"> (opens in a new tab)</span>
+    </a>
+  );
+}
 
 /* ------------------------------------------------------------------ */
 
 export function Problem() {
   return (
-    <Reveal as="section" className="border-y border-rule bg-paper-2/60 py-20 sm:py-24">
-      <div className="container-page" aria-labelledby="problem-heading">
-        <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
-          <div data-reveal>
-            <p className="eyebrow">The problem</p>
-            <h2 id="problem-heading" className="mt-3 text-4xl font-semibold sm:text-5xl">
-              The same worksheet hits different walls.
-            </h2>
-          </div>
-          <p data-reveal className="text-lg text-ink-2">
-            In 2022–23, about <strong className="text-ink">7.5 million</strong> U.S. public school students — <strong className="text-ink">15%</strong> — received special education services, and specific learning disabilities such as dyslexia were the largest group.{" "}
-            <a className="whitespace-nowrap font-semibold text-brand-ink underline underline-offset-4" href="https://nces.ed.gov/programs/coe/indicator/cgg/students-with-disabilities" target="_blank" rel="noreferrer">
-              NCES, 2024<span className="sr-only"> (opens in a new tab)</span>
-            </a>
-            . Most of them learn from the same handouts as everyone else. Adapting each one by hand takes time teachers rarely have.
+    <section aria-labelledby="problem-heading" className="border-t border-rule bg-paper-2 py-20 sm:py-28">
+      <div className="container-page grid gap-12 lg:grid-cols-12">
+        <div className="lg:col-span-6">
+          <h2 id="problem-heading" className="text-4xl sm:text-5xl">
+            One handout. Four different walls.
+          </h2>
+          <p className="mt-6 max-w-[52ch] text-lg leading-relaxed text-ink-2">
+            In 2022–23, about <strong className="font-bold text-ink">7.5 million</strong> U.S. public school students, 15% of all students, received special education services. Specific learning disabilities such as dyslexia were the largest group (
+            <ExternalLink href="https://nces.ed.gov/programs/coe/indicator/cgg/students-with-disabilities" className="underline decoration-white/50 hover:decoration-brand">NCES, 2024</ExternalLink>). Most of them learn from the same handouts as everyone else, and adapting each one by hand takes time teachers rarely have.
+          </p>
+          <p className="mt-6 max-w-[52ch] text-ink-3">
+            No two students with the same diagnosis are alike, so AdaptED treats the label as a starting point and lets the teacher choose the specific supports.
           </p>
         </div>
-        <ul className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <dl className="lg:col-span-6">
           {NEED_IDS.map((n) => (
-            <li key={n} data-reveal className={cn(`need-${n}`, "sheet flex flex-col p-5")}>
-              <p className="font-display text-xl font-semibold text-[color:var(--need)]">{NEEDS[n].label}</p>
-              <p className="mt-2 text-[0.95rem] text-ink-2">
-                <span className="font-semibold text-ink">The wall: </span>
-                {NEEDS[n].barrier}
-              </p>
-              <p className="mt-auto border-t border-rule pt-3 text-[0.95rem]">
-                <span className="font-semibold">AdaptED: </span>
-                {NEEDS[n].tagline}
-              </p>
-            </li>
+            <div key={n} className={cn(`need-${n}`, "grid gap-1 border-t border-rule py-5 first:border-t-0 first:pt-0 sm:grid-cols-[12rem_1fr] sm:gap-6")}>
+              <dt className="flex items-center gap-2.5 font-bold">
+                <span aria-hidden className="size-2.5 rounded-full bg-[color:var(--need)]" />
+                {NEEDS[n].label}
+              </dt>
+              <dd className="text-ink-2">{NEEDS[n].barrier}</dd>
+            </div>
           ))}
-        </ul>
-        <p data-reveal className="mt-6 text-sm text-ink-3">
-          No two students with the same diagnosis are identical — so AdaptED treats the label as a starting point and lets the teacher choose the specific supports.
-        </p>
+        </dl>
       </div>
-    </Reveal>
+    </section>
   );
 }
 
@@ -63,74 +52,53 @@ export function Problem() {
 
 const STEPS = [
   {
-    Icon: ScanLine,
     title: "Barrier scan",
-    body: "Code reads the original and marks exact phrases that could block access: long sentences, multi-step directions, figurative language, spoken-only instructions, undefined length.",
-    tag: "Instant · runs in your browser",
+    body: "Code reads the original and marks the exact phrases that could block access: long sentences, multi-step directions, figurative language, spoken-only instructions, answers with no stated length.",
   },
   {
-    Icon: SlidersHorizontal,
     title: "Learner profile",
-    body: "One or more needs plus specific supports the teacher toggles. Grade, language, and whether goals stay grade-level (accommodation) or may change (modification).",
-    tag: "No names · no medical details",
+    body: "One or more needs, then the specific supports this student uses. Grade, language, and whether goals stay grade-level or may change. No names, no medical details.",
   },
   {
-    Icon: Cpu,
     title: "Constrained generation",
-    body: "Gemini writes a structured JSON assignment under nine non-negotiable rules — keep every question, never give answers, keep academic vocabulary, never rewrite a text being studied — guided by research playbooks for each need.",
-    tag: "Schema-validated output",
+    body: "Gemini writes a structured assignment under nine rules: keep every question, never give answers, keep academic vocabulary, never rewrite a text being studied, invent nothing.",
   },
   {
-    Icon: ShieldCheck,
     title: "Fidelity check",
-    body: "AdaptED's own code counts every original question, answer choice, and key term. If anything is missing it asks the model to fix it, and as a last resort restores the question word-for-word.",
-    tag: "Verified, not assumed",
+    body: "AdaptED's own code counts every original question, answer choice, and key term. Anything missing goes back to the model once, and a question still missing is restored word for word.",
   },
 ];
 
 export function HowItWorks() {
-  const { calm } = useMotion();
-  const ref = useRef<HTMLDivElement>(null);
-  useGSAP(
-    () => {
-      if (calm) return;
-      gsap.fromTo(".how-line", { scaleX: 0 }, { scaleX: 1, ease: "none", scrollTrigger: { trigger: ref.current, start: "top 75%", end: "bottom 60%", scrub: 0.6 } });
-    },
-    { scope: ref, dependencies: [calm] },
-  );
   return (
-    <section id="how" className="scroll-mt-16 py-20 sm:py-28" aria-labelledby="how-heading">
-      <Reveal className="container-page">
-        <div className="max-w-3xl" data-reveal>
-          <p className="eyebrow">How it decides</p>
-          <h2 id="how-heading" className="mt-3 text-4xl font-semibold sm:text-5xl">
+    <section id="how" aria-labelledby="how-heading" className="scroll-mt-16 border-t border-rule py-20 sm:py-28">
+      <div className="container-page">
+        <div className="grid gap-6 lg:grid-cols-12">
+          <h2 id="how-heading" className="text-4xl sm:text-5xl lg:col-span-6">
             AI writes. Code checks. You decide.
           </h2>
-          <p className="mt-4 text-lg text-ink-2">
-            AdaptED doesn&apos;t just ask an AI to &ldquo;make it easier.&rdquo; Deterministic analysis, a research-based prompt, a strict output schema, and an automatic fidelity check work together — so the result is accessible <em>and</em> academically faithful.
+          <p className="max-w-[52ch] text-lg leading-relaxed text-ink-2 lg:col-span-6 lg:pt-2">
+            AdaptED doesn&apos;t just ask an AI to make things easier. Deterministic analysis, a research-based prompt, a strict output schema, and an automatic check work together, so the result is accessible and academically faithful.
           </p>
         </div>
-        <div ref={ref} className="relative mt-14">
-          <div className="how-line absolute left-0 right-0 top-6 hidden h-0.5 origin-left bg-ink lg:block" aria-hidden />
-          <ol className="relative grid gap-6 lg:grid-cols-4">
-            {STEPS.map(({ Icon, title, body, tag }, i) => (
-              <li key={title} data-reveal className="relative">
-                <span className="relative z-10 grid size-12 place-items-center rounded-full border-2 border-ink bg-paper font-display text-lg font-semibold">
-                  {i + 1}
-                </span>
-                <h3 className="mt-4 flex items-center gap-2 font-sans text-lg font-bold">
-                  <Icon className="size-5 text-brand" aria-hidden /> {title}
-                </h3>
-                <p className="mt-2 text-ink-2">{body}</p>
-                <p className="mt-3 inline-block rounded-full bg-paper-2 px-2.5 py-0.5 font-mono text-xs text-ink-3">{tag}</p>
-              </li>
-            ))}
-          </ol>
-        </div>
-        <p data-reveal className="mt-10 max-w-3xl text-ink-2">
-          If the AI is unavailable, an offline rule engine still produces a structured version from the teacher&apos;s chosen supports — clearly labelled, never presented as AI output.
+        <ol className="mt-14 grid gap-x-8 sm:grid-cols-2 lg:grid-cols-4">
+          {STEPS.map((s, i) => (
+            <li key={s.title} className="border-t-2 border-ink pt-5 pb-10">
+              <p className="tnum text-5xl font-extrabold leading-none text-brand" aria-hidden>
+                {i + 1}
+              </p>
+              <h3 className="mt-4 text-xl tracking-[-0.015em]">
+                <span className="sr-only">Step {i + 1}: </span>
+                {s.title}
+              </h3>
+              <p className="mt-2 text-ink-2">{s.body}</p>
+            </li>
+          ))}
+        </ol>
+        <p className="max-w-[60ch] text-ink-3">
+          If the AI is unavailable, an offline rule engine builds a structured version from the teacher&apos;s chosen supports. It is always labelled, never presented as AI output.
         </p>
-      </Reveal>
+      </div>
     </section>
   );
 }
@@ -140,66 +108,76 @@ export function HowItWorks() {
 const RESEARCH_BY_NEED: Record<NeedId, { moves: string[]; sources: string[] }> = {
   dyslexia: {
     moves: [
-      "Pre-teach academic words with syllable breaks — and keep them in the text",
-      "Short sentences, chunked passages, headings",
-      "Read-aloud ready text; text-to-speech in the student view",
+      "Pre-teach academic words with syllable breaks, and keep them in the text",
+      "Short sentences and chunked passages under headings",
+      "Read-aloud ready text, with text-to-speech in the student view",
       "Starters, spelling banks, and other ways to answer when writing isn't the skill",
-      "Clear standard type, wider spacing, soft backgrounds — no novelty fonts",
+      "Clear standard type, wider spacing, soft backgrounds; no novelty fonts",
     ],
     sources: ["ida-definition", "ida-accommodations", "tts-meta", "letter-spacing", "dyslexia-fonts", "bda-style"],
   },
   adhd: {
-    moves: ["A no-decision first step", "Short timed chunks with outcome-named headings", "Questions next to the reading they need", "Visible checklists and a concrete self-check", "Planned, structured movement breaks"],
+    moves: ["A first step that needs no decision", "Short timed chunks with outcome-named headings", "Questions placed right after the reading they need", "Visible checklists and a concrete self-check", "Planned, structured movement breaks"],
     sources: ["adhd-classroom", "self-regulation", "udl-strategy", "segmenting"],
   },
   apd: {
-    moves: ["Every spoken direction also written, one step per line", "Guided notes for anything taught orally", "Written alternatives to listening-only tasks", "Teacher notes on noise and checking understanding", "Leave the reading alone — listening is the barrier, not reading"],
+    moves: ["Every spoken direction also written, one step per line", "Guided notes for anything taught orally", "Written alternatives to listening-only tasks", "Teacher notes on noise and checking understanding", "The reading is left alone: listening is the barrier, not reading"],
     sources: ["asha-capd", "asha-portal", "guided-notes", "udl-perception"],
   },
   autism: {
-    moves: ["Same predictable section order", "What, how much, how long, finished when, then what", "Literal wording — unless figurative language is the lesson", "A model answer on a different example", "Concrete steps for open-ended or perspective questions"],
+    moves: ["The same predictable section order", "What, how much, how long, finished when, then what", "Literal wording, unless figurative language is the lesson", "A model answer on a different example", "Concrete steps for open-ended or perspective questions"],
     sources: ["teacch", "ncaep", "figurative", "udl-language"],
   },
 };
 
 export function Research() {
   return (
-    <section id="research" className="scroll-mt-16 border-t border-rule bg-paper-2/60 py-20 sm:py-28" aria-labelledby="research-heading">
-      <Reveal className="container-page">
-        <div className="grid gap-8 lg:grid-cols-[1fr_1fr] lg:items-end" data-reveal>
-          <div>
-            <p className="eyebrow">The research</p>
-            <h2 id="research-heading" className="mt-3 text-4xl font-semibold sm:text-5xl">
-              Built on evidence, not stereotypes.
-            </h2>
-          </div>
-          <p className="text-lg text-ink-2">
-            The adaptation playbooks start from CAST&apos;s <strong className="text-ink">Universal Design for Learning Guidelines 3.0</strong>, the <strong className="text-ink">International Dyslexia Association</strong>&apos;s accommodation guidance, and <strong className="text-ink">ASHA</strong>&apos;s guidance on auditory processing — then peer-reviewed studies for specific moves. Every change AdaptED makes cites one of these.
+    <section id="research" aria-labelledby="research-heading" className="scroll-mt-16 border-t border-rule bg-paper-2 py-20 sm:py-28">
+      <div className="container-page">
+        <div className="grid gap-6 lg:grid-cols-12">
+          <h2 id="research-heading" className="text-4xl sm:text-5xl lg:col-span-6">
+            Built on evidence, not stereotypes.
+          </h2>
+          <p className="max-w-[54ch] text-lg leading-relaxed text-ink-2 lg:col-span-6 lg:pt-2">
+            The playbooks start from CAST&apos;s <strong className="font-bold text-ink">Universal Design for Learning Guidelines 3.0</strong>, the <strong className="font-bold text-ink">International Dyslexia Association</strong>&apos;s accommodation guidance, and <strong className="font-bold text-ink">ASHA</strong>&apos;s guidance on auditory processing, then peer-reviewed studies for specific moves. Every change AdaptED makes cites one of them.
           </p>
         </div>
 
-        <div className="mt-12 grid gap-4 md:grid-cols-2">
+        <div className="mt-14">
+          <div className="hidden grid-cols-12 gap-8 border-b-2 border-ink pb-3 text-sm font-bold text-ink-3 lg:grid" aria-hidden>
+            <span className="col-span-3">Need</span>
+            <span className="col-span-5">What AdaptED does</span>
+            <span className="col-span-4">Grounded in</span>
+          </div>
           {NEED_IDS.map((n) => (
-            <article key={n} data-reveal className={cn(`need-${n}`, "sheet p-6")}>
-              <h3 className="font-display text-2xl font-semibold text-[color:var(--need)]">{NEEDS[n].label}</h3>
-              <p className="mt-1 text-ink-2">{NEEDS[n].barrier}</p>
-              <ul className="mt-4 space-y-1.5">
+            <article key={n} className={cn(`need-${n}`, "grid gap-4 border-b border-rule py-8 lg:grid-cols-12 lg:gap-8")} aria-labelledby={`research-${n}`}>
+              <div className="lg:col-span-3">
+                <h3 id={`research-${n}`} className="flex items-center gap-2.5 text-2xl tracking-[-0.015em]">
+                  <span aria-hidden className="size-3 rounded-full bg-[color:var(--need)]" />
+                  {NEEDS[n].label}
+                </h3>
+                <p className="mt-2 text-[0.95rem] text-ink-3">{NEEDS[n].tagline}</p>
+              </div>
+              <ul className="space-y-2 lg:col-span-5">
                 {RESEARCH_BY_NEED[n].moves.map((m) => (
-                  <li key={m} className="flex gap-2.5">
-                    <BookCheck className="mt-1 size-4 shrink-0 text-[color:var(--need)]" aria-hidden />
+                  <li key={m} className="flex gap-3">
+                    <Check className="mt-1 size-4 shrink-0 text-[color:var(--need)]" aria-hidden />
                     <span>{m}</span>
                   </li>
                 ))}
               </ul>
-              <ul className="mt-5 flex flex-wrap gap-1.5 border-t border-rule pt-4">
+              <ul className="space-y-1.5 text-[0.95rem] lg:col-span-4">
                 {RESEARCH_BY_NEED[n].sources.map((id) => {
                   const r = RESEARCH[id];
                   return (
                     <li key={id}>
-                      <a href={r.url} target="_blank" rel="noreferrer" title={r.citation} className="inline-flex items-center gap-1 rounded-full border border-rule-strong px-2.5 py-1 text-xs font-semibold text-ink-2 hover:border-ink hover:text-ink">
-                        {r.label} <ArrowUpRight className="size-3" aria-hidden />
-                        <span className="sr-only">: {r.citation} (opens in a new tab)</span>
-                      </a>
+                      <ExternalLink href={r.url} className="inline-flex items-start gap-1 text-ink-2 hover:text-ink">
+                        <span>
+                          <span className="underline decoration-white/40 group-hover:decoration-brand">{r.label}</span>
+                          <span className="block text-sm text-ink-3">{r.citation}</span>
+                        </span>
+                        <ArrowUpRight className="mt-1 size-3.5 shrink-0" aria-hidden />
+                      </ExternalLink>
                     </li>
                   );
                 })}
@@ -207,59 +185,81 @@ export function Research() {
             </article>
           ))}
         </div>
-
-        <div data-reveal className="sheet mt-6 p-6">
-          <h3 className="flex items-center gap-2 font-sans text-lg font-bold">
-            <Ban className="size-5 text-warn" aria-hidden /> What AdaptED deliberately won&apos;t do
-          </h3>
-          <ul className="mt-3 grid gap-x-8 gap-y-2 text-ink-2 md:grid-cols-2">
-            <li>Swap academic words for easier ones — students still need to learn them.</li>
-            <li>Rewrite a speech, poem, or primary source that students are analyzing.</li>
-            <li>Give away answers in hints, starters, or examples.</li>
-            <li>Assume every student with a diagnosis needs the same thing.</li>
-            <li>Use &ldquo;dyslexia fonts&rdquo; — the evidence doesn&apos;t support them.</li>
-            <li>Claim to be proven effective. The research supports the strategies; AdaptED is a tool to apply them.</li>
-          </ul>
-        </div>
-      </Reveal>
+      </div>
     </section>
   );
 }
 
 /* ------------------------------------------------------------------ */
 
+const ALWAYS = [
+  ["Same learning goals", "Accommodation by default. Goals change only when the teacher chooses to modify them."],
+  ["Every question kept", "Counted by code after generation, and restored word for word if the AI drops one."],
+  ["No answers given away", "Starters and hints frame the thinking; model answers use a different example."],
+  ["Private by design", "No accounts and no database. Files are read in the browser; contact details are removed before AI."],
+];
+
+const NEVER = [
+  "Swap academic words for easier ones. Students still need to learn them.",
+  "Rewrite a speech, poem, or primary source that students are analyzing.",
+  "Assume every student with a diagnosis needs the same thing.",
+  "Use “dyslexia fonts.” The evidence doesn't support them.",
+  "Claim to be proven effective. The research supports the strategies; AdaptED applies them.",
+];
+
 export function Principles() {
-  const items = [
-    { Icon: Target, title: "Same learning goals", body: "Accommodation by default. Modified goals only when the teacher chooses them." },
-    { Icon: ListChecks, title: "Every question kept", body: "Counted by code after generation. Missing questions are restored, word for word." },
-    { Icon: ShieldCheck, title: "No answers given", body: "Supports frame thinking; models use different examples." },
-    { Icon: Lock, title: "Private by design", body: "No accounts, no database. Files are read in the browser; contact details are stripped before AI." },
-  ];
   return (
-    <Reveal as="section" className="py-20 sm:py-24">
-      <div className="container-page" aria-label="Principles">
-        <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {items.map(({ Icon, title, body }) => (
-            <li key={title} data-reveal className="border-t-2 border-ink pt-4">
-              <Icon className="size-6 text-brand" aria-hidden />
-              <h3 className="mt-3 font-sans text-lg font-bold">{title}</h3>
-              <p className="mt-1 text-ink-2">{body}</p>
-            </li>
-          ))}
-        </ul>
-        <div data-reveal className="mt-20 flex flex-col items-start justify-between gap-6 rounded-2xl border border-rule-strong bg-paper-2 p-8 sm:flex-row sm:items-center sm:p-10">
-          <div>
-            <h2 className="text-3xl font-semibold sm:text-4xl">
-              Try it with tomorrow&apos;s assignment.
-            </h2>
-            <p className="mt-2 text-lg text-ink-2">Paste it, pick the learner, and see exactly what changes — in under a minute.</p>
+    <section aria-labelledby="principles-heading" className="border-t border-rule py-20 sm:py-28">
+      <div className="container-page">
+        <h2 id="principles-heading" className="max-w-[18ch] text-4xl sm:text-5xl">
+          What a teacher can count on.
+        </h2>
+        <div className="mt-12 grid gap-12 lg:grid-cols-12">
+          <div className="lg:col-span-7">
+            <h3 className="text-lg text-ink-2">AdaptED always</h3>
+            <dl className="mt-3">
+              {ALWAYS.map(([t, d]) => (
+                <div key={t} className="grid gap-1 border-t border-rule py-4 sm:grid-cols-[13rem_1fr] sm:gap-6">
+                  <dt className="font-bold">{t}</dt>
+                  <dd className="text-ink-2">{d}</dd>
+                </div>
+              ))}
+            </dl>
           </div>
-          <a href="#studio" className="btn btn-brand min-h-12 shrink-0 px-6 text-base">
-            Open the studio
-          </a>
+          <div className="lg:col-span-5">
+            <h3 className="text-lg text-ink-2">AdaptED never</h3>
+            <ul className="mt-3">
+              {NEVER.map((t) => (
+                <li key={t} className="flex gap-3 border-t border-rule py-4 text-ink-2">
+                  <X className="mt-1 size-4 shrink-0 text-ink-3" aria-hidden />
+                  <span>{t}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
-    </Reveal>
+    </section>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+
+export function CloseCta() {
+  return (
+    <section aria-labelledby="close-heading" className="bg-brand text-on-brand">
+      <div className="container-page flex flex-col items-start justify-between gap-8 py-16 sm:py-20 lg:flex-row lg:items-end">
+        <div>
+          <h2 id="close-heading" className="max-w-[16ch] text-4xl text-on-brand sm:text-6xl">
+            Try it with tomorrow&apos;s assignment.
+          </h2>
+          <p className="mt-4 max-w-[48ch] text-lg text-on-brand/80">Paste it, pick the learner, and see exactly what changes, in under a minute.</p>
+        </div>
+        <a href="#studio" className="btn min-h-12 shrink-0 bg-on-brand px-6 text-base text-brand hover:bg-[#0a1748]">
+          Open the studio <ArrowRight className="size-4" aria-hidden />
+        </a>
+      </div>
+    </section>
   );
 }
 
@@ -267,21 +267,21 @@ export function Principles() {
 
 export function Footer() {
   return (
-    <footer className="no-print border-t border-rule bg-paper-2/60 py-12">
-      <div className="container-page grid gap-8 md:grid-cols-[1.2fr_1fr]">
-        <div>
+    <footer className="no-print border-t border-rule py-12">
+      <div className="container-page grid gap-10 md:grid-cols-12">
+        <div className="md:col-span-7">
           <Logo />
-          <p className="mt-2 max-w-md text-ink-2">One lesson. Every learner. An accessibility tool for teachers, built for the 2026 Congressional App Challenge.</p>
-          <p className="mt-4 max-w-md text-sm text-ink-3">
-            AdaptED helps apply research-based accommodations; it does not diagnose, replace IEP/504 decisions, or guarantee outcomes. Always review AI-generated material before using it with students. AI tools assisted in developing this project — see the README for disclosure.
+          <p className="mt-3 max-w-[52ch] text-ink-2">One lesson. Every learner. An accessibility tool for teachers, built for the 2026 Congressional App Challenge.</p>
+          <p className="mt-4 max-w-[60ch] text-sm text-ink-3">
+            AdaptED helps apply research-based accommodations. It does not diagnose, replace IEP or 504 decisions, or guarantee outcomes. Review AI-generated material before using it with students. AI tools assisted in developing this project; see the README for disclosure.
           </p>
         </div>
-        <div className="text-sm">
+        <div className="text-sm md:col-span-5">
           <p className="font-bold">Accessibility of this site</p>
           <ul className="mt-2 space-y-1.5 text-ink-2">
-            <li>Calm mode removes smooth scrolling and animation (it also follows your system&apos;s reduced-motion setting).</li>
-            <li>Keyboard and screen-reader friendly; designed to WCAG 2.2 AA.</li>
-            <li>Body type is Atkinson Hyperlegible, designed for legibility.</li>
+            <li>Calm mode turns off smooth scrolling and animation, and follows your system&apos;s reduced-motion setting.</li>
+            <li>Keyboard and screen-reader friendly, designed to WCAG 2.2 AA.</li>
+            <li>Set in Atkinson Hyperlegible, designed by the Braille Institute for legibility.</li>
           </ul>
         </div>
       </div>

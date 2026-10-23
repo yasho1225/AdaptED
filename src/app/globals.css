@@ -1,17 +1,17 @@
 @import "tailwindcss";
 
 /*
- * AdaptED design system — "marked-up worksheet".
- * Warm paper (BDA advises against stark white), ink text, and a highlighter
- * used only to mark barriers. Body type: Atkinson Hyperlegible Next, designed
- * for legibility; display: Fraunces.
+ * AdaptED design system.
+ * A committed blue field with white type; worksheets are the only paper objects on it;
+ * highlighter yellow marks barriers and the one primary action.
+ * One typeface family throughout: Atkinson Hyperlegible (Braille Institute), set heavy
+ * for display, with its mono cut reserved for measurements and syllable notation.
  */
-
 
 @theme inline {
   --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-display-face), ui-serif, Georgia, serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-display: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-mono-face), ui-monospace, monospace;
 
   --color-paper: var(--paper);
   --color-paper-2: var(--paper-2);
@@ -42,18 +42,18 @@
   --color-autism: var(--autism);
   --color-autism-soft: var(--autism-soft);
 
-  --radius-sm: 0.375rem;
-  --radius-md: 0.625rem;
-  --radius-lg: 0.875rem;
-  --radius-xl: 1.25rem;
-  --radius-2xl: 1.75rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.625rem;
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
 }
 
 /*
  * Two surfaces:
  *  • Paper — every reading surface (worksheets, forms, adapted documents): dark ink on warm paper,
  *    per BDA guidance against stark white. Applied with .sheet / .on-paper.
- *  • Canvas — the page itself: deep "blueprint" blue with white type and a highlighter-yellow accent.
+ *  • Canvas — the page itself: a committed blue field with white type and a highlighter-yellow accent.
  */
 :root,
 .sheet,
@@ -104,35 +104,35 @@
 
 :root {
   color-scheme: dark;
-  --paper: oklch(0.3 0.135 262);
-  --paper-2: oklch(0.345 0.14 262);
-  --ink: oklch(0.985 0.004 260);
-  --ink-2: oklch(0.9 0.035 258);
-  --ink-3: oklch(0.82 0.05 258);
-  --rule: oklch(1 0 0 / 0.14);
-  --rule-strong: oklch(1 0 0 / 0.3);
-  --brand: oklch(0.87 0.155 92);
-  --brand-ink: oklch(0.89 0.14 92);
-  --brand-soft: oklch(1 0 0 / 0.1);
-  --on-brand: oklch(0.24 0.09 262);
-  --sheet-ink: oklch(0.24 0.09 262);
-  --mark: oklch(0.87 0.155 92 / 0.9);
-  --mark-strong: oklch(0.87 0.155 92);
-  --ok: oklch(0.86 0.13 158);
-  --ok-soft: oklch(0.86 0.13 158 / 0.14);
-  --warn: oklch(0.88 0.13 75);
-  --warn-soft: oklch(0.88 0.13 75 / 0.14);
-  --dyslexia: oklch(0.84 0.09 230);
-  --dyslexia-soft: oklch(0.84 0.09 230 / 0.16);
-  --adhd: oklch(0.85 0.11 60);
-  --adhd-soft: oklch(0.85 0.11 60 / 0.16);
-  --apd: oklch(0.85 0.11 165);
-  --apd-soft: oklch(0.85 0.11 165 / 0.16);
-  --autism: oklch(0.85 0.09 305);
-  --autism-soft: oklch(0.85 0.09 305 / 0.16);
-  --on-need: oklch(0.24 0.09 262);
-  --shadow-sheet: 0 1px 0 oklch(1 0 0 / 0.25) inset, 0 2px 6px oklch(0.15 0.1 262 / 0.25), 0 24px 50px -18px oklch(0.12 0.12 262 / 0.6);
-  --shadow-lift: 0 30px 70px -20px oklch(0.1 0.12 262 / 0.7);
+  --paper: #1e40af;
+  --paper-2: #1a3794;
+  --ink: #ffffff;
+  --ink-2: #dce5ff;
+  --ink-3: #bccbf7;
+  --rule: rgb(255 255 255 / 0.2);
+  --rule-strong: rgb(255 255 255 / 0.42);
+  --brand: #ffd43b;
+  --brand-ink: #ffd43b;
+  --brand-soft: rgb(255 255 255 / 0.1);
+  --on-brand: #0f1f5c;
+  --sheet-ink: #0f1f5c;
+  --mark: rgb(255 212 59 / 0.9);
+  --mark-strong: #ffd43b;
+  --ok: #9eebc8;
+  --ok-soft: rgb(158 235 200 / 0.15);
+  --warn: #ffd99a;
+  --warn-soft: rgb(255 217 154 / 0.15);
+  --dyslexia: #a9d4ff;
+  --dyslexia-soft: rgb(169 212 255 / 0.16);
+  --adhd: #ffc891;
+  --adhd-soft: rgb(255 200 145 / 0.16);
+  --apd: #9eebc8;
+  --apd-soft: rgb(158 235 200 / 0.16);
+  --autism: #e2c6ff;
+  --autism-soft: rgb(226 198 255 / 0.16);
+  --on-need: #0f1f5c;
+  --shadow-sheet: 0 1px 2px rgb(8 20 70 / 0.28), 0 18px 40px -16px rgb(8 20 70 / 0.55);
+  --shadow-lift: 0 30px 60px -24px rgb(8 20 70 / 0.65);
 }
 
 @layer base {
@@ -148,13 +148,9 @@
   }
   body {
     background-color: var(--paper);
-    background-image:
-      radial-gradient(ellipse 70% 45% at 70% -5%, oklch(0.48 0.16 258 / 0.55), transparent 70%),
-      linear-gradient(oklch(1 0 0 / 0.035) 1px, transparent 1px),
-      linear-gradient(90deg, oklch(1 0 0 / 0.035) 1px, transparent 1px);
-    background-size: auto, 32px 32px, 32px 32px;
-    background-attachment: scroll;
     color: var(--ink);
+    caret-color: var(--brand);
+    scrollbar-color: rgb(255 255 255 / 0.45) var(--paper-2);
     font-family: var(--font-sans);
     font-size: 1.0625rem;
     line-height: 1.6;
@@ -164,17 +160,32 @@
   h2,
   h3 {
     font-family: var(--font-display);
-    font-optical-sizing: auto;
-    letter-spacing: -0.02em;
-    line-height: 1.08;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.04;
     text-wrap: balance;
+  }
+  h4 {
+    font-weight: 700;
+  }
+  .sheet textarea,
+  .sheet input,
+  .on-paper input {
+    caret-color: var(--brand);
+  }
+  a {
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: 1.5px;
+  }
+  .tnum {
+    font-variant-numeric: tabular-nums;
   }
   p {
     text-wrap: pretty;
   }
   ::selection {
-    background: oklch(0.87 0.155 92);
-    color: oklch(0.2 0.06 262);
+    background: #ffd43b;
+    color: #0f1f5c;
   }
   :focus-visible {
     outline: 3px solid var(--brand);
@@ -204,12 +215,11 @@
       padding-inline: 1.5rem;
     }
   }
-  .eyebrow {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--ink-3);
+  /* Standalone panel label (never a kicker above a heading). */
+  .label {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--ink-2);
   }
   .sheet {
     background-color: var(--sheet);
@@ -234,8 +244,8 @@
     gap: 0.5rem;
     min-height: 2.75rem;
     padding: 0.5rem 1.15rem;
-    border-radius: 999px;
-    font-weight: 600;
+    border-radius: var(--radius-md);
+    font-weight: 700;
     font-size: 0.95rem;
     transition: transform 160ms ease, background-color 160ms ease, box-shadow 160ms ease, color 160ms ease;
     cursor: pointer;
@@ -258,11 +268,10 @@
   .btn-brand {
     background: var(--brand);
     color: var(--on-brand);
-    box-shadow: 0 0 0 1px oklch(1 0 0 / 0.25) inset, 0 12px 30px -12px color-mix(in oklch, var(--brand) 80%, transparent);
+    box-shadow: 0 1px 0 rgb(255 255 255 / 0.5) inset, 0 6px 18px -8px rgb(8 20 70 / 0.6);
   }
   .btn-brand:hover:not(:disabled) {
-    background: color-mix(in oklch, var(--brand) 88%, white);
-    transform: translateY(-1px);
+    background: color-mix(in oklch, var(--brand) 85%, white);
   }
   .btn-ghost {
     border: 1px solid var(--rule-strong);
@@ -284,7 +293,7 @@
     border: 1px solid var(--rule-strong);
     background: color-mix(in oklch, var(--ink) 5%, transparent);
     color: var(--ink);
-    border-radius: 999px;
+    border-radius: var(--radius-md);
     padding: 0.35rem 0.8rem;
     font-size: 0.875rem;
     font-weight: 600;
@@ -306,16 +315,21 @@
     padding: 0.6rem 0.9rem;
     font-weight: 600;
     font-size: 0.925rem;
-    color: var(--ink-3);
-    border-radius: 999px;
+    color: var(--ink-2);
+    border-radius: var(--radius-md);
     min-height: 2.5rem;
     white-space: nowrap;
   }
   .tab[aria-selected="true"] {
     color: var(--sheet-ink);
     background: var(--sheet);
-    box-shadow: 0 1px 2px oklch(0.3 0.03 85 / 0.12), inset 0 0 0 1px var(--rule-strong);
+    box-shadow: 0 1px 2px rgb(8 20 70 / 0.25);
   }
+}
+
+@keyframes grow {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
 }
 
 /* Need themes for the adapted document */
@@ -348,15 +362,5 @@
   }
   .no-print {
     display: none !important;
-  }
-}
-
-/* Hero, static (calm) arrangement on large screens: cards sit above a slightly smaller original. */
-@media (min-width: 1024px) {
-  [data-calm="true"] .hero-original {
-    scale: 0.84;
-  }
-  [data-calm="true"] .hero-card {
-    z-index: 20;
   }
 }

@@ -30,10 +30,10 @@ export function SourcePanel({ value, onChange }: { value: string; onChange: (v: 
   return (
     <div className="sheet flex h-full flex-col p-5 sm:p-6">
       <div className="flex items-center gap-3">
-        <span className="grid size-8 place-items-center rounded-full bg-ink font-display text-sm font-bold text-paper" aria-hidden>
+        <span className="grid size-8 place-items-center rounded-full bg-ink text-sm font-bold text-paper" aria-hidden>
           1
         </span>
-        <h3 className="font-display text-xl font-semibold">The assignment</h3>
+        <h3 className="text-xl">The assignment</h3>
       </div>
 
       <fieldset className="mt-5">

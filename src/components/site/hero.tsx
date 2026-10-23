@@ -1,161 +1,215 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ArrowDown, ArrowRight, BookOpen, Check, MessagesSquare, PencilLine, Timer } from "lucide-react";
+import { ArrowDown, ArrowRight, Pause, Play } from "lucide-react";
+import { AdaptedDocument } from "@/components/doc/adapted-document";
+import { OriginalDocument, barrierRanges } from "@/components/doc/original-document";
 import { useMotion } from "@/components/motion/motion-provider";
-import { SplitText } from "@/components/motion/split-text";
+import { detectBarriers, normalize } from "@/lib/adapt/analyze";
+import { CURATED } from "@/lib/adapt/curated";
+import { NEEDS } from "@/lib/adapt/profile";
+import { getResearch } from "@/lib/adapt/research";
+import { SAMPLES } from "@/lib/adapt/samples";
+import { NEED_IDS, type NeedId } from "@/lib/adapt/types";
 import { cn } from "@/lib/utils";
 
-gsap.registerPlugin(useGSAP, ScrollTrigger);
+type Version = "original" | NeedId;
+const VERSIONS: Version[] = ["original", ...NEED_IDS];
+const SAMPLE = SAMPLES[0];
+const CYCLE_MS = 4200;
 
-function M({ children }: { children: React.ReactNode }) {
-  return (
-    <mark className="hero-mark rounded-[0.2em] bg-[linear-gradient(104deg,transparent_2px,var(--mark)_4px,var(--mark)_calc(100%-4px),transparent_calc(100%-2px))] bg-no-repeat px-0.5 text-inherit [box-decoration-break:clone]" style={{ backgroundSize: "var(--mark-size, 100%) 100%" }}>
-      {children}
-    </mark>
-  );
+function label(v: Version) {
+  return v === "original" ? "Original" : NEEDS[v].label;
 }
 
-const CARD_POS = [
-  "lg:left-0 lg:top-2 lg:-rotate-[4deg]",
-  "lg:right-0 lg:top-0 lg:rotate-[3deg]",
-  "lg:left-3 lg:bottom-0 lg:rotate-[2.5deg]",
-  "lg:right-2 lg:bottom-3 lg:-rotate-[3.5deg]",
-];
-
-function MiniCard({ need, label, children, i }: { need: string; label: string; children: React.ReactNode; i: number }) {
-  return (
-    <div className={cn(`need-${need}`, "hero-card sheet w-full overflow-hidden lg:absolute lg:z-20 lg:w-[15.5rem]", CARD_POS[i])} data-i={i}>
-      <p className="bg-[color:var(--need-soft)] px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-[color:var(--need)]">{label}</p>
-      <div className="space-y-1.5 px-3 py-2.5 text-[0.78rem] leading-snug">{children}</div>
-    </div>
-  );
-}
-
+/**
+ * First viewport: the product working, not a picture of it. One real worksheet,
+ * switchable in place between the original and each adapted version, with the
+ * reasons for the changes beside it.
+ */
 export function Hero() {
   const { calm } = useMotion();
-  const root = useRef<HTMLElement>(null);
+  const [active, setActive] = useState<Version>("original");
+  const [playing, setPlaying] = useState(false);
+  const sheetRef = useRef<HTMLDivElement>(null);
+  const barriers = useMemo(() => {
+    const all = detectBarriers(SAMPLE.text);
+    return barrierRanges(normalize(SAMPLE.text).trim(), all).map((r) => all[r.index]);
+  }, []);
 
-  useGSAP(
-    () => {
-      if (calm) return;
-      const mm = gsap.matchMedia();
-      mm.add("(min-width: 1024px)", () => {
-        const tl = gsap.timeline({
-          scrollTrigger: { trigger: root.current, start: "top top", end: "+=110%", scrub: 0.7, pin: true, anticipatePin: 1 },
-        });
-        tl.fromTo(".hero-mark", { "--mark-size": "0%" }, { "--mark-size": "100%", stagger: 0.12, duration: 0.5, ease: "none" })
-          .fromTo(".hero-barriers", { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.3 }, "<0.3")
-          .from(
-            ".hero-card",
-            {
-              // Start every card stacked under the original worksheet, then deal them out.
-              x: (_i: number, el: HTMLElement) => {
-                const s = el.parentElement!.getBoundingClientRect();
-                const r = el.getBoundingClientRect();
-                return s.left + s.width / 2 - (r.left + r.width / 2);
-              },
-              y: (_i: number, el: HTMLElement) => {
-                const s = el.parentElement!.getBoundingClientRect();
-                const r = el.getBoundingClientRect();
-                return s.top + s.height / 2 - (r.top + r.height / 2);
-              },
-              scale: 0.6,
-              opacity: 0,
-              duration: 1,
-              stagger: 0.06,
-              ease: "power2.out",
-            },
-            ">0.1",
-          )
-          .to(".hero-original", { scale: 0.84, filter: "brightness(0.92)", duration: 1, ease: "power2.out" }, "<");
-      });
-      // Gentle intro on load (all sizes)
-      gsap.from(".hero-copy > *", { y: 20, opacity: 0, duration: 0.8, stagger: 0.08, ease: "power3.out", delay: 0.35 });
-      return () => mm.revert();
-    },
-    { scope: root, dependencies: [calm] },
-  );
+  // Auto-advance once through every version (WCAG 2.2.2: visible pause, stops on interaction, off in calm mode).
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setPlaying(!calm);
+  }, [calm]);
+  useEffect(() => {
+    if (!playing) return;
+    const t = window.setTimeout(() => {
+      const i = VERSIONS.indexOf(active);
+      if (i === VERSIONS.length - 1) setPlaying(false);
+      else setActive(VERSIONS[i + 1]);
+    }, CYCLE_MS);
+    return () => window.clearTimeout(t);
+  }, [playing, active]);
+
+  // The one authored motion: each version is wiped onto the sheet like a highlighter stroke.
+  useEffect(() => {
+    if (calm || !sheetRef.current) return;
+    const el = sheetRef.current.querySelector("[data-version]");
+    if (!el) return;
+    const tween = gsap.fromTo(el, { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.7, ease: "expo.out", clearProps: "clipPath" });
+    return () => {
+      tween.kill();
+    };
+  }, [active, calm]);
+
+  const choose = (v: Version) => {
+    setPlaying(false);
+    setActive(v);
+  };
+
+  const changes = active === "original" ? [] : CURATED.science[active].changes.slice(0, 4);
 
   return (
-    <section id="top" ref={root} className="relative overflow-hidden" aria-labelledby="hero-heading">
-      <div className="container-page grid min-h-[calc(100svh-4rem)] items-center gap-12 py-14 lg:grid-cols-[1fr_1.05fr] lg:py-10">
-        <div>
-          <p className="eyebrow">For teachers · Dyslexia · ADHD · Auditory processing · Autism</p>
-          <h1 id="hero-heading" className="mt-5 text-[3.1rem] font-semibold leading-[0.98] sm:text-7xl xl:text-[5.4rem]">
-            <SplitText text="One lesson." className="block" />
-            <SplitText text="Every learner." className="block italic text-brand-ink [font-variation-settings:'SOFT'_100]" delay={0.18} />
+    <section id="top" aria-labelledby="hero-heading" className="relative">
+      <div className="container-page pt-10 pb-16 sm:pt-14 lg:pt-14">
+        <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
+          <h1 id="hero-heading" className="text-[3.25rem] leading-[0.95] tracking-[-0.035em] sm:text-7xl lg:col-span-7 xl:text-[6rem]">
+            One lesson.
+            <br />
+            <span className="relative isolate inline-block">
+              Every learner.
+              <span aria-hidden className="absolute inset-x-[0.02em] -bottom-[0.14em] -z-10 h-[0.12em] rounded-full bg-brand" />
+            </span>
           </h1>
-          <div className="hero-copy">
-            <p className="mt-7 max-w-xl text-lg leading-relaxed text-ink-2 sm:text-xl">
-              Give AdaptED the assignment you already have. It finds what could block a specific student, rebuilds the <strong className="text-ink">access</strong> — not the learning goals — and shows you every change and the research behind it.
+          <div className="lg:col-span-5 lg:pb-3">
+            <p className="max-w-[46ch] text-lg leading-relaxed text-ink-2 sm:text-xl">
+              Give AdaptED the assignment you already teach. It finds what would block a specific student and rebuilds the <strong className="font-bold text-ink">access</strong>, not the learning goals, with every change explained.
             </p>
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-7 flex flex-wrap gap-3">
               <a href="#studio" className="btn btn-brand min-h-12 px-6 text-base">
                 Adapt an assignment <ArrowRight className="size-4" aria-hidden />
               </a>
-              <a href="#how" className="btn btn-ghost min-h-12 px-6 text-base">
-                How it decides
+              <a href="#research" className="btn btn-ghost min-h-12 px-6 text-base">
+                See the research
               </a>
             </div>
-            <ul className="mt-6 flex flex-wrap gap-x-5 gap-y-1.5 text-sm text-ink-3">
-              {["Every question kept", "No answers given away", "No student data stored"].map((t) => (
-                <li key={t} className="flex items-center gap-1.5">
-                  <Check className="size-4 text-ok" aria-hidden /> {t}
-                </li>
-              ))}
-            </ul>
           </div>
         </div>
 
-        <div className="relative" aria-label="Illustration: one worksheet becomes four adapted versions" role="img">
-          <div className="relative grid gap-3 sm:grid-cols-2 lg:block lg:h-[36rem]" aria-hidden>
-            <div className="hero-original sheet ruled relative z-10 p-5 sm:col-span-2 lg:absolute lg:left-1/2 lg:top-1/2 lg:w-[23rem] lg:-translate-x-1/2 lg:-translate-y-1/2">
-              <p className="eyebrow">Grade 7 · Science</p>
-              <p className="mt-1 font-display text-lg font-semibold">Photosynthesis and Ecosystems</p>
-              <p className="mt-2 text-[0.8rem] leading-6 text-ink-2">
-                <M>Inside the chloroplasts of leaf cells, the pigment chlorophyll absorbs sunlight; the plant then uses that energy to combine carbon dioxide…</M> <M>In a nutshell</M>, photosynthesis is the engine that keeps the whole ecosystem running.
-              </p>
-              <p className="mt-2 text-[0.8rem] leading-6 text-ink-2">
-                5. <M>Discuss with a partner</M>: predict what would happen… <M>Briefly explain</M> your reasoning.
-              </p>
-              <p className="hero-barriers mt-3 inline-flex items-center gap-1.5 rounded-full bg-mark-strong px-2.5 py-0.5 text-xs font-bold text-[oklch(0.22_0.03_265)]">4 barriers found</p>
+        {/* Live specimen */}
+        <div className="mt-12 grid grid-cols-1 gap-6 border-t border-rule pt-8 lg:mt-14 lg:grid-cols-12 lg:gap-10">
+          <div className="min-w-0 lg:col-span-4">
+            <div className="flex items-center justify-between gap-3">
+              <h2 className="text-xl tracking-[-0.015em]">The same worksheet, five ways</h2>
+              {!calm && (
+                <button type="button" onClick={() => setPlaying((p) => !p)} className="btn btn-ghost btn-sm !px-2.5" aria-label={playing ? "Pause the tour" : "Play the tour"}>
+                  {playing ? <Pause className="size-4" aria-hidden /> : <Play className="size-4" aria-hidden />}
+                </button>
+              )}
+            </div>
+            <p className="mt-1 text-sm text-ink-3">
+              Grade {SAMPLE.grade} {SAMPLE.subject.toLowerCase()} · pre-built example
+            </p>
+
+            <div role="tablist" aria-label="Version of the worksheet" aria-orientation="vertical" className="mt-5 -mx-4 flex gap-1 overflow-x-auto px-4 pb-1 lg:mx-0 lg:flex-col lg:overflow-visible lg:px-0">
+              {VERSIONS.map((v) => {
+                const on = v === active;
+                return (
+                  <button
+                    key={v}
+                    role="tab"
+                    id={`hero-tab-${v}`}
+                    aria-selected={on}
+                    aria-controls="hero-sheet"
+                    tabIndex={on ? 0 : -1}
+                    onClick={() => choose(v)}
+                    onKeyDown={(e) => {
+                      const i = VERSIONS.indexOf(active);
+                      if (["ArrowDown", "ArrowRight", "ArrowUp", "ArrowLeft"].includes(e.key)) {
+                        e.preventDefault();
+                        const d = e.key === "ArrowDown" || e.key === "ArrowRight" ? 1 : -1;
+                        const next = VERSIONS[(i + d + VERSIONS.length) % VERSIONS.length];
+                        choose(next);
+                        document.getElementById(`hero-tab-${next}`)?.focus();
+                      }
+                    }}
+                    className={cn(
+                      v !== "original" && `need-${v}`,
+                      "group flex shrink-0 items-center gap-3 rounded-md px-3 py-2.5 text-left font-bold transition-colors lg:w-full",
+                      on ? "bg-sheet text-sheet-ink" : "text-ink-2 hover:bg-white/10 hover:text-ink",
+                    )}
+                  >
+                    <span
+                      aria-hidden
+                      className={cn("size-2.5 shrink-0 rounded-full", v === "original" ? "bg-brand" : "bg-[color:var(--need)]", on && v !== "original" && "outline outline-2 outline-offset-1 outline-sheet-ink/30")}
+                    />
+                    <span className="whitespace-nowrap">{label(v)}</span>
+                    {playing && on && (
+                      <span aria-hidden className="ml-auto hidden h-0.5 w-10 overflow-hidden rounded bg-sheet-ink/15 lg:block">
+                        <span key={active} className="block h-full origin-left animate-[grow_4.2s_linear_forwards] bg-sheet-ink/60" />
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
             </div>
 
-            <MiniCard need="dyslexia" label="Dyslexia" i={0}>
-              <p className="font-bold">photosynthesis</p>
-              <p className="font-mono text-[color:var(--need)]">pho·to·syn·the·sis</p>
-              <p className="text-ink-2">Leaf cells have tiny parts called <strong>chloroplasts</strong>. Inside them, chlorophyll absorbs sunlight.</p>
-            </MiniCard>
-            <MiniCard need="adhd" label="ADHD" i={1}>
-              <p className="flex items-center gap-1 font-bold"><Timer className="size-3.5" /> Start here · 1 min</p>
-              <p className="text-ink-2">Circle the word photosynthesis each time you see it (there are 3).</p>
-              <p className="flex items-center gap-1.5"><span className="size-3.5 rounded border-2 border-[color:var(--need)]" /> Read part 1 · 3 min</p>
-              <p className="flex items-center gap-1.5"><span className="size-3.5 rounded border-2 border-[color:var(--need)]" /> Questions 1 & 2 · 4 min</p>
-            </MiniCard>
-            <MiniCard need="apd" label="Auditory processing" i={2}>
-              <p className="flex items-center gap-1.5"><BookOpen className="size-3.5 text-[color:var(--need)]" /> 1. Read the two paragraphs.</p>
-              <p className="flex items-center gap-1.5"><PencilLine className="size-3.5 text-[color:var(--need)]" /> 2. Fill in the guided notes.</p>
-              <p className="flex items-center gap-1.5"><MessagesSquare className="size-3.5 text-[color:var(--need)]" /> 5. Partner talk — or the written option.</p>
-            </MiniCard>
-            <MiniCard need="autism" label="Autism" i={3}>
-              <p><strong className="text-[color:var(--need)]">How much:</strong> Q1 — 2 sentences. Q4 — circle 1 letter.</p>
-              <p><strong className="text-[color:var(--need)]">Finished when:</strong> all 5 questions have answers.</p>
-              <p className="text-ink-2">“In a nutshell” → “In summary”</p>
-            </MiniCard>
+            <div className="mt-6 border-t border-rule pt-5" aria-live="polite">
+              {active === "original" ? (
+                <>
+                  <p className="font-bold">{barriers.length} barriers marked in the original</p>
+                  <ul className="mt-3 space-y-2.5 text-[0.95rem] text-ink-2">
+                    {barriers.slice(0, 4).map((b, i) => (
+                      <li key={i} className="flex gap-2.5">
+                        <span aria-hidden className="mt-2 h-1 w-3 shrink-0 rounded-full bg-brand" />
+                        {b.issue}
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              ) : (
+                <>
+                  <p className="font-bold">{NEEDS[active].tagline}</p>
+                  <ul className="mt-3 space-y-3 text-[0.95rem]">
+                    {changes.map((c, i) => (
+                      <li key={i}>
+                        <span className="font-bold text-ink">{c.title}</span>
+                        <span className="block text-sm text-ink-3">{getResearch(c.evidence)?.label}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
+            </div>
           </div>
-          <p className="mt-4 hidden items-center justify-center gap-2 text-sm text-ink-3 lg:flex">
-            {calm ? (
-              "One worksheet, four versions — each built for a different barrier."
-            ) : (
-              <>
-                <ArrowDown className="size-4" aria-hidden /> Scroll to see one worksheet become four
-              </>
-            )}
-          </p>
+
+          <div className="min-w-0 lg:col-span-8">
+            <div
+              id="hero-sheet"
+              ref={sheetRef}
+              role="tabpanel"
+              aria-labelledby={`hero-tab-${active}`}
+              className="sheet relative h-[30rem] overflow-hidden sm:h-[36rem]"
+              tabIndex={0}
+            >
+              <div data-version key={active} className="h-full">
+                {active === "original" ? (
+                  <div className="h-full px-6 py-6 sm:px-9 sm:py-8">
+                    <p className="label !text-ink-3">Original assignment</p>
+                    <OriginalDocument text={SAMPLE.text} barriers={barriers} className="mt-3 text-[0.98rem] text-ink-2" />
+                  </div>
+                ) : (
+                  <AdaptedDocument assignment={CURATED.science[active]} need={active} headingLevel={3} />
+                )}
+              </div>
+              <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-sheet via-sheet/90 to-transparent" />
+              <a href="#studio" className="absolute bottom-4 left-1/2 inline-flex -translate-x-1/2 items-center gap-1.5 rounded-md bg-sheet-ink px-4 py-2 text-sm font-bold text-white shadow-[var(--shadow-lift)]">
+                Open the full version <ArrowDown className="size-4" aria-hidden />
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </section>
