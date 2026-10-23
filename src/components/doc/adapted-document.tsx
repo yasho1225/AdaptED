@@ -207,7 +207,7 @@ function BlockView({
           <div>
             <p className="font-bold">{b.term}</p>
             {b.syllables && b.syllables !== b.term && (
-              <p className="font-mono text-[0.95em] tracking-wide text-[color:var(--need)]" aria-label={`Syllables: ${b.syllables.replace(/·/g, " ")}`}>
+              <p className="tnum text-[0.95em] tracking-wide text-[color:var(--need)]" aria-label={`Syllables: ${b.syllables.replace(/·/g, " ")}`}>
                 {b.syllables}
               </p>
             )}
@@ -234,13 +234,13 @@ function BlockView({
     case "expectations":
       if (b.type === "expectations") {
         return (
-          <dl className="grid gap-2 rounded-xl border-2 border-[color:var(--need)]/40 bg-[color:var(--need-soft)] p-4">
+          <dl className="@container grid gap-2 rounded-xl border-2 border-[color:var(--need)]/40 bg-[color:var(--need-soft)] p-4">
             {(b.items ?? []).map((item, i) => {
               const at = item.indexOf(":");
               const label = at > 0 ? item.slice(0, at) : "";
               const value = at > 0 ? item.slice(at + 1).trim() : item;
               return (
-                <div key={i} className="grid gap-x-3 sm:grid-cols-[11rem_1fr]">
+                <div key={i} className="grid gap-x-3 @sm:grid-cols-[11rem_1fr]">
                   <dt className="font-bold text-[color:var(--need)]">{label}</dt>
                   <dd>{value}</dd>
                 </div>

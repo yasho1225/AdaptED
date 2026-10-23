@@ -1,18 +1,22 @@
 @import "tailwindcss";
 
 /*
- * AdaptED design system.
- * A committed blue field with white type; worksheets are the only paper objects on it;
- * highlighter yellow marks barriers and the one primary action.
- * Type: Atkinson Hyperlegible (Braille Institute) for everything people read, its mono cut for
- * measurements and syllable notation, and Bricolage Grotesque — condensed, heavy, optical-size
- * aware — for headlines on the blue canvas only. Worksheets never use the display face.
+ * AdaptED design system — see DESIGN.md.
+ * One motif: the highlighter's chisel stroke (a slanted cut) shapes every stage, button, bullet and band.
+ * One ground (blue), one ink (white), one accent (highlighter yellow); sections change field as hard cuts.
+ * Type: Bricolage Grotesque for headings on the page, Atkinson Hyperlegible Next for everything people read.
+ * Flat: tone steps instead of lines and shadows outside real product fragments ([data-ui]).
  */
 
 @theme inline {
   --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-display-face), var(--font-body), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-mono-face), ui-monospace, monospace;
+  /* No monospace on this site: numbers and syllables use the text face with tabular figures. */
+  --font-mono: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+
+  /* Nothing anyone reads goes below 13px. */
+  --text-xs: 0.8125rem;
+  --text-xs--line-height: 1.35;
 
   --color-paper: var(--paper);
   --color-paper-2: var(--paper-2);
@@ -34,6 +38,11 @@
   --color-warn: var(--warn);
   --color-warn-soft: var(--warn-soft);
 
+  --color-blue: #0e2fa3;
+  --color-navy: #0a1b52;
+  --color-yellow: #ffd43b;
+  --color-field-paper: #f3f4f8;
+
   --color-dyslexia: var(--dyslexia);
   --color-dyslexia-soft: var(--dyslexia-soft);
   --color-adhd: var(--adhd);
@@ -50,34 +59,43 @@
   --radius-2xl: 1rem;
 }
 
+/* Motion tokens (Emil Kowalski's curves; tasteskill durations). */
+:root {
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --t-press: 140ms;
+  --t-hover: 180ms;
+  --t-ui: 240ms;
+}
+
 /*
- * Two surfaces:
- *  • Paper — every reading surface (worksheets, forms, adapted documents): dark ink on warm paper,
- *    per BDA guidance against stark white. Applied with .sheet / .on-paper.
- *  • Canvas — the page itself: a committed blue field with white type and a highlighter-yellow accent.
+ * Light surfaces: worksheets and studio panels (.sheet, .on-paper, .force-light) and the paper field.
+ * Dark ink on light ground; worksheets keep a warm paper per the BDA style guide.
  */
 :root,
 .sheet,
 .on-paper,
-.force-light {
-  
-  --paper: oklch(0.975 0.012 85);
-  --paper-2: oklch(0.955 0.016 85);
-  --sheet: oklch(0.993 0.006 90);
-  --ink: oklch(0.24 0.03 265);
-  --ink-2: oklch(0.4 0.03 265);
-  --ink-3: oklch(0.5 0.025 265);
-  --rule: oklch(0.89 0.018 85);
-  --rule-strong: oklch(0.8 0.022 85);
-  --brand: oklch(0.47 0.19 268);
-  --brand-ink: oklch(0.38 0.17 268);
-  --brand-soft: oklch(0.94 0.035 268);
-  --mark: oklch(0.92 0.1 95 / 0.7);
-  --mark-strong: oklch(0.87 0.13 92);
-  --ok: oklch(0.47 0.12 155);
-  --ok-soft: oklch(0.95 0.04 155);
-  --warn: oklch(0.5 0.13 60);
-  --warn-soft: oklch(0.96 0.045 75);
+.force-light,
+.field-paper {
+  --paper: #f3f4f8;
+  --paper-2: #e8eaf1;
+  --sheet: #fefdf8;
+  --ink: #0f1d4a;
+  --ink-2: #3a4675;
+  --ink-3: #56618a;
+  --rule: #dcdfe8;
+  --rule-strong: #c2c7d6;
+  --brand: #0e2fa3;
+  --brand-ink: #0e2fa3;
+  --brand-soft: #e6ebfa;
+  --focus: #0e2fa3;
+  --mark: rgb(255 212 59 / 0.62);
+  --mark-strong: #ffd43b;
+  --ok: #1d7a52;
+  --ok-soft: #e3f4ec;
+  --warn: #8a5300;
+  --warn-soft: #fbf0dc;
 
   /* Need accents: AA (4.5:1+) on paper for text use. */
   --dyslexia: oklch(0.48 0.12 235);
@@ -89,37 +107,38 @@
   --autism: oklch(0.47 0.15 305);
   --autism-soft: oklch(0.955 0.03 305);
 
-  --on-need: oklch(0.995 0 0);
-  --on-brand: oklch(0.995 0 0);
-  --sheet-ink: oklch(0.24 0.03 265);
-  --shadow-sheet: 0 1px 0 oklch(0.85 0.02 85), 0 2px 4px oklch(0.4 0.03 85 / 0.06), 0 18px 40px -12px oklch(0.35 0.04 85 / 0.18);
-  --shadow-lift: 0 1px 0 oklch(0.85 0.02 85), 0 30px 60px -20px oklch(0.3 0.05 265 / 0.3);
+  --on-need: #ffffff;
+  --on-brand: #ffffff;
+  --sheet-ink: #0f1d4a;
 }
 
 .sheet,
 .on-paper,
-.force-light {
+.force-light,
+.field-paper {
   color: var(--ink);
   color-scheme: light;
 }
 
-:root {
+/* The page: blue ground, white ink, yellow accent. */
+:root,
+.field-blue,
+.field-navy {
   color-scheme: dark;
-  /* The page color is set per section by mood (see [data-mood] below). */
-  --canvas: #1e40af;
-  --paper: #1e40af;
-  --paper-2: #1a3794;
+  --field: #0e2fa3;
+  --paper: #0e2fa3;
+  --paper-2: #2443ae;
   --ink: #ffffff;
-  /* Translucent whites keep contrast on every mood color: ≥7.1:1 and ≥5.5:1. */
-  --ink-2: rgb(255 255 255 / 0.88);
-  --ink-3: rgb(255 255 255 / 0.74);
+  --ink-2: rgb(255 255 255 / 0.86);
+  --ink-3: rgb(255 255 255 / 0.76);
   --rule: rgb(255 255 255 / 0.2);
   --rule-strong: rgb(255 255 255 / 0.42);
   --brand: #ffd43b;
   --brand-ink: #ffd43b;
   --brand-soft: rgb(255 255 255 / 0.1);
-  --on-brand: #0f1f5c;
-  --sheet-ink: #0f1f5c;
+  --focus: #ffd43b;
+  --on-brand: #0a1b52;
+  --sheet-ink: #0a1b52;
   --mark: rgb(255 212 59 / 0.9);
   --mark-strong: #ffd43b;
   --ok: #9eebc8;
@@ -134,9 +153,33 @@
   --apd-soft: rgb(158 235 200 / 0.16);
   --autism: #e2c6ff;
   --autism-soft: rgb(226 198 255 / 0.16);
-  --on-need: #0f1f5c;
-  --shadow-sheet: 0 1px 2px rgb(8 20 70 / 0.28), 0 18px 40px -16px rgb(8 20 70 / 0.55);
-  --shadow-lift: 0 30px 60px -24px rgb(8 20 70 / 0.65);
+  --on-need: #0a1b52;
+}
+.field-navy {
+  --field: #0a1b52;
+  --paper: #0a1b52;
+  --paper-2: #16296b;
+}
+
+/* Section fields: hard cuts at section edges, never fades. */
+.field-blue { background-color: #0e2fa3; color: var(--ink); }
+.field-navy { background-color: #0a1b52; color: var(--ink); }
+.field-paper { background-color: #f3f4f8; --field: #f3f4f8; }
+.field-yellow {
+  --field: #ffd43b;
+  --paper: #ffd43b;
+  --paper-2: #f2c623;
+  --ink: #0a1b52;
+  --ink-2: rgb(10 27 82 / 0.86);
+  --ink-3: rgb(10 27 82 / 0.78);
+  --rule: rgb(10 27 82 / 0.2);
+  --brand: #0a1b52;
+  --brand-ink: #0a1b52;
+  --on-brand: #ffd43b;
+  --focus: #0a1b52;
+  background-color: #ffd43b;
+  color: var(--ink);
+  color-scheme: light;
 }
 
 @layer base {
@@ -151,12 +194,12 @@
     scroll-padding-top: 5rem;
   }
   body {
-    background-color: var(--canvas);
+    background-color: #0e2fa3;
     color: var(--ink);
     caret-color: var(--brand);
-    scrollbar-color: rgb(255 255 255 / 0.45) var(--paper-2);
+    scrollbar-color: rgb(255 255 255 / 0.45) #0a1b52;
     font-family: var(--font-sans);
-    font-size: 1.0625rem;
+    font-size: 1.125rem;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
   }
@@ -167,7 +210,7 @@
     font-weight: 800;
     font-stretch: 86%;
     letter-spacing: -0.012em;
-    line-height: 0.98;
+    line-height: 0.95;
     text-wrap: balance;
   }
   h1 {
@@ -208,14 +251,14 @@
   }
   ::selection {
     background: #ffd43b;
-    color: #0f1f5c;
+    color: #0a1b52;
   }
   :focus-visible {
-    outline: 3px solid var(--brand);
+    outline: 3px solid var(--focus);
     outline-offset: 3px;
     border-radius: 6px;
   }
-  /* Calm mode / reduced motion: turn off all non-essential motion */
+  /* Calm mode / reduced motion: the finished page, nothing travels. */
   [data-calm="true"] *,
   [data-calm="true"] *::before,
   [data-calm="true"] *::after {
@@ -223,22 +266,59 @@
     animation-delay: 0s !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
+    transition-delay: 0s !important;
     scroll-behavior: auto !important;
   }
 }
 
 @layer components {
   .container-page {
+    --pad: 1rem;
     margin-inline: auto;
     width: 100%;
     max-width: 76rem;
-    padding-inline: 1rem;
+    padding-inline: var(--pad);
   }
   @media (min-width: 640px) {
     .container-page {
-      padding-inline: 1.5rem;
+      --pad: 1.5rem;
     }
   }
+  @media (min-width: 1024px) {
+    .container-page {
+      --pad: 2rem;
+    }
+  }
+
+
+  /* Type steps (DESIGN.md: display, head, lead, body, small). */
+  .t-display {
+    font-size: clamp(4rem, 2.4rem + 6.4vw, 8.5rem);
+  }
+  .t-head {
+    font-size: clamp(2.5rem, 1.6rem + 3.6vw, 5rem);
+  }
+  .t-lead {
+    font-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);
+    line-height: 1.4;
+  }
+
+  /* The motif: a highlighter's chisel cut. --cut is the horizontal offset of the slant. */
+  .chisel {
+    clip-path: polygon(var(--cut, 1rem) 0, 100% 0, calc(100% - var(--cut, 1rem)) 100%, 0 100%);
+  }
+  .chisel-start {
+    clip-path: polygon(var(--cut, 1rem) 0, 100% 0, 100% 100%, 0 100%);
+  }
+  .bullet {
+    display: inline-block;
+    flex-shrink: 0;
+    width: 1.1em;
+    height: 0.55em;
+    background: currentColor;
+    clip-path: polygon(0.18em 0, 100% 0, calc(100% - 0.18em) 100%, 0 100%);
+  }
+
   /* Standalone panel label (never a kicker above a heading). */
   .label {
     font-size: 0.875rem;
@@ -249,65 +329,82 @@
     background-color: var(--sheet);
     border: 1px solid var(--rule);
     border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-sheet);
   }
   .ruled {
     background-image: repeating-linear-gradient(to bottom, transparent 0 31px, color-mix(in oklch, var(--rule) 70%, transparent) 31px 32px);
   }
   .mark {
-    background: linear-gradient(104deg, transparent 0.2em, var(--mark) 0.35em, var(--mark) calc(100% - 0.35em), transparent calc(100% - 0.2em));
-    border-radius: 0.2em;
+    background-color: var(--mark);
+    border-radius: 0.15em;
     padding: 0.05em 0.15em;
     box-decoration-break: clone;
     -webkit-box-decoration-break: clone;
   }
+
+  /*
+   * Buttons: one shape on the whole site, the chisel.
+   */
   .btn {
+    --cut: 0.95rem;
+    --btn-bg: var(--ink);
+    --btn-bg-hover: color-mix(in oklch, var(--ink) 88%, var(--field, #0e2fa3));
+    --btn-ink: var(--field, #0e2fa3);
+    position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    min-height: 2.75rem;
-    padding: 0.5rem 1.15rem;
-    border-radius: var(--radius-md);
+    min-height: 3rem;
+    padding: 0.55rem 1.7rem;
+    border: 0;
+    background-color: var(--btn-bg);
+    color: var(--btn-ink);
     font-weight: 700;
-    font-size: 0.95rem;
-    transition: transform 160ms ease, background-color 160ms ease, box-shadow 160ms ease, color 160ms ease;
-    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1.2;
     white-space: nowrap;
+    cursor: pointer;
+    clip-path: polygon(var(--cut) 0, 100% 0, calc(100% - var(--cut)) 100%, 0 100%);
+    transition: transform var(--t-press) var(--ease-out), background-color var(--t-hover) ease, color var(--t-hover) ease;
   }
-  .btn:active {
-    transform: translateY(1px);
+  /* A clip-path would cut the focus ring off, so a focused button squares up and shows the ring whole. */
+  .btn:focus-visible {
+    clip-path: none;
+  }
+  .btn:active:not(:disabled) {
+    transform: scale(0.97);
   }
   .btn:disabled {
     opacity: 0.55;
     cursor: not-allowed;
   }
-  .btn-primary {
-    background: var(--ink);
-    color: var(--paper);
+  @media (hover: hover) and (pointer: fine) {
+    .btn:hover:not(:disabled) {
+      background-color: var(--btn-bg-hover);
+    }
   }
-  .btn-primary:hover:not(:disabled) {
-    background: color-mix(in oklch, var(--ink) 86%, var(--brand));
+  .btn-primary {
+    --btn-bg: var(--ink);
+    --btn-ink: var(--sheet-on-ink, var(--paper));
+  }
+  :where(.sheet, .on-paper, .force-light, .field-paper) .btn-primary {
+    --btn-ink: #ffffff;
+    --btn-bg-hover: #26356b;
   }
   .btn-brand {
-    background: var(--brand);
-    color: var(--on-brand);
-    box-shadow: 0 1px 0 rgb(255 255 255 / 0.5) inset, 0 6px 18px -8px rgb(8 20 70 / 0.6);
-  }
-  .btn-brand:hover:not(:disabled) {
-    background: color-mix(in oklch, var(--brand) 85%, white);
+    --btn-bg: var(--brand);
+    --btn-bg-hover: color-mix(in oklch, var(--brand) 84%, white);
+    --btn-ink: var(--on-brand);
   }
   .btn-ghost {
-    border: 1px solid var(--rule-strong);
-    background: color-mix(in oklch, var(--ink) 5%, transparent);
-    color: var(--ink);
-  }
-  .btn-ghost:hover:not(:disabled) {
-    border-color: var(--ink-3);
+    --btn-bg: color-mix(in oklch, var(--ink) 11%, transparent);
+    --btn-bg-hover: color-mix(in oklch, var(--ink) 18%, transparent);
+    --btn-ink: var(--ink);
   }
   .btn-sm {
+    --cut: 0.75rem;
     min-height: 2.5rem;
-    padding: 0.35rem 0.85rem;
+    padding: 0.4rem 1.15rem;
     font-size: 0.875rem;
   }
   .chip {
@@ -322,6 +419,10 @@
     font-size: 0.875rem;
     font-weight: 600;
     min-height: 2.5rem;
+    transition: background-color var(--t-hover) ease, border-color var(--t-hover) ease, color var(--t-hover) ease, transform var(--t-press) var(--ease-out);
+  }
+  .chip:active {
+    transform: scale(0.97);
   }
   .field {
     width: 100%;
@@ -346,13 +447,13 @@
     border-radius: var(--radius-md);
     min-height: 2.5rem;
     white-space: nowrap;
+    transition: background-color var(--t-hover) ease, color var(--t-hover) ease;
   }
   .tab[aria-selected="true"] {
     color: var(--sheet-ink);
     background: var(--sheet);
-    box-shadow: 0 1px 2px rgb(8 20 70 / 0.25);
   }
-  /* Touch screens: every control is at least 44px tall (WCAG 2.5.8 asks 24; Apple and Google ask 44–48). */
+  /* Touch screens: every control is at least 44px tall. */
   @media (pointer: coarse) {
     .btn-sm,
     .chip,
@@ -363,35 +464,74 @@
   }
 }
 
-/*
- * Color psychology, one feeling per section. All pass WCAG AA with white text,
- * including every in-between color while the page fades from one to the next.
- *   trust    blue      — dependable, calm: the tool and the promise
- *   weight   dusk      — the problem, taken seriously
- *   steady   navy      — structure: how it works
- *   grounded deep teal — evidence: blue's trust with green's growth
- *   safe     green     — reassurance: what you can count on
- * Highlighter yellow (optimism, attention) marks barriers and actions — never red,
- * because the barrier is in the worksheet, not the student.
- */
-[data-mood="trust"] { --mood: #1e40af; }
-[data-mood="weight"] { --mood: #2b2766; }
-[data-mood="steady"] { --mood: #162b6b; }
-[data-mood="grounded"] { --mood: #0e4a5a; }
-[data-mood="safe"] { --mood: #14532d; }
-/* Calm mode: each section simply shows its color; no fading. */
-[data-calm="true"] [data-mood] { background-color: var(--mood); }
-
-/* How it works: the step numbers not in focus become outlines (dimming yellow by opacity turned it olive). */
-.step-num {
-  transition: color 500ms ease, -webkit-text-stroke-color 500ms ease;
-  -webkit-text-stroke: 2px transparent;
+/* Run a block from the content edge out to the viewport edge (the section clips the overflow). */
+@utility bleed-x {
+  margin-inline: calc(-1 * var(--pad));
 }
-@media (min-width: 1024px) {
-  [data-dim] .step-num {
-    color: transparent;
-    -webkit-text-stroke-color: rgb(255 255 255 / 0.45);
-  }
+@utility bleed-right {
+  margin-left: 0;
+  margin-right: calc(-1 * (max(0px, (100vw - 76rem) / 2) + var(--pad)));
+}
+
+/*
+ * Entrances (reveals.tsx): parts of a section arrive in reading order, once, rising 24px.
+ * Hidden only after the script has run (html[data-reveals]), so nothing stays invisible without it.
+ */
+html[data-reveals="on"] [data-rise]:not([data-in]) {
+  opacity: 0;
+  transform: translateY(24px);
+}
+[data-rise] {
+  transition: opacity 700ms var(--ease-out), transform 900ms var(--ease-expo);
+  transition-delay: calc(var(--rise-i, 0) * 70ms);
+}
+[data-rise][data-instant] {
+  transition: none;
+}
+
+/* Signature move: the hero stage opens like a highlighter stroke from its slanted edge. */
+.stage-wipe {
+  animation: stage-wipe 1100ms var(--ease-in-out) 260ms both;
+}
+.stage-settle {
+  animation: stage-settle 1400ms var(--ease-expo) 300ms both;
+}
+@keyframes stage-wipe {
+  from { clip-path: inset(0 100% 0 0); }
+  to { clip-path: inset(0 0 0 0); }
+}
+@keyframes stage-settle {
+  from { transform: translateY(18px) scale(1.04); }
+}
+
+/* Showcase plate: the shutter (tasteskill recipe), opened once when it enters. */
+html[data-reveals="on"] .shutter:not([data-in]) {
+  clip-path: inset(0 0 100% 0);
+}
+.shutter {
+  overflow: clip; /* the plate starts scaled up; keep it inside its frame (and off the page width) */
+  transition: clip-path 1100ms var(--ease-in-out);
+}
+.shutter > * {
+  transition: transform 1500ms var(--ease-expo);
+}
+html[data-reveals="on"] .shutter:not([data-in]) > * {
+  transform: scale(1.08);
+}
+
+/*
+ * Barrier highlights in worksheets: a flat highlighter fill drawn in from the left (GSAP tweens
+ * --mark-size). An SVG fill rather than a gradient, so it stays one flat colour.
+ */
+.hl-mark,
+.hl-under {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1' preserveAspectRatio='none'%3E%3Crect width='1' height='1' fill='%23FFD43B' fill-opacity='0.62'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: var(--mark-size, 100%) 100%;
+}
+.hl-under {
+  background-position: 0 100%;
+  background-size: var(--mark-size, 100%) 38%;
 }
 
 /* Hero: key terms that fly between worksheet versions (see term-flight.ts). */
@@ -405,43 +545,36 @@
   white-space: nowrap;
   transform-origin: 0 0;
   pointer-events: none;
-  border-radius: 0.2em;
+  border-radius: 0.15em;
   background: rgb(255 212 59 / calc(var(--hl) * 0.95));
-  box-shadow: 0 0 0 0.14em rgb(255 212 59 / calc(var(--hl) * 0.95)), 0 calc(var(--hl) * 10px) calc(var(--hl) * 24px) -6px rgb(8 20 70 / calc(var(--hl) * 0.35));
+  box-shadow: 0 0 0 0.14em rgb(255 212 59 / calc(var(--hl) * 0.95));
 }
-/* Hero headline: each line is a mask the words rise out of (room left for descenders and the underline). */
+/* Hero headline: each line is a mask the words rise out of (room left for descenders). */
 .hl-line {
   display: block;
   overflow: clip;
-  padding-bottom: 0.2em;
-  margin-bottom: -0.2em;
+  padding-bottom: 0.18em;
+  margin-bottom: -0.18em;
 }
 /* Section headline reveal (heading-reveal.tsx): same room for descenders. */
 .rv-line-mask {
-  padding-bottom: 0.2em;
-  margin-bottom: -0.2em;
+  padding-bottom: 0.18em;
+  margin-bottom: -0.18em;
 }
 .hl-word {
   display: inline-block;
-  animation: word-rise 1s cubic-bezier(0.16, 1, 0.3, 1) both;
-  animation-delay: calc(var(--i, 0) * 70ms + 60ms);
-}
-.hero-underline {
-  transform-origin: left;
-  animation: underline-draw 0.7s cubic-bezier(0.65, 0, 0.35, 1) 0.6s both;
+  animation: word-rise 900ms var(--ease-expo) both;
+  animation-delay: calc(var(--i, 0) * 80ms + 80ms);
 }
 .hero-rise {
-  animation: rise-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
-  animation-delay: calc(var(--i, 0) * 90ms + 320ms);
+  animation: rise-in 600ms var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 70ms + 420ms);
 }
 @keyframes word-rise {
-  from { transform: translateY(115%); }
-}
-@keyframes underline-draw {
-  from { transform: scaleX(0); }
+  from { transform: translateY(110%); }
 }
 @keyframes rise-in {
-  from { opacity: 0; transform: translateY(18px); }
+  from { opacity: 0; transform: translateY(12px); }
 }
 
 @keyframes draw {

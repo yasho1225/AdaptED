@@ -1,58 +1,144 @@
-# AdaptED design system
+# AdaptED — DESIGN.md
 
-Reviewed against the Impeccable craft floor and the UI UX Pro Max checklist (Swiss/minimal style for an education tool).
+The design system for the AdaptED site, written in the DESIGN.md format (Overview, Colors, Typography, Layout, Elevation, Shapes, Components, Motion, Do's and Don'ts, Responsive). Art direction was dealt with tasteskill v2 (direction **One motif**, seed 792400633) and kept to the brand where the brand is fixed: the blue page with white type the team asked for, and Atkinson Hyperlegible for everything people read. House rules from tasteskill and Impeccable, motion rules from Emil Kowalski's design-engineering skill.
 
-## World
-A committed blue field with white type. Worksheets are the only paper objects on it — the reading surfaces stay dark-on-paper, because that is where students read. A highlighter yellow marks barriers and the single primary action; nothing else is yellow.
+## Overview
 
-## Color psychology: one feeling per section
-The page color changes with the story. Each color was picked for the feeling it should carry, and every one passes WCAG AA with white text, including the in-between colors while the page fades.
+**The idea.** On this page, the Barrier Lens's highlighter stroke becomes the shape of every stage, button, bullet and band.
 
-| Section | Mood | Color | Why |
-| --- | --- | --- | --- |
-| Opening, tool, footer | Trust | `#1E40AF` | Blue reads as calm and dependable; teachers are asked to trust an AI tool. |
-| The problem | Weight | `#2B2766` | Dusk indigo: the darkest, most serious point, where we name what is hard. |
-| How it works | Steady | `#162B6B` | Navy: structure and reliability. |
-| Research | Grounded | `#0E4A5A` | Deep teal: blue's trust plus green's growth, for credibility. |
-| Promises | Safe | `#14532D` | Green means safe and "go": reassurance. |
-| Closing call to action | Hope | `#FFD43B` | Yellow: optimism and attention, used once at full strength. |
+A highlighter has a chisel tip, so its stroke starts and ends on a slant. That one slanted cut is the only ornament on the page. It appears at four scales:
 
-Other color jobs:
-- **Barrier highlights are yellow, never red.** Red says "wrong"; the barrier is in the worksheet, not the student.
-- **Success is mint** (`#9EEBC8`); warnings are warm amber (`#FFD99A`), never alarm red.
-- **Need colors** are soft and low-saturation (sky, apricot, mint, lavender) so they can label without shouting.
+| Scale | Where |
+| --- | --- |
+| Enormous | The hero stage: a flat yellow field, its top-left corner cut on the slant, bleeding off the right and bottom edges, carrying the live worksheet |
+| Large | The closing band, the footer's block-built wordmark |
+| Medium | Every button and every picture frame |
+| Text size | List bullets, the "ED" in the wordmark, inline picture frames inside a sentence |
 
-Text on the canvas uses translucent white (`--ink-2` 88%, `--ink-3` 74%) so contrast holds on every mood: lowest 5.5:1.
+**The live thing.** The hero worksheet: switch versions and the science words lift off as highlighted copies and land where the same words sit in the new version. The studio below is the whole working product.
 
-Paper surfaces (`.sheet`, `.on-paper`) keep dark ink on warm paper (BDA: avoid stark white).
+**Pictures.** The product is the picture. Every image is the real interface: live HTML fragments marked `data-ui`, and raster crops of real worksheet versions captured from the app (`scripts/capture-ui.mjs`). No stock photos of classrooms; no illustrations of "AI".
 
-## Type
-Two jobs, two faces:
-- **Bricolage Grotesque** (variable width and optical size) for headlines on the blue page only: weight 800, condensed (h1 80% width, h2 86%), tight leading. Hero up to 9rem, section heads up to 4.5rem. It gives the page a confident, poster-like voice.
-- **Atkinson Hyperlegible Next** (Braille Institute) for everything people read: body (17px, 1.6), labels, and every heading inside a worksheet. **Atkinson Hyperlegible Mono** only for measurements and syllable notation. Body measure ≤ 70ch; nothing under 12px.
+## Colors
 
-Worksheets never use the display face: a student's page is for reading, not for personality.
+One ground, one ink, one accent; sections change the whole field as hard cuts, never fades.
 
-## Touch and targets
-Controls are at least 40px tall with a mouse and 44px on touch screens (`pointer: coarse`); a radio inside a card is hit through the whole card.
+| Token | Value | Role |
+| --- | --- | --- |
+| `blue` | `#0E2FA3` | The page ground (hero, statement, showcase, studio, principles, footer). White on it: 10.8:1 |
+| `navy` | `#0A1B52` | Second field for the "How it works" chapter and ink on light fields |
+| `paper` | `#F3F4F8` | Light field for the research chapter (cool, never cream) |
+| `white` | `#FFFFFF` | Type on blue; surfaces on paper |
+| `yellow` | `#FFD43B` | The accent: the motif, the primary action, barrier highlights. Never a text colour on light grounds |
+| `on-yellow` | `#0A1B52` | Type and buttons on yellow |
+| `sheet` | `#FEFDF8` | Worksheets only (inside `data-ui`): warm paper, per the BDA style guide |
+
+Text on blue uses white at 100% (headings, body) and 82% (secondary); never below 74%. On paper: navy 100% and `#3A4675` secondary. Need colours (sky `#A9D4FF`, apricot `#FFC891`, mint `#9EEBC8`, lavender `#E2C6FF` on blue; deeper tones on paper) label the four versions and nothing else.
+
+Barriers are yellow, never red: the barrier is in the worksheet, not the student.
+
+## Typography
+
+Two faces.
+
+- **Display — Bricolage Grotesque** (variable, self-hosted subset, weights 700–800): headings only, on blue, navy, paper and yellow fields. Weight 800, width 80% (h1) / 86% (h2), tracking −0.015em, leading 0.9.
+- **Text — Atkinson Hyperlegible Next** (Braille Institute): everything people read, including every heading inside a worksheet. Tabular figures for numbers. No monospace anywhere.
+
+Five steps do the visible work:
+
+| Step | Size | Use |
+| --- | --- | --- |
+| display | `clamp(4rem, 2.4rem + 6.4vw, 8.5rem)` | The hero headline, the footer wordmark |
+| head | `clamp(2.5rem, 1.6rem + 3.6vw, 5rem)` | Section headings (two lines or fewer at every width) |
+| lead | `clamp(1.25rem, 1.05rem + 0.8vw, 1.75rem)` | Statements, supporting sentences, tile names |
+| body | `1.125rem` / 1.6 | Running text, max 60ch |
+| small | `0.875rem` | Captions, sources, notes. Nothing anyone reads goes below 13px |
 
 ## Layout
-12-column Swiss grid, flush-left. Sections are separated by full-width rules and alternating bands — not rows of identical cards. No labels above headings. Radii: 4 / 8 / 12px.
 
-## Motion (emotional arc)
-Every moment is tied to a feeling or a fact, and all of it is removed by Calm mode and `prefers-reduced-motion`:
-1. **"The key words stay"** (hero, the signature moment) — switching versions of the real worksheet lifts its science vocabulary off as highlighted copies that land where the same words sit in the new version, while the new layout fades in around them. It shows the product's promise — the vocabulary is kept, only the way in changes — instead of claiming it. Auto-tours once, with a visible pause button. The headline rises out of line masks in pure CSS on first paint.
-2. **Mood fade** — the page color eases between section moods as you scroll (GSAP on `--canvas`). Calm mode shows each section's color still.
-3. **Stuck → can start** — in the problem section, the real 139-word passage loosens into the real adapted chunks while the section holds (large screens) or as it scrolls past (small screens). This is the only pinned section.
-4. **How it works** — the picture beside the steps stays put (CSS sticky) and changes with each step: barriers highlighted under a scan, the student profile, the four real versions dealt out as a fan, then a ledger of fidelity checks computed live. Small screens and Calm mode show each picture under its step.
-5. **Relief** — when every question is confirmed kept, a check mark draws itself; ticking a student checklist box springs and draws its check.
-6. **Pull** — the three main buttons lean slightly toward the pointer (React Bits Magnet); off on touch and in Calm mode.
+- One container: max 76rem, side margins 16px (phone) / 24px (tablet) / 32px (desktop); equal on both sides everywhere.
+- 12-column grid; text starts on two anchor lines (column 1 and column 7).
+- Sections are 128–192px apart on desktop, 96px on phones; nothing inside a section is spaced that far.
+- Neighbouring sections never share a composition.
 
-## Imagery
-The product is the imagery: every picture on the page is a real worksheet, a real adapted version, or a number the code computed. No stock photos of classrooms, no illustrations of "AI". See `IMAGES.md` for where photography could be added and the rules for it.
+Page order and blueprint per section:
 
-## Writing
-Plain language, short sentences, everyday words. Site copy measured with AdaptED's own scorer: about grade 8.8 → grade 3.9 (Flesch–Kincaid), excluding citations and sample worksheet text.
+| Section | Field | Blueprint |
+| --- | --- | --- |
+| Hero | blue | Fragment on a shaped stage: headline top-left, one action, the yellow chisel stage from 42% down holding the live worksheet |
+| Where students get stuck | blue | Statement with inline thumbnails (36px max, three lines) |
+| One idea at a time | blue | Square plate, spare text: the before/after reading on a paper plate; tabs, title, two action cells |
+| Try it (studio) | blue | The working product; panels are `data-ui` fragments |
+| How it works | navy | Stages as one bar: four segments sized by how long each stage really takes, then the pictures for each stage |
+| Built on research | paper | Large marks on tiles: one yellow heading tile, sources set large |
+| What each version does | paper | Two-column menu with picture bullets: each need, its supports, the source of each |
+| What you can count on | blue | Two columns of plain statements |
+| Close | yellow | The object returns: the four versions, cropped by the section edge, with the closing line |
+| Footer | navy | The mark, built large: the wordmark knocked out of chisel blocks |
 
-## Browser surfaces
-Themed selection (yellow on navy), caret, scrollbar, focus ring (3px yellow on canvas, indigo on paper), underline offset, tabular numerals in measurements.
+## Elevation & Depth
+
+Flat. Surfaces are separated by a tone step (blue → white sheet, paper → white tile), never by a line or a shadow. Shadows only on things that float above the page (none on this site). Inside `data-ui` fragments the product keeps its own form-field borders.
+
+## Shapes
+
+- **The chisel**: a parallelogram whose short sides slant at about 18° (horizontal offset = 0.32 × height). Custom property `--cut`.
+- Buttons, picture frames, bullets, the hero stage corner and the footer blocks use the chisel. Tiles and fields are square. Worksheets keep their 12px paper radius (they are the product, not the page).
+- One button shape on the whole site: the chisel.
+
+## Components
+
+**Buttons.** Flat chisel, 48px tall (40px small, 44px on touch). Primary: yellow on blue/navy, navy on yellow. Secondary: white at 12% on blue, navy at 8% on paper. Press: `scale(0.97)` in 140ms. Hover (fine pointers only): fill steps lighter in 180ms. On keyboard focus the button squares up and shows a 3px ring, so the chisel never clips the ring.
+
+**Navigation.** A plain bar on the page's blue: wordmark left (the "ED" on a yellow chisel), three text links, Calm mode, one action. No border, no blur.
+
+**Tabs.** Text tabs with a filled active state; arrow-key navigation; inactive text stays at full contrast.
+
+**Tiles.** Square, a tone step from the field, no border; the name set large, one line of what it informs, the source linked.
+
+**Lists.** No rules between rows; space and a chisel bullet in the need colour.
+
+## Motion
+
+Emil Kowalski's rules with tasteskill's budget.
+
+| Token | Value | Use |
+| --- | --- | --- |
+| `--ease-out` | `cubic-bezier(0.23, 1, 0.32, 1)` | Entrances, press, anything under 600ms |
+| `--ease-expo` | `cubic-bezier(0.16, 1, 0.3, 1)` | Reveals of 800ms and longer, line rises |
+| `--ease-in-out` | `cubic-bezier(0.77, 0, 0.175, 1)` | Wipes and shutters, things that travel while visible |
+| `--t-press` / `--t-hover` / `--t-ui` | 140 / 180 / 240ms | Press, colour hover, UI changes |
+
+- **Signature move (one):** the hero stage opens like a highlighter stroke, a clip-path wipe from its slanted left edge over 1.1s, while the worksheet settles from a slight scale.
+- **The live move:** the key-word flight in the hero.
+- **Entrances:** each section's parts arrive in reading order, 70ms apart, rising 24px with opacity, once, when 85% of the way up the viewport. Lists arrive row by row; tiles in sequence; headings rise out of line masks.
+- **Feedback:** every control responds to press; hover only behind `(hover: hover) and (pointer: fine)`.
+- **Never:** ease-in on anything the visitor waits for, `transition: all`, scale from 0, bounce, layout-property animation, scroll hijacking, content left hidden if a script fails.
+- **Calm mode** (and `prefers-reduced-motion`) shows the finished page: no travel, no smoothing, no autoplay.
+
+## Do's and Don'ts
+
+**Do**
+- Use the chisel for every action and picture frame.
+- Keep headings to two lines at every width; say what the section is.
+- Show the real product: live fragments and captured crops.
+- Change fields with hard cuts at section edges.
+- Keep running text in full ink at 16px or more.
+
+**Don't**
+- No gradients, glows, glass, or shadows at rest.
+- No hairline rules or 1px outlined boxes outside real form fields and product fragments.
+- No eyebrow labels, no index numbering (01/02), no tiny letter-spaced capitals, no monospace.
+- No styled accent word in a headline.
+- No icon-topped feature cards, no rows of identical cards.
+- No invented proof: no testimonials, logos, or statistics that are not sourced.
+
+## Responsive Behavior
+
+| Width | Changes |
+| --- | --- |
+| < 640px | One column. Hero headline 2 lines at ~10vw; the yellow stage runs full width under the action, its corner cut kept, the worksheet cropped on the right rather than scaled. Statement left-aligned at 24px. Studio panels stack. Tiles two across. Menu one column. |
+| 640–1023px | Two-column showcase and menu; tiles three across. |
+| ≥ 1024px | Full compositions: stage on columns 5–12; sticky picture beside the stages; tiles four across. |
+
+Touch targets: 44px on coarse pointers, 40px on fine. Text never under 13px.

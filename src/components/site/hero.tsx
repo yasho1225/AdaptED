@@ -2,7 +2,7 @@
 
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import gsap from "gsap";
-import { ArrowDown, ArrowRight, Pause, Play } from "lucide-react";
+import { ArrowRight, Pause, Play } from "lucide-react";
 import { AdaptedDocument } from "@/components/doc/adapted-document";
 import { OriginalDocument, barrierRanges } from "@/components/doc/original-document";
 import { CalmMagnet } from "@/components/motion/calm-magnet";
@@ -36,15 +36,15 @@ function label(v: Version) {
 }
 
 /**
- * First viewport: the product working, not a picture of it. One real worksheet, switchable in
- * place between the original and each adapted version. On every switch the key science words
- * lift off and land in their new places: the vocabulary is kept, only the way in changes.
+ * First viewport (tasteskill blueprint "Fragment on a shaped stage"): the headline and one action
+ * top-left; a flat highlighter-yellow stage, its corner cut on the chisel slant, opens like a pen
+ * stroke and carries the real worksheet. Switching versions flies the key science words from where
+ * they were to where they land: the vocabulary is kept, only the way in changes.
  */
 export function Hero() {
   const { calm } = useMotion();
   const [active, setActive] = useState<Version>("original");
   const [playing, setPlaying] = useState(false);
-  const root = useRef<HTMLElement>(null);
   const sheetRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const before = useRef<Map<string, TermSnapshot> | null>(null);
@@ -107,165 +107,142 @@ export function Hero() {
     window.dispatchEvent(new CustomEvent<OpenInStudioDetail>(OPEN_IN_STUDIO, { detail: { need: active === "original" ? "dyslexia" : active } }));
   };
 
-  const changes = active === "original" ? [] : SCIENCE[active].changes.slice(0, 4);
+  const changes = active === "original" ? [] : SCIENCE[active].changes.slice(0, 3);
+
+  const notes = (
+    <div aria-live="polite" className="max-w-[26rem] lg:min-h-[19rem]">
+      <p className="text-lg font-bold">The key words stay. The way in changes.</p>
+      {active === "original" ? (
+        <>
+          <p className="mt-4 text-ink-2">
+            {barriers.length} things in this grade {SAMPLE.grade} worksheet could get in the way:
+          </p>
+          <ul className="mt-3 space-y-2.5">
+            {barriers.slice(0, 3).map((b, i) => (
+              <li key={i} className="flex items-baseline gap-3">
+                <span aria-hidden className="bullet text-brand" />
+                <span>{b.issue}</span>
+              </li>
+            ))}
+          </ul>
+        </>
+      ) : (
+        <>
+          <p className={cn(`need-${active}`, "mt-4 text-ink-2")}>
+            <span className="font-bold text-[color:var(--need)]">{NEEDS[active].label}:</span> {NEEDS[active].tagline}
+          </p>
+          <ul className="mt-3 space-y-3">
+            {changes.map((c, i) => (
+              <li key={i} className={cn(`need-${active}`, "flex items-baseline gap-3")}>
+                <span aria-hidden className="bullet text-[color:var(--need)]" />
+                <span>
+                  <span className="font-bold">{c.title}</span>
+                  <span className="block text-sm text-ink-3">{getResearch(c.evidence)?.label}</span>
+                </span>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+      <a href="#studio" onClick={openInStudio} className="btn btn-ghost btn-sm mt-6">
+        {active === "original" ? "Try it on this worksheet" : `Open the ${label(active)} version`} <ArrowRight className="size-4" aria-hidden />
+      </a>
+    </div>
+  );
 
   return (
-    <section ref={root} id="top" data-mood="trust" aria-labelledby="hero-heading" className="relative">
-      <div className="container-page pt-10 pb-16 sm:pt-14 lg:pt-16">
-        <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
-          {/* Words rise out of their lines on first paint (pure CSS, so no flash before hydration); calm mode shows them still. */}
-          <h1 id="hero-heading" className="text-[3.9rem] sm:text-8xl lg:col-span-7 lg:text-[7.5rem] xl:text-[9rem]">
+    <section id="top" aria-labelledby="hero-heading" className="field-blue relative overflow-hidden">
+      <div className="container-page grid lg:min-h-[max(46rem,calc(100svh-4rem))] lg:grid-cols-[minmax(0,38fr)_minmax(0,62fr)] lg:grid-rows-[auto_1fr] lg:gap-x-10">
+        {/* Words rise out of their lines on first paint (pure CSS, so no flash before hydration); calm mode shows them still. */}
+        <div className="pt-12 sm:pt-16 lg:col-span-2 lg:pt-20">
+          <h1 id="hero-heading" className="t-display">
             <span className="hl-line">
               <Word i={0}>One</Word> <Word i={1}>lesson.</Word>
             </span>{" "}
             <span className="hl-line">
-              <span className="relative isolate inline-block">
-                <Word i={2}>Every</Word> <Word i={3}>learner.</Word>
-                <span aria-hidden className="hero-underline absolute inset-x-[0.02em] -bottom-[0.1em] -z-10 h-[0.11em] rounded-full bg-brand" />
-              </span>
+              <Word i={2}>Every</Word> <Word i={3}>learner.</Word>
             </span>
           </h1>
-          <div className="lg:col-span-5 lg:pb-4">
-            <p className="hero-rise max-w-[44ch] text-lg leading-relaxed text-ink-2 sm:text-xl">
-              Paste in any assignment. AdaptED makes a version your student can use. They still learn the <strong className="font-bold text-ink">same things</strong>, and you see every change and why.
-            </p>
-            <div className="hero-rise mt-7 flex flex-wrap gap-3" style={{ "--i": 1 } as React.CSSProperties}>
-              <CalmMagnet>
-                <a href="#studio" className="btn btn-brand min-h-12 px-6 text-base">
-                  Try it now <ArrowRight className="size-4" aria-hidden />
-                </a>
-              </CalmMagnet>
-              <a href="#research" className="btn btn-ghost min-h-12 px-6 text-base">
-                See the research
-              </a>
-            </div>
-          </div>
         </div>
 
-        {/* Live specimen */}
-        {/* Small screens: tabs, then the sheet, then the reasons. Large: tabs and reasons beside the sheet. */}
-        <div className="mt-12 grid grid-cols-1 gap-6 border-t border-rule pt-8 lg:mt-16 lg:grid-cols-12 lg:grid-rows-[auto_1fr] lg:gap-x-10 lg:gap-y-0">
-          <div className="min-w-0 lg:col-span-4">
-            <div className="flex items-center justify-between gap-3">
-              <h2 className="text-2xl">One worksheet, five versions</h2>
-              {!calm && (
-                <button type="button" onClick={() => setPlaying((p) => !p)} className="btn btn-ghost btn-sm size-11 !p-0" aria-label={playing ? "Pause the tour" : "Play the tour"}>
-                  {playing ? <Pause className="size-4" aria-hidden /> : <Play className="size-4" aria-hidden />}
-                </button>
-              )}
-            </div>
-            <p className="mt-2 text-ink-2">
-              <span className="mark font-bold text-sheet-ink">The key words stay.</span> The way in changes.
-            </p>
-            <p className="mt-1 text-sm text-ink-3">
-              Grade {SAMPLE.grade} {SAMPLE.subject.toLowerCase()} · pre-made example
-            </p>
-
-            <div role="tablist" aria-label="Version of the worksheet" aria-orientation="vertical" className="mt-5 flex flex-wrap gap-1 lg:flex-col">
-              {VERSIONS.map((v) => {
-                const on = v === active;
-                return (
-                  <button
-                    key={v}
-                    role="tab"
-                    id={`hero-tab-${v}`}
-                    aria-selected={on}
-                    aria-controls="hero-sheet"
-                    tabIndex={on ? 0 : -1}
-                    onClick={() => choose(v)}
-                    onKeyDown={(e) => {
-                      const i = VERSIONS.indexOf(active);
-                      if (["ArrowDown", "ArrowRight", "ArrowUp", "ArrowLeft"].includes(e.key)) {
-                        e.preventDefault();
-                        const d = e.key === "ArrowDown" || e.key === "ArrowRight" ? 1 : -1;
-                        const next = VERSIONS[(i + d + VERSIONS.length) % VERSIONS.length];
-                        choose(next);
-                        document.getElementById(`hero-tab-${next}`)?.focus();
-                      }
-                    }}
-                    className={cn(
-                      v !== "original" && `need-${v}`,
-                      "group flex min-h-11 shrink-0 items-center gap-3 rounded-md px-3 py-2.5 text-left font-bold transition-colors lg:w-full",
-                      on ? "bg-sheet text-sheet-ink" : "text-ink-2 hover:bg-white/10 hover:text-ink",
-                    )}
-                  >
-                    <span
-                      aria-hidden
-                      className={cn("size-2.5 shrink-0 rounded-full", v === "original" ? "bg-brand" : "bg-[color:var(--need)]", on && v !== "original" && "outline outline-2 outline-offset-1 outline-sheet-ink/30")}
-                    />
-                    <span className="whitespace-nowrap">{label(v)}</span>
-                    {playing && on && (
-                      <span aria-hidden className="ml-auto hidden h-0.5 w-10 overflow-hidden rounded bg-sheet-ink/15 lg:block">
-                        <span key={active} className="block h-full origin-left animate-[grow_linear_forwards] bg-sheet-ink/60" style={{ animationDuration: `${CYCLE_MS}ms` }} />
-                      </span>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
+        <div className="pt-8 pb-10 lg:pb-16">
+          <p className="hero-rise t-lead max-w-[34ch]">Paste in any assignment. Get a version your student can use, with the same goals and every change explained.</p>
+          <div className="hero-rise mt-8" style={{ "--i": 1 } as React.CSSProperties}>
+            <CalmMagnet>
+              <a href="#studio" className="btn btn-brand">
+                Try it now <ArrowRight className="size-4" aria-hidden />
+              </a>
+            </CalmMagnet>
           </div>
+          <div className="mt-14 hidden lg:block">{notes}</div>
+        </div>
 
-          <div className="min-w-0 lg:col-span-8 lg:col-start-5 lg:row-span-2 lg:row-start-1">
-            <div
-              id="hero-sheet"
-              ref={sheetRef}
-              role="tabpanel"
-              aria-labelledby={`hero-tab-${active}`}
-              className="sheet relative h-[30rem] overflow-hidden sm:h-[36rem]"
-              tabIndex={0}
-            >
-              <div data-version key={active} className="h-full">
-                {active === "original" ? (
-                  <div className="h-full px-6 py-6 sm:px-9 sm:py-8">
-                    <p className="label !text-ink-3">Original assignment</p>
-                    <OriginalDocument text={SAMPLE.text} barriers={barriers} className="mt-3 text-[0.98rem] text-ink-2" />
-                  </div>
-                ) : (
-                  <AdaptedDocument assignment={SCIENCE[active]} need={active} headingLevel={3} />
+        {/* The stage: a flat yellow field cut on the chisel slant, bleeding off the right and bottom edges. */}
+        <div className="stage-wipe bleed-x relative mt-2 overflow-hidden lg:bleed-right lg:mt-8">
+          <div aria-hidden className="chisel-start absolute inset-0 bg-yellow [--cut:4.5rem] lg:[--cut:9rem]" />
+          {/* On large screens the worksheet is cropped by the section's bottom edge instead of setting its height. */}
+          <div className="stage-settle relative px-4 pt-4 sm:px-8 sm:pt-8 lg:absolute lg:inset-0 lg:pt-14 lg:pr-0 lg:pl-14">
+            <div data-ui className="sheet relative h-[30rem] w-full overflow-hidden rounded-b-none sm:h-[34rem] lg:h-[40rem] lg:max-w-[42rem]">
+              <div className="flex items-center gap-2 bg-paper-2 p-1.5">
+                <div role="tablist" aria-label="Version of the worksheet" className="flex min-w-0 flex-1 gap-1 overflow-x-auto">
+                  {VERSIONS.map((v) => {
+                    const on = v === active;
+                    return (
+                      <button
+                        key={v}
+                        role="tab"
+                        id={`hero-tab-${v}`}
+                        aria-selected={on}
+                        aria-controls="hero-sheet"
+                        tabIndex={on ? 0 : -1}
+                        onClick={() => choose(v)}
+                        onKeyDown={(e) => {
+                          const i = VERSIONS.indexOf(active);
+                          if (["ArrowDown", "ArrowRight", "ArrowUp", "ArrowLeft"].includes(e.key)) {
+                            e.preventDefault();
+                            const d = e.key === "ArrowDown" || e.key === "ArrowRight" ? 1 : -1;
+                            const next = VERSIONS[(i + d + VERSIONS.length) % VERSIONS.length];
+                            choose(next);
+                            document.getElementById(`hero-tab-${next}`)?.focus();
+                          }
+                        }}
+                        className={cn(v !== "original" && `need-${v}`, "tab relative inline-flex shrink-0 items-center gap-2 !px-3 text-sm")}
+                      >
+                        <span aria-hidden className={cn("size-2 shrink-0 rounded-full", v === "original" ? "bg-[#0e2fa3]" : "bg-[color:var(--need)]")} />
+                        {label(v)}
+                        {playing && on && (
+                          <span aria-hidden className="absolute inset-x-3 bottom-1 h-0.5 overflow-hidden rounded bg-sheet-ink/10">
+                            <span key={active} className="block h-full origin-left animate-[grow_linear_forwards] bg-sheet-ink/50" style={{ animationDuration: `${CYCLE_MS}ms` }} />
+                          </span>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+                {!calm && (
+                  <button type="button" onClick={() => setPlaying((p) => !p)} className="grid size-10 shrink-0 place-items-center rounded-md text-ink-2 transition-colors hover:bg-sheet hover:text-ink" aria-label={playing ? "Pause the tour" : "Play the tour"}>
+                    {playing ? <Pause className="size-4" aria-hidden /> : <Play className="size-4" aria-hidden />}
+                  </button>
                 )}
               </div>
-              <div ref={overlayRef} aria-hidden className="pointer-events-none absolute inset-0" />
-              <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-28 bg-gradient-to-t from-sheet via-sheet/90 to-transparent" />
-              <a
-                href="#studio"
-                onClick={openInStudio}
-                className="absolute bottom-4 left-1/2 z-[3] inline-flex min-h-11 -translate-x-1/2 items-center gap-1.5 whitespace-nowrap rounded-md bg-sheet-ink px-4 text-sm font-bold text-white shadow-[var(--shadow-lift)]"
-              >
-                {active === "original" ? "Try it on this worksheet" : `Open the ${label(active)} version`} <ArrowDown className="size-4" aria-hidden />
-              </a>
+              <div id="hero-sheet" ref={sheetRef} role="tabpanel" aria-labelledby={`hero-tab-${active}`} className="relative h-full overflow-hidden" tabIndex={0}>
+                <div data-version key={active}>
+                  {active === "original" ? (
+                    <div className="px-6 py-6 sm:px-9 sm:py-8">
+                      <p className="label !text-ink-3">Original assignment · grade {SAMPLE.grade} science</p>
+                      <OriginalDocument text={SAMPLE.text} barriers={barriers} className="mt-3 text-[0.98rem] text-ink-2" />
+                    </div>
+                  ) : (
+                    <AdaptedDocument assignment={SCIENCE[active]} need={active} headingLevel={3} />
+                  )}
+                </div>
+                <div ref={overlayRef} aria-hidden className="pointer-events-none absolute inset-0" />
+              </div>
             </div>
           </div>
-          <div className="min-w-0 lg:col-span-4 lg:col-start-1">
-            <div className="border-t border-rule pt-5 lg:mt-6" aria-live="polite">
-              {active === "original" ? (
-                <>
-                  <p className="font-bold">{barriers.length} things that could get in the way</p>
-                  <ul className="mt-3 space-y-2.5 text-[0.95rem] text-ink-2">
-                    {barriers.slice(0, 4).map((b, i) => (
-                      <li key={i} className="flex gap-2.5">
-                        <span aria-hidden className="mt-2 h-1 w-3 shrink-0 rounded-full bg-brand" />
-                        {b.issue}
-                      </li>
-                    ))}
-                  </ul>
-                </>
-              ) : (
-                <>
-                  <p className="font-bold">{NEEDS[active].tagline}</p>
-                  <ul className="mt-3 space-y-3 text-[0.95rem]">
-                    {changes.map((c, i) => (
-                      <li key={i}>
-                        <span className="font-bold text-ink">{c.title}</span>
-                        <span className="block text-sm text-ink-3">{getResearch(c.evidence)?.label}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </>
-              )}
-            </div>
-          </div>
-
         </div>
+
+        <div className="py-10 lg:hidden">{notes}</div>
       </div>
     </section>
   );

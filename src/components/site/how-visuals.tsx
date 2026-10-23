@@ -58,19 +58,19 @@ export function FindVisual({ play }: { play: boolean }) {
   });
 
   return (
-    <div ref={ref} className="sheet relative overflow-hidden">
+    <div ref={ref} data-ui className="sheet relative overflow-hidden">
       <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1.5 border-b border-rule px-5 py-3 text-sm">
         <span className="font-bold">Original · grade {SAMPLE.grade} science</span>
         <span className="tnum shrink-0 rounded-full bg-mark-strong px-2.5 py-0.5 font-bold text-sheet-ink">{shown.length} found in the reading</span>
       </div>
       <div className="relative px-5 pt-4 pb-2 sm:px-6">
-        <div aria-hidden className="scan pointer-events-none absolute inset-x-0 top-0 z-10 h-12 -translate-y-1/2 bg-[linear-gradient(to_bottom,transparent,color-mix(in_oklch,var(--brand)_22%,transparent),transparent)] opacity-0" />
+        <div aria-hidden className="scan pointer-events-none absolute inset-x-0 top-0 z-10 h-[3px] bg-[#0e2fa3] opacity-0" />
         <OriginalDocument text={text} barriers={barriers} className="line-clamp-[11] text-[0.95rem] text-ink-2" />
       </div>
       <ol className="space-y-1.5 border-t border-rule bg-paper/60 px-5 py-4 text-sm sm:px-6">
         {shown.slice(0, 3).map((b, i) => (
           <li key={i} className="issue flex gap-2.5">
-            <span className="tnum grid size-5 shrink-0 place-items-center rounded bg-mark-strong font-mono text-xs font-bold text-sheet-ink">{i + 1}</span>
+            <span className="tnum grid size-5 shrink-0 place-items-center rounded bg-mark-strong tnum text-xs font-bold text-sheet-ink">{i + 1}</span>
             <span className="text-ink-2">{b.issue}</span>
           </li>
         ))}
@@ -92,7 +92,7 @@ export function StudentVisual({ play }: { play: boolean }) {
   });
 
   return (
-    <div ref={ref} className="sheet p-5 sm:p-6">
+    <div ref={ref} data-ui className="sheet p-5 sm:p-6">
       <p className="text-lg font-bold">Your student</p>
       <p className="mt-3 text-sm font-semibold text-ink-2">Needs help with</p>
       <ul className="mt-2 flex flex-wrap gap-2">
@@ -156,7 +156,7 @@ export function WriteVisual({ play }: { play: boolean }) {
   });
 
   return (
-    <div ref={ref} className="relative mx-auto h-[20rem] w-full max-w-[40rem] sm:h-[26rem]">
+    <div ref={ref} data-ui className="relative mx-auto h-[20rem] w-full max-w-[40rem] sm:h-[26rem]">
       {cards.map((c, i) => (
         <div
           key={c.n}
@@ -212,7 +212,7 @@ export function CheckVisual({ play }: { play: boolean }) {
   });
 
   return (
-    <div ref={ref} className="sheet overflow-hidden">
+    <div ref={ref} data-ui className="sheet overflow-hidden">
       <div className="border-b border-rule px-5 py-3 sm:px-6">
         <p className="font-bold">Checked by AdaptED&apos;s code, not by the AI</p>
         <p className="text-sm text-ink-3">The same grade {SAMPLE.grade} worksheet, all four versions</p>
@@ -236,7 +236,7 @@ export function CheckVisual({ play }: { play: boolean }) {
                 </span>
               </th>
               <td className="px-2 py-3">
-                <span className="tnum flex items-center gap-1.5 font-mono font-bold">
+                <span className="tnum flex items-center gap-1.5 tnum font-bold">
                   {f.matchedQuestions}/{f.originalQuestions} {f.missing.length === 0 && <TickDraw />}
                 </span>
               </td>
@@ -244,7 +244,7 @@ export function CheckVisual({ play }: { play: boolean }) {
                 <span className="flex items-center gap-1.5 font-bold">{f.choicesPreserved ? <>kept <TickDraw /></> : "missing"}</span>
               </td>
               <td className="px-2 py-3 pr-5 sm:pr-6">
-                <span className="tnum flex items-center gap-1.5 font-mono font-bold">
+                <span className="tnum flex items-center gap-1.5 tnum font-bold">
                   {f.vocabularyKept.length}/{vocab} {f.vocabularyDropped.length === 0 && <TickDraw />}
                 </span>
               </td>

@@ -65,7 +65,7 @@ function Metric({ label, before, after, decimals = 0, suffix, note, done }: { la
   return (
     <div className="min-w-0 px-5 py-4">
       <dt className="text-sm font-bold text-ink-2">{label}</dt>
-      <dd className="tnum mt-1 flex items-baseline gap-2 font-mono text-xl font-bold">
+      <dd className="tnum mt-1 flex items-baseline gap-2 tnum text-xl font-bold">
         {before !== undefined && (
           <>
             <span className="text-ink-3 line-through decoration-1">{before.toFixed(decimals)}</span>
@@ -88,7 +88,7 @@ export function MetricsStrip({ result }: { result: AdaptResult }) {
   const { before, after } = result.metrics;
   const f = result.fidelity;
   return (
-    <dl className="sheet grid grid-cols-1 divide-y divide-rule sm:grid-cols-2 sm:divide-y-0 lg:grid-cols-4 lg:divide-x">
+    <dl data-ui className="sheet grid grid-cols-1 divide-y divide-rule sm:grid-cols-2 sm:divide-y-0 lg:grid-cols-4 lg:divide-x">
       <Metric label="Reading level (grade)" before={before.gradeLevel} after={after.gradeLevel} decimals={1} note="An estimate" />
       <Metric label="Words per sentence" before={before.avgSentenceLength} after={after.avgSentenceLength} decimals={1} note="On average" />
       <Metric label="Questions kept" done={f.originalQuestions > 0 && f.missing.length === 0 && f.restored.length === 0} after={f.matchedQuestions} suffix={`of ${f.originalQuestions}`} note={f.restored.length ? `${f.restored.length} put back word for word` : "Checked by AdaptED"} />
@@ -149,7 +149,7 @@ export function TeacherPanel({ result }: { result: AdaptResult }) {
   const p = result.profile;
   return (
     <div className="grid gap-5 md:grid-cols-2">
-      <div className="sheet p-6">
+      <div data-ui className="sheet p-6">
         <h4 className="font-sans text-base font-bold">Tips for giving this to your student</h4>
         {result.assignment.teacherNotes.length ? (
           <ul className="mt-3 space-y-3">
@@ -171,7 +171,7 @@ export function TeacherPanel({ result }: { result: AdaptResult }) {
           </ul>
         )}
       </div>
-      <div className="sheet p-6">
+      <div data-ui className="sheet p-6">
         <h4 className="font-sans text-base font-bold">About this student</h4>
         <dl className="mt-3 space-y-2 text-[0.95rem]">
           <div>
@@ -203,7 +203,7 @@ export function ResultTabs({ tab, onTab, onCompare, comparing }: { tab: ResultTa
     ["teacher", "Teacher notes"],
   ];
   return (
-    <div className="flex flex-wrap items-center justify-between gap-3">
+    <div data-ui className="flex flex-wrap items-center justify-between gap-3">
       <div role="tablist" aria-label="Result views" className="grid w-full grid-cols-2 gap-1 rounded-xl bg-paper-2 p-1 sm:inline-flex sm:w-auto sm:rounded-full">
         {tabs.map(([id, label]) => (
           <button

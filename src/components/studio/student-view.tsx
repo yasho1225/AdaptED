@@ -24,7 +24,7 @@ export function StudentView({ result }: { result: AdaptResult }) {
 
   return (
     <div>
-      <div className="sheet mb-4 flex flex-wrap items-center gap-x-5 gap-y-3 px-4 py-3" role="toolbar" aria-label="Display options">
+      <div data-ui className="sheet mb-4 flex flex-wrap items-center gap-x-5 gap-y-3 px-4 py-3" role="toolbar" aria-label="Display options">
         <div className="flex items-center gap-1.5">
           <span className="text-sm font-semibold text-ink-2">Text</span>
           <button type="button" className="btn btn-ghost btn-sm size-11 !p-0" aria-label="Smaller text" disabled={prefs.size === 0} onClick={() => setPrefs((p) => ({ ...p, size: Math.max(0, p.size - 1) as DisplayPrefs["size"] }))}>

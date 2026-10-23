@@ -47,7 +47,7 @@ export function SourcePanel({ value, onChange, onCreated }: { value: string; onC
   };
 
   return (
-    <div className="sheet flex h-full flex-col p-5 sm:p-6">
+    <div data-ui className="sheet flex h-full flex-col p-5 sm:p-6">
       <div className="flex items-center gap-3">
         <span className="grid size-8 place-items-center rounded-full bg-ink text-sm font-bold text-paper" aria-hidden>
           1
@@ -132,7 +132,7 @@ export function SourcePanel({ value, onChange, onCreated }: { value: string; onC
           maxLength={MAX}
           onChange={(e) => onChange(e.target.value)}
           placeholder={"Paste your assignment here: the directions, any reading, and the questions.\n\nYou can also drag a PDF or Word file here."}
-          className="field ruled min-h-[18rem] h-full resize-y font-sans text-[0.95rem] leading-8"
+          className="field min-h-[18rem] h-full resize-y font-sans text-[0.95rem] leading-7"
           aria-describedby="source-help source-status"
         />
         {!value && <FileText className="pointer-events-none absolute right-4 bottom-4 size-8 text-rule-strong" aria-hidden />}

@@ -1,23 +1,25 @@
 import { HeadingReveal } from "@/components/motion/heading-reveal";
-import { MoodController } from "@/components/motion/mood-controller";
+import { Reveals } from "@/components/motion/reveals";
 import { Hero } from "@/components/site/hero";
-import { Nav } from "@/components/site/nav";
 import { HowItWorks } from "@/components/site/how-it-works";
-import { CloseCta, Footer, Principles, Problem, Research } from "@/components/site/sections";
+import { Nav } from "@/components/site/nav";
+import { CloseCta, Footer, Principles, Research, Showcase, Stuck, VersionsMenu } from "@/components/site/sections";
 import { Studio } from "@/components/studio/studio";
 
 export default function Home() {
   return (
     <>
-      <MoodController />
+      <Reveals />
       <HeadingReveal />
       <Nav />
       <main>
         <Hero />
-        <Problem />
+        <Stuck />
+        <Showcase />
         <Studio />
         <HowItWorks />
         <Research />
+        <VersionsMenu />
         <Principles />
         <CloseCta />
       </main>

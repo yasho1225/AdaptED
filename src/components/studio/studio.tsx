@@ -91,10 +91,10 @@ export function Studio() {
   // The hero's "Open the … version" button: load its worksheet, pick that need, and show the result.
   useEffect(() => {
     const open = (e: Event) => {
-      const { need } = (e as CustomEvent<OpenInStudioDetail>).detail;
+      const { need, compare } = (e as CustomEvent<OpenInStudioDetail>).detail;
       const p = defaultProfile(need);
       autoRan.current = true;
-      setComparing(false);
+      setComparing(!!compare);
       setSource(SAMPLES[0].text);
       setProfile(p);
       void run(SAMPLES[0].text, p);
@@ -137,25 +137,25 @@ export function Studio() {
   const untranslated = shown && shown.source !== "ai" && viewProfile.language !== "english";
 
   return (
-    <section id="studio" data-mood="trust" ref={sectionRef} aria-labelledby="studio-heading" className="relative scroll-mt-20 py-20 sm:py-28">
+    <section id="studio" ref={sectionRef} aria-labelledby="studio-heading" className="field-blue relative scroll-mt-20 pt-12 pb-28 sm:pb-40">
       <div className="container-page">
-        <div className="max-w-3xl">
-          <h2 id="studio-heading" data-reveal className="text-[2.75rem] sm:text-6xl lg:text-7xl">
-            Try it.
+        <div className="grid gap-x-10 gap-y-6 lg:grid-cols-12 lg:items-end">
+          <h2 id="studio-heading" data-reveal className="t-head lg:col-span-5">
+            Try it
           </h2>
-          <p className="mt-5 max-w-[52ch] text-lg leading-relaxed text-ink-2">
+          <p className="max-w-[46ch] text-ink-2 lg:col-span-7">
             Bring an assignment, or have AI write a new one. Tell AdaptED about your student. See the new version, what changed, and why, in English or another language.
           </p>
         </div>
 
-        <div className="mt-10 grid gap-5 lg:grid-cols-2">
+        <div className="mt-14 grid gap-4 lg:grid-cols-2">
           <SourcePanel value={source} onChange={setSource} onCreated={onCreated} />
           <ProfilePanel profile={profile} onChange={setProfile} />
         </div>
 
-        <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+        <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
           <CalmMagnet>
-            <button type="button" className="btn btn-brand min-h-[3.25rem] px-7 text-base" onClick={() => void run(source, profile, { scroll: true })} disabled={loading}>
+            <button type="button" className="btn btn-brand min-h-[3.75rem] px-9 text-lg [--cut:1.2rem]" onClick={() => void run(source, profile, { scroll: true })} disabled={loading}>
               <Wand2 className="size-5" aria-hidden />
               {loading ? "Adapting…" : `Adapt for ${needLabel}`}
               <ArrowRight className="size-4" aria-hidden />
@@ -164,14 +164,15 @@ export function Studio() {
           {stale && <p className="text-sm font-semibold text-warn">You made changes. Click the button again to update.</p>}
         </div>
         {error && (
-          <p role="alert" className="mx-auto mt-4 max-w-xl rounded-xl border border-warn/40 bg-warn-soft px-4 py-3 text-center font-semibold text-warn">
+          <p role="alert" className="mx-auto mt-4 max-w-xl bg-warn-soft px-4 py-3 text-center font-semibold text-warn">
             {error}
           </p>
         )}
 
-        <div ref={resultRef} className="mt-14 scroll-mt-24 space-y-5" aria-live="polite" aria-busy={loading}>
+        <div ref={resultRef} className="mt-20 scroll-mt-24 space-y-5" aria-live="polite" aria-busy={loading}>
           {ran && (
             <>
+              <div data-ui className="space-y-5">
               <div className="flex flex-wrap items-end justify-between gap-4">
                 <div>
                   <h3 className="text-2xl sm:text-3xl">{shown && !loading ? "Here’s the new version" : "Making the new version…"}</h3>
@@ -216,6 +217,7 @@ export function Studio() {
                   {viewProfile.language === "simple-english" ? "Simpler English needs AI, which isn’t available right now, so this version keeps the original wording." : "Translating needs AI, which isn’t available right now, so this version is in English."}
                 </p>
               )}
+              </div>
 
               {shown && !loading && <MetricsStrip result={shown} />}
 
@@ -235,7 +237,7 @@ export function Studio() {
 
               {comparing && (
                 <div className="pt-6">
-                  <div className="mb-4 flex items-center justify-between gap-3">
+                  <div data-ui className="mb-4 flex items-center justify-between gap-3">
                     <h3 className="text-2xl">One lesson, four versions</h3>
                     <button type="button" className="btn btn-ghost btn-sm" onClick={() => setComparing(false)}>
                       <RotateCcw className="size-4" aria-hidden /> Close comparison

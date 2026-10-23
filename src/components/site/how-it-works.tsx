@@ -5,6 +5,14 @@ import { useMotion } from "@/components/motion/motion-provider";
 import { cn } from "@/lib/utils";
 import { CheckVisual, FindVisual, StudentVisual, WriteVisual } from "./how-visuals";
 
+/** Each stage, how long it really takes, and its colour in the bar. Widths follow the durations (12% minimum). */
+const STAGES = [
+  { time: "Under a second", clause: "First, AdaptED finds what could get in the way.", grow: 12, tone: "bg-yellow" },
+  { time: "About a minute", clause: "Then you choose the help your student needs.", grow: 57, tone: "bg-white" },
+  { time: "About 20 seconds", clause: "Next, AI writes the new version under strict rules.", grow: 19, tone: "bg-[#a9d4ff]" },
+  { time: "Under a second", clause: "Last, AdaptED checks every question and key word.", grow: 12, tone: "bg-[#9eebc8]" },
+];
+
 const STEPS = [
   {
     title: "Find what's hard",
@@ -84,18 +92,44 @@ export function HowItWorks() {
   }, [calm]);
 
   return (
-    <section ref={sectionRef} id="how" data-mood="steady" aria-labelledby="how-heading" className="scroll-mt-16 overflow-x-clip py-20 sm:py-28">
+    <section ref={sectionRef} id="how" aria-labelledby="how-heading" className="field-navy scroll-mt-16 overflow-x-clip py-28 sm:py-40">
       <div className="container-page">
-        <div className="grid gap-6 lg:grid-cols-12">
-          <h2 id="how-heading" data-reveal className="text-[2.75rem] sm:text-6xl lg:col-span-6 lg:text-7xl">
-            AI writes. AdaptED checks. You decide.
+        <div className="grid gap-x-10 gap-y-6 lg:grid-cols-12 lg:items-end">
+          <h2 id="how-heading" data-reveal className="t-head lg:col-span-7">
+            AI writes. AdaptED checks.
           </h2>
-          <p className="max-w-[48ch] text-lg leading-relaxed text-ink-2 lg:col-span-6 lg:pt-2">
-            AdaptED doesn&apos;t just ask AI to &ldquo;make it easier.&rdquo; It follows research. It sets strict rules. And it checks the work before you see it.
+          <p className="max-w-[44ch] text-ink-2 lg:col-span-5">
+            And you decide. AdaptED doesn&apos;t just ask AI to &ldquo;make it easier.&rdquo; It follows research, sets strict rules, and checks the work before you see it.
           </p>
         </div>
 
-        <div className={cn("mt-14 grid gap-10", !calm && "lg:grid-cols-12")}>
+        {/* The stages as one bar: each segment as wide as that stage really takes. */}
+        <div data-rise-group className="mt-16">
+          <div data-ui className="flex flex-col gap-1.5 lg:h-[22vh] lg:min-h-[10rem] lg:flex-row">
+            {STAGES.map((st, i) => (
+              <div key={i} data-rise className={cn("flex min-h-[4.5rem] flex-col justify-between p-4 text-[#0a1b52] lg:min-h-0 lg:p-5", st.tone)} style={{ flexGrow: st.grow, flexBasis: 0 }}>
+                <span className="text-[1.25rem] leading-tight font-bold lg:text-[clamp(1.1rem,1.6vw,1.75rem)]">{st.time}</span>
+                <span className="text-[0.95rem] font-bold lg:hidden">{st.clause}</span>
+              </div>
+            ))}
+          </div>
+          <div aria-hidden className="mt-4 hidden gap-1.5 lg:flex">
+            {STAGES.map((st, i) => (
+              <p key={i} className="max-w-[22ch] pr-3 text-lg leading-snug text-ink-2" style={{ flexGrow: st.grow, flexBasis: 0 }}>
+                {st.clause}
+              </p>
+            ))}
+          </div>
+          <ol className="sr-only">
+            {STAGES.map((st, i) => (
+              <li key={i}>
+                {st.clause} {st.time}.
+              </li>
+            ))}
+          </ol>
+        </div>
+
+        <div className={cn("mt-24 grid gap-10", !calm && "lg:grid-cols-12")}>
           <ol className={cn(!calm && "lg:col-span-5")}>
             {STEPS.map((s, i) => (
               <li
@@ -105,15 +139,10 @@ export function HowItWorks() {
                 ref={(el) => {
                   stepRefs.current[i] = el;
                 }}
-                className={cn(
-                  "group border-t-2 border-ink pt-6 pb-12",
-                  !calm && "lg:flex lg:min-h-[58vh] lg:flex-col lg:justify-center lg:border-t-0 lg:py-0",
-                )}
+                className={cn("group pb-16", !calm && "lg:flex lg:min-h-[58vh] lg:flex-col lg:justify-center lg:py-0")}
               >
-                <p className="step-num font-display text-7xl leading-none font-extrabold text-brand [font-stretch:80%] sm:text-8xl" aria-hidden>
-                  {i + 1}
-                </p>
-                <h3 className="mt-3 text-3xl transition-colors duration-500 sm:text-4xl lg:group-data-dim:text-ink-3">
+                <span aria-hidden className={cn("chisel block h-3 w-14 transition-opacity duration-500 [--cut:0.4rem] lg:group-data-dim:opacity-40", STAGES[i].tone)} />
+                <h3 className="mt-5 text-2xl transition-colors duration-500 sm:text-[2rem] lg:group-data-dim:text-ink-3">
                   <span className="sr-only">Step {i + 1}: </span>
                   {s.title}
                 </h3>

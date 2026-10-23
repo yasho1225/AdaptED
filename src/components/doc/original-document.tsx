@@ -59,14 +59,13 @@ export const OriginalDocument = forwardRef<HTMLDivElement, Props>(function Origi
         key={`m${i}`}
         data-mark={r.index}
         className={cn(
-          "barrier-mark rounded-[0.2em] bg-no-repeat px-0.5 text-inherit [box-decoration-break:clone] [-webkit-box-decoration-break:clone]",
-          relevant ? "bg-[linear-gradient(104deg,transparent_2px,var(--mark)_4px,var(--mark)_calc(100%-4px),transparent_calc(100%-2px))]" : "bg-[linear-gradient(transparent_60%,var(--mark)_60%)] opacity-80",
+          "barrier-mark rounded-[0.15em] bg-transparent px-0.5 text-inherit [box-decoration-break:clone] [-webkit-box-decoration-break:clone]",
+          relevant ? "hl-mark" : "hl-under",
           activeBarrier === r.index && "outline outline-2 outline-offset-2 outline-[color:var(--mark-strong)]",
         )}
-        style={{ backgroundSize: "var(--mark-size, 100%) 100%" }}
       >
         {clean.slice(r.start, r.end)}
-        <sup className="ml-0.5 select-none font-mono text-xs font-bold text-ink-2" aria-label={`barrier ${i + 1}`}>
+        <sup className="ml-0.5 select-none tnum text-xs font-bold text-ink-2" aria-label={`barrier ${i + 1}`}>
           {i + 1}
         </sup>
       </mark>,

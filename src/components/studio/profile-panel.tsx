@@ -21,7 +21,7 @@ export function ProfilePanel({ profile, onChange }: { profile: LearnerProfile; o
   const others = SUPPORT_IDS.filter((id) => !suggested.includes(id));
 
   return (
-    <div className="sheet flex h-full flex-col p-5 sm:p-6">
+    <div data-ui className="sheet flex h-full flex-col p-5 sm:p-6">
       <div className="flex items-center gap-3">
         <span className="grid size-8 place-items-center rounded-full bg-ink text-sm font-bold text-paper" aria-hidden>
           2
