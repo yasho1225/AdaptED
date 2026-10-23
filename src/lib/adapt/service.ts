@@ -1,5 +1,5 @@
 import "server-only";
-import { computeMetrics } from "./analyze";
+import { computeMetrics, originalReadingText } from "./analyze";
 import { checkFidelity, fidelityFeedback, readingText, restoreMissingQuestions } from "./fidelity";
 import { GeminiError, generateJson, hasGeminiKey } from "./gemini";
 import { adaptOffline } from "./offline-engine";
@@ -28,7 +28,7 @@ function finalize(
     assignment,
     ...meta,
     fidelity,
-    metrics: { before: computeMetrics(source), after: computeMetrics(readingText(assignment)) },
+    metrics: { before: computeMetrics(originalReadingText(source)), after: computeMetrics(readingText(assignment)) },
     profile,
     notices,
     generatedAt: new Date().toISOString(),

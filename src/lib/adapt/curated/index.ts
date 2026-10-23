@@ -1,4 +1,4 @@
-import { computeMetrics } from "../analyze";
+import { computeMetrics, originalReadingText } from "../analyze";
 import { checkFidelity, readingText } from "../fidelity";
 import { isDefaultSingleNeedProfile } from "../profile";
 import { findSample, type SampleAssignment } from "../samples";
@@ -27,7 +27,7 @@ export function curatedResult(source: string, profile: LearnerProfile): AdaptRes
     assignment,
     source: "curated",
     fidelity: checkFidelity(source, assignment),
-    metrics: { before: computeMetrics(source), after: computeMetrics(readingText(assignment)) },
+    metrics: { before: computeMetrics(originalReadingText(source)), after: computeMetrics(readingText(assignment)) },
     profile,
     notices: [],
     generatedAt: new Date(0).toISOString(),

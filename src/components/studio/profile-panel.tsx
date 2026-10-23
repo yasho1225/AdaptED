@@ -1,0 +1,158 @@
+"use client";
+
+import { Check } from "lucide-react";
+import { GRADES, LANGUAGES, NEEDS, SUPPORTS, SUPPORT_IDS, supportsForNeeds } from "@/lib/adapt/profile";
+import { NEED_IDS, type LearnerProfile, type NeedId, type SupportId } from "@/lib/adapt/types";
+import { cn } from "@/lib/utils";
+
+export function ProfilePanel({ profile, onChange }: { profile: LearnerProfile; onChange: (p: LearnerProfile) => void }) {
+  const toggleNeed = (n: NeedId) => {
+    const has = profile.needs.includes(n);
+    if (has && profile.needs.length === 1) return;
+    const needs = has ? profile.needs.filter((x) => x !== n) : NEED_IDS.filter((x) => x === n || profile.needs.includes(x));
+    onChange({ ...profile, needs, supports: supportsForNeeds(needs) });
+  };
+  const toggleSupport = (s: SupportId) => {
+    const supports = profile.supports.includes(s) ? profile.supports.filter((x) => x !== s) : SUPPORT_IDS.filter((x) => x === s || profile.supports.includes(x));
+    onChange({ ...profile, supports });
+  };
+
+  const suggested = SUPPORT_IDS.filter((id) => SUPPORTS[id].needs.some((n) => profile.needs.includes(n)));
+  const others = SUPPORT_IDS.filter((id) => !suggested.includes(id));
+
+  return (
+    <div className="sheet flex h-full flex-col p-5 sm:p-6">
+      <div className="flex items-center gap-3">
+        <span className="grid size-8 place-items-center rounded-full bg-ink font-display text-sm font-bold text-paper" aria-hidden>
+          2
+        </span>
+        <h3 className="font-display text-xl font-semibold">The learner</h3>
+      </div>
+
+      <fieldset className="mt-5">
+        <legend className="text-sm font-semibold text-ink-2">Learning needs <span className="font-normal text-ink-3">(choose one or more)</span></legend>
+        <div className="mt-2 grid grid-cols-2 gap-2">
+          {NEED_IDS.map((n) => {
+            const on = profile.needs.includes(n);
+            return (
+              <button
+                key={n}
+                type="button"
+                aria-pressed={on}
+                onClick={() => toggleNeed(n)}
+                className={cn(
+                  `need-${n}`,
+                  "flex min-h-[4.5rem] flex-col items-start rounded-xl border-2 px-3 py-2.5 text-left transition-[border-color,background-color]",
+                  on ? "border-[color:var(--need)] bg-[color:var(--need-soft)]" : "border-rule hover:border-rule-strong",
+                )}
+              >
+                <span className="flex w-full items-center justify-between gap-2 font-bold">
+                  <span className={on ? "text-[color:var(--need)]" : ""}>{NEEDS[n].label}</span>
+                  <span className={cn("grid size-5 place-items-center rounded-full border-2", on ? "border-[color:var(--need)] bg-[color:var(--need)] text-[color:var(--on-need)]" : "border-rule-strong")} aria-hidden>
+                    {on && <Check className="size-3" strokeWidth={3.5} />}
+                  </span>
+                </span>
+                <span className="mt-0.5 text-xs leading-snug text-ink-2">{NEEDS[n].tagline}</span>
+              </button>
+            );
+          })}
+        </div>
+      </fieldset>
+
+      <fieldset className="mt-5">
+        <legend className="text-sm font-semibold text-ink-2">
+          Supports for this student <span className="font-normal text-ink-3">({profile.supports.length} on — a label is a starting point, not a recipe)</span>
+        </legend>
+        <ul className="mt-2 flex flex-wrap gap-1.5">
+          {suggested.map((id) => (
+            <SupportChip key={id} id={id} on={profile.supports.includes(id)} onToggle={toggleSupport} />
+          ))}
+        </ul>
+        {others.length > 0 && (
+          <details className="group mt-2">
+            <summary className="cursor-pointer text-sm font-semibold text-brand-ink">More supports ({others.length})</summary>
+            <ul className="mt-2 flex flex-wrap gap-1.5">
+              {others.map((id) => (
+                <SupportChip key={id} id={id} on={profile.supports.includes(id)} onToggle={toggleSupport} />
+              ))}
+            </ul>
+          </details>
+        )}
+      </fieldset>
+
+      <div className="mt-5 grid gap-3 sm:grid-cols-2">
+        <label className="text-sm font-semibold text-ink-2">
+          Grade
+          <select className="field mt-1" value={profile.grade ?? ""} onChange={(e) => onChange({ ...profile, grade: e.target.value || undefined })}>
+            <option value="">Detect from assignment</option>
+            {GRADES.map((g) => (
+              <option key={g} value={g}>
+                Grade {g}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="text-sm font-semibold text-ink-2">
+          Student&apos;s language
+          <select className="field mt-1" value={profile.language} onChange={(e) => onChange({ ...profile, language: e.target.value as LearnerProfile["language"] })}>
+            {LANGUAGES.map((l) => (
+              <option key={l.value} value={l.value}>
+                {l.label}
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
+
+      <fieldset className="mt-4">
+        <legend className="text-sm font-semibold text-ink-2">Learning goals</legend>
+        <div className="mt-1.5 grid gap-2 sm:grid-cols-2" role="radiogroup">
+          {(
+            [
+              ["accommodate", "Keep grade-level goals", "Accommodation — same learning, different access. Recommended."],
+              ["modify", "Allow modified goals", "Only if this student's plan allows it. Items can become optional."],
+            ] as const
+          ).map(([v, label, help]) => (
+            <label key={v} className={cn("flex cursor-pointer gap-2.5 rounded-xl border-2 p-3", profile.expectations === v ? "border-ink" : "border-rule hover:border-rule-strong")}>
+              <input type="radio" name="expectations" value={v} checked={profile.expectations === v} onChange={() => onChange({ ...profile, expectations: v })} className="mt-1 accent-[var(--ink)]" />
+              <span>
+                <span className="block text-sm font-bold">{label}</span>
+                <span className="block text-xs leading-snug text-ink-2">{help}</span>
+              </span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+
+      <label className="mt-4 block text-sm font-semibold text-ink-2">
+        Anything else about how this student learns? <span className="font-normal text-ink-3">(optional)</span>
+        <textarea
+          className="field mt-1 min-h-[4.5rem] resize-y text-[0.95rem] font-normal"
+          maxLength={300}
+          value={profile.notes ?? ""}
+          onChange={(e) => onChange({ ...profile, notes: e.target.value })}
+          placeholder="e.g. Loves sports examples. Prefers typing to handwriting. (No names or medical details.)"
+        />
+      </label>
+    </div>
+  );
+}
+
+function SupportChip({ id, on, onToggle }: { id: SupportId; on: boolean; onToggle: (s: SupportId) => void }) {
+  const s = SUPPORTS[id];
+  return (
+    <li>
+      <button
+        type="button"
+        aria-pressed={on}
+        onClick={() => onToggle(id)}
+        title={s.description}
+        className={cn("chip !min-h-0 !py-1 !text-[0.8rem] transition-colors", on ? "border-ink bg-ink text-paper" : "text-ink-2 hover:border-ink-3")}
+      >
+        {on && <Check className="size-3.5" strokeWidth={3} aria-hidden />}
+        {s.label}
+        <span className="sr-only">: {s.description}</span>
+      </button>
+    </li>
+  );
+}

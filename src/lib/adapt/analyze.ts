@@ -243,6 +243,12 @@ export function parseAssignment(raw: string): ParsedAssignment {
   return { title, passages, directions, questions };
 }
 
+/** The original's reading load (passages, directions, question stems) — comparable with readingText() of an adaptation. */
+export function originalReadingText(raw: string): string {
+  const p = parseAssignment(raw);
+  return [...p.directions, ...p.passages, ...p.questions.map((q) => q.text)].join("\n");
+}
+
 /* ------------------------------------------------------------------ */
 /* Barrier Lens                                                        */
 /* ------------------------------------------------------------------ */
@@ -300,10 +306,6 @@ const OPEN_VERB = /\b(explain|describe|discuss|analyze|reflect|consider|imagine|
 const LENGTH_HINT = /\b(\d+|one|two|three|four|five)\s*(?:-|–|to)?\s*(?:\d+\s*)?(sentences?|words?|paragraphs?|examples?|reasons?|points?)\b/i;
 const SPOKEN = /\b(listen|as we discussed|as discussed in class|your teacher will (?:explain|read|tell)|discuss with (?:a|your) partner|turn and talk|class discussion|watch the video|dictation|lecture|i will explain|we talked about)\b/i;
 const MULTI_STEP = /\b(and then|then|after that|and also|before you|once you)\b/i;
-
-function excerpt(s: string, max = 140): string {
-  return s.length > max ? s.slice(0, max - 1).trimEnd() + "…" : s;
-}
 
 /** Find barriers in the original text. Quotes are verbatim substrings so the UI can highlight them. */
 export function detectBarriers(raw: string): Barrier[] {

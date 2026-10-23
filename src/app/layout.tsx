@@ -1,31 +1,35 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Atkinson_Hyperlegible_Next, Fraunces } from "next/font/google";
+import { MotionProvider } from "@/components/motion/motion-provider";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  display: "swap",
-});
+const body = Atkinson_Hyperlegible_Next({ subsets: ["latin"], variable: "--font-body", display: "swap", adjustFontFallback: false, fallback: ["system-ui", "sans-serif"] });
+const display = Fraunces({ subsets: ["latin"], variable: "--font-display-face", display: "swap", axes: ["opsz", "SOFT"] });
 
 export const metadata: Metadata = {
   title: "AdaptED — One lesson. Every learner.",
   description:
-    "Transform educational content for dyslexia, ADHD, auditory processing, and autism structure—powered by Gemini with local fallback.",
+    "AdaptED helps teachers turn one assignment into accessible versions for students with dyslexia, ADHD, auditory processing differences, and autism — keeping the learning goals intact and showing exactly what changed and why.",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#fbf7ee" },
+    { media: "(prefers-color-scheme: dark)", color: "#1b1e28" },
+  ],
+};
+
+/** Applies saved theme + calm mode before paint (no flash, no motion surprise). */
+const bootScript = `(function(){try{var d=document.documentElement;var t=localStorage.getItem('adapted-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}d.dataset.theme=t;var c=localStorage.getItem('adapted-calm');if(c===null){c=matchMedia('(prefers-reduced-motion: reduce)').matches?'true':'false'}d.dataset.calm=c}catch(e){}})();`;
+
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${inter.variable} h-full`} suppressHydrationWarning>
-      <body
-        className="min-h-full flex flex-col font-sans antialiased"
-        suppressHydrationWarning
-      >
-        {children}
+    <html lang="en" className={`${body.variable} ${display.variable}`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: bootScript }} />
+      </head>
+      <body suppressHydrationWarning>
+        <MotionProvider>{children}</MotionProvider>
       </body>
     </html>
   );
