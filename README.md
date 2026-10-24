@@ -42,7 +42,8 @@ npm run lint
 npm run build
 npm run a11y      # axe-core WCAG 2.2 AA audit (needs `npm start` on :3100)
 npm run audit:ui -- <outDir>   # 4 breakpoints: overflow, tap targets, text size, headings, axe, console errors
-npm run e2e:studio -- false    # 17 studio checks with motion on (pass `true` for calm mode), incl. create + language
+npm run e2e:studio -- false    # 18 studio checks with motion on (pass `true` for calm mode), incl. create + language
+npm run e2e:samples            # the 3 samples without AI: 12 pre-made versions with no server call, then 21 checks of the no-AI path
 ```
 
 Measured on a local production build (Lighthouse 12.8, October 2026): mobile (simulated slow 4G, 4× slower CPU) Performance 89–90, Accessibility 100, Best Practices 100, SEO 100; desktop 100 in all four.
