@@ -24,7 +24,7 @@ export function StudentView({ result }: { result: AdaptResult }) {
 
   return (
     <div>
-      <div data-ui className="sheet mb-4 flex flex-wrap items-center gap-x-5 gap-y-3 px-4 py-3" role="toolbar" aria-label="Display options">
+      <div data-ui className="panel mb-4 flex flex-wrap items-center gap-x-5 gap-y-3 px-4 py-3" role="toolbar" aria-label="Display options">
         <div className="flex items-center gap-1.5">
           <span className="text-sm font-semibold text-ink-2">Text</span>
           <button type="button" className="btn btn-ghost btn-sm size-11 !p-0" aria-label="Smaller text" disabled={prefs.size === 0} onClick={() => setPrefs((p) => ({ ...p, size: Math.max(0, p.size - 1) as DisplayPrefs["size"] }))}>
@@ -46,7 +46,7 @@ export function StudentView({ result }: { result: AdaptResult }) {
           {TINT_OPTIONS.map((t) => (
             <label key={t.v} className="grid size-11 cursor-pointer place-items-center" title={t.label}>
               <input type="radio" name="tint" className="peer sr-only" checked={prefs.tint === t.v} onChange={() => setPrefs((p) => ({ ...p, tint: t.v }))} />
-              <span className={cn("block size-7 rounded-full border-2 border-rule-strong peer-checked:border-ink peer-checked:ring-2 peer-checked:ring-ink peer-checked:ring-offset-2 peer-checked:ring-offset-sheet peer-focus-visible:outline peer-focus-visible:outline-3 peer-focus-visible:outline-brand", t.swatch)} />
+              <span className={cn("block size-7 rounded-full border-2 border-rule-strong peer-checked:border-ink peer-checked:ring-2 peer-checked:ring-ink peer-checked:ring-offset-2 peer-checked:ring-offset-paper peer-focus-visible:outline peer-focus-visible:outline-3 peer-focus-visible:outline-brand", t.swatch)} />
               <span className="sr-only">{t.label}</span>
             </label>
           ))}

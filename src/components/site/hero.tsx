@@ -7,10 +7,10 @@ import { AdaptedDocument } from "@/components/doc/adapted-document";
 import { OriginalDocument, barrierRanges } from "@/components/doc/original-document";
 import { CalmMagnet } from "@/components/motion/calm-magnet";
 import { useMotion } from "@/components/motion/motion-provider";
-import { detectBarriers, normalize } from "@/lib/adapt/analyze";
+import { computeMetrics, detectBarriers, normalize, originalReadingText } from "@/lib/adapt/analyze";
 import { SCIENCE } from "@/lib/adapt/curated/science";
+import { checkFidelity, readingText } from "@/lib/adapt/fidelity";
 import { NEEDS } from "@/lib/adapt/profile";
-import { getResearch } from "@/lib/adapt/research";
 import { SAMPLES } from "@/lib/adapt/samples";
 import { NEED_IDS, type NeedId } from "@/lib/adapt/types";
 import { OPEN_IN_STUDIO, type OpenInStudioDetail } from "@/lib/events";
@@ -35,11 +35,22 @@ function label(v: Version) {
   return v === "original" ? "Original" : NEEDS[v].label;
 }
 
+/** A before/after number pair, read aloud as "9.6 to 6.9". */
+function Change({ from, to }: { from: number; to: number }) {
+  return (
+    <span className="tnum font-bold whitespace-nowrap text-ink">
+      {from.toFixed(1)} <span aria-hidden>→</span>
+      <span className="sr-only">to</span> {to.toFixed(1)}
+    </span>
+  );
+}
+
 /**
- * First viewport (tasteskill blueprint "Fragment on a shaped stage"): the headline and one action
- * top-left; a flat highlighter-yellow stage, its corner cut on the chisel slant, opens like a pen
- * stroke and carries the real worksheet. Switching versions flies the key science words from where
- * they were to where they land: the vocabulary is kept, only the way in changes.
+ * First viewport: the headline and one action top-left; a flat highlighter-yellow stage, its corner
+ * cut on the chisel slant, opens like a pen stroke and carries the real worksheet in a dark app frame.
+ * Switching versions flies the key science words from where they were to where they land (the
+ * vocabulary is kept, only the way in changes), and the caption quotes what AdaptED's own code
+ * measured for that version: the same numbers the studio shows.
  */
 export function Hero() {
   const { calm } = useMotion();
@@ -107,44 +118,35 @@ export function Hero() {
     window.dispatchEvent(new CustomEvent<OpenInStudioDetail>(OPEN_IN_STUDIO, { detail: { need: active === "original" ? "dyslexia" : active } }));
   };
 
-  const changes = active === "original" ? [] : SCIENCE[active].changes.slice(0, 3);
+  // Measured lazily, for the version on screen only, so the first paint does no extra work.
+  const readout = useMemo(() => {
+    if (active === "original") return null;
+    const fidelity = checkFidelity(SAMPLE.text, SCIENCE[active]);
+    return {
+      before: computeMetrics(originalReadingText(SAMPLE.text)),
+      after: computeMetrics(readingText(SCIENCE[active])),
+      kept: fidelity.matchedQuestions,
+      total: fidelity.originalQuestions,
+    };
+  }, [active]);
 
-  const notes = (
-    <div aria-live="polite" className="max-w-[26rem] lg:min-h-[19rem]">
-      <p className="text-lg font-bold">The key words stay. The way in changes.</p>
-      {active === "original" ? (
-        <>
-          <p className="mt-4 text-ink-2">
-            {barriers.length} things in this grade {SAMPLE.grade} worksheet could get in the way:
-          </p>
-          <ul className="mt-3 space-y-2.5">
-            {barriers.slice(0, 3).map((b, i) => (
-              <li key={i} className="flex items-baseline gap-3">
-                <span aria-hidden className="bullet text-brand" />
-                <span>{b.issue}</span>
-              </li>
-            ))}
-          </ul>
-        </>
+  const caption = (
+    <div aria-live="polite" className="max-w-[30rem] lg:min-h-[10.5rem]">
+      <p className="font-bold">The key words stay. The way in changes.</p>
+      {readout && active !== "original" ? (
+        <p className={cn(`need-${active}`, "mt-2 text-ink-2")}>
+          <span className="font-bold text-[color:var(--need)]">{NEEDS[active].label}:</span> reading level <Change from={readout.before.gradeLevel} to={readout.after.gradeLevel} />, words per sentence <Change from={readout.before.avgSentenceLength} to={readout.after.avgSentenceLength} />,{" "}
+          <span className="tnum font-bold text-ink">
+            {readout.kept} of {readout.total}
+          </span>{" "}
+          questions kept.
+        </p>
       ) : (
-        <>
-          <p className={cn(`need-${active}`, "mt-4 text-ink-2")}>
-            <span className="font-bold text-[color:var(--need)]">{NEEDS[active].label}:</span> {NEEDS[active].tagline}
-          </p>
-          <ul className="mt-3 space-y-3">
-            {changes.map((c, i) => (
-              <li key={i} className={cn(`need-${active}`, "flex items-baseline gap-3")}>
-                <span aria-hidden className="bullet text-[color:var(--need)]" />
-                <span>
-                  <span className="font-bold">{c.title}</span>
-                  <span className="block text-sm text-ink-3">{getResearch(c.evidence)?.label}</span>
-                </span>
-              </li>
-            ))}
-          </ul>
-        </>
+        <p className="mt-2 text-ink-2">
+          A grade {SAMPLE.grade} science worksheet, as written. <span className="mark font-semibold">Highlighted</span>: {barriers.length} things that could get in the way.
+        </p>
       )}
-      <a href="#studio" onClick={openInStudio} className="btn btn-ghost btn-sm mt-6">
+      <a href="#studio" onClick={openInStudio} className="btn btn-ghost btn-sm mt-5">
         {active === "original" ? "Try it on this worksheet" : `Open the ${label(active)} version`} <ArrowRight className="size-4" aria-hidden />
       </a>
     </div>
@@ -154,7 +156,7 @@ export function Hero() {
     <section
       id="top"
       aria-labelledby="hero-heading"
-      className="field-blue relative overflow-hidden"
+      className="relative overflow-hidden"
       // Keyboard focus inside the hero ends the tour, so nothing changes under it.
       onFocus={(e) => playing && e.target.matches(":focus-visible") && setPlaying(false)}
     >
@@ -180,7 +182,7 @@ export function Hero() {
               </a>
             </CalmMagnet>
           </div>
-          <div className="mt-14 hidden lg:block">{notes}</div>
+          <div className="mt-14 hidden lg:block">{caption}</div>
         </div>
 
         {/* The stage: a flat yellow field cut on the chisel slant, bleeding off the right and bottom edges. */}
@@ -188,8 +190,9 @@ export function Hero() {
           <div aria-hidden className="chisel-start absolute inset-0 bg-yellow [--cut:4.5rem] lg:[--cut:9rem]" />
           {/* On large screens the worksheet is cropped by the section's bottom edge instead of setting its height. */}
           <div className="stage-settle relative px-4 pt-4 sm:px-8 sm:pt-8 lg:absolute lg:inset-0 lg:pt-14 lg:pr-0 lg:pl-14">
-            <div data-ui className="sheet relative h-[30rem] w-full overflow-hidden rounded-b-none sm:h-[34rem] lg:h-[40rem] lg:max-w-[42rem]">
-              <div className="flex items-center gap-2 bg-paper-2 p-1.5">
+            {/* A dark app frame: the version tabs, with the selected one joined to the paper below it. */}
+            <div data-ui className="relative flex h-[30rem] w-full flex-col overflow-hidden rounded-t-xl bg-surface sm:h-[34rem] lg:h-[40rem] lg:max-w-[42rem]">
+              <div className="flex items-end gap-2 px-2 pt-2">
                 <div role="tablist" aria-label="Version of the worksheet" className="flex min-w-0 flex-1 gap-1 overflow-x-auto">
                   {VERSIONS.map((v) => {
                     const on = v === active;
@@ -212,12 +215,16 @@ export function Hero() {
                             document.getElementById(`hero-tab-${next}`)?.focus();
                           }
                         }}
-                        className={cn(v !== "original" && `need-${v}`, "tab relative inline-flex shrink-0 items-center gap-2 !px-3 text-sm")}
+                        className={cn(
+                          v !== "original" && `need-${v}`,
+                          "relative inline-flex min-h-11 shrink-0 items-center gap-2 rounded-t-lg px-3.5 text-sm font-semibold transition-colors duration-200",
+                          on ? "bg-sheet text-sheet-ink" : "text-ink-2 hover:text-ink",
+                        )}
                       >
-                        <span aria-hidden className={cn("size-2 shrink-0 rounded-full", v === "original" ? "bg-[#0e2fa3]" : "bg-[color:var(--need)]")} />
+                        <span aria-hidden className={cn("size-2 shrink-0 rounded-full", v === "original" ? "bg-yellow" : "bg-[color:var(--need)]")} />
                         {label(v)}
                         {playing && on && (
-                          <span aria-hidden className="absolute inset-x-3 bottom-1 h-0.5 overflow-hidden rounded bg-sheet-ink/10">
+                          <span aria-hidden className="absolute inset-x-3 top-1.5 h-0.5 overflow-hidden rounded bg-sheet-ink/10">
                             <span key={active} className="block h-full origin-left animate-[grow_linear_forwards] bg-sheet-ink/50" style={{ animationDuration: `${CYCLE_MS}ms` }} />
                           </span>
                         )}
@@ -226,12 +233,12 @@ export function Hero() {
                   })}
                 </div>
                 {!calm && (
-                  <button type="button" onClick={() => setPlaying((p) => !p)} className="grid size-10 shrink-0 place-items-center rounded-md text-ink-2 transition-colors hover:bg-sheet hover:text-ink" aria-label={playing ? "Pause the tour" : "Play the tour"}>
+                  <button type="button" onClick={() => setPlaying((p) => !p)} className="mb-0.5 grid size-10 shrink-0 place-items-center rounded-md text-ink-2 transition-colors hover:bg-surface-3 hover:text-ink" aria-label={playing ? "Pause the tour" : "Play the tour"}>
                     {playing ? <Pause className="size-4" aria-hidden /> : <Play className="size-4" aria-hidden />}
                   </button>
                 )}
               </div>
-              <div id="hero-sheet" ref={sheetRef} role="tabpanel" aria-labelledby={`hero-tab-${active}`} className="relative h-full overflow-hidden" tabIndex={0}>
+              <div id="hero-sheet" ref={sheetRef} role="tabpanel" aria-labelledby={`hero-tab-${active}`} className="sheet relative min-h-0 flex-1 overflow-hidden rounded-none" tabIndex={0}>
                 <div data-version key={active}>
                   {active === "original" ? (
                     <div className="px-6 py-6 sm:px-9 sm:py-8">
@@ -248,7 +255,7 @@ export function Hero() {
           </div>
         </div>
 
-        <div className="py-10 lg:hidden">{notes}</div>
+        <div className="py-10 lg:hidden">{caption}</div>
       </div>
     </section>
   );

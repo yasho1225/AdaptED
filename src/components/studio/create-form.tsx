@@ -61,7 +61,7 @@ export function CreateForm({ onCreated, onError }: { onCreated: (r: CreateResult
       )}
       <div className="mt-2 flex flex-wrap gap-1.5" aria-label="Ideas">
         {IDEAS.map((t) => (
-          <button key={t} type="button" className="chip text-[0.82rem] text-ink-2 transition-colors hover:border-ink-3" onClick={() => set("topic", t)}>
+          <button key={t} type="button" className="chip text-[0.82rem] text-ink-2" onClick={() => set("topic", t)}>
             {t}
           </button>
         ))}
@@ -76,7 +76,7 @@ export function CreateForm({ onCreated, onError }: { onCreated: (r: CreateResult
               ["questions", "Questions only"],
             ] as const
           ).map(([v, label]) => (
-            <label key={v} className={cn("flex min-h-11 cursor-pointer items-center gap-2.5 rounded-lg border-2 px-3 py-2 text-sm font-semibold transition-colors", req.include === v ? "border-ink" : "border-rule hover:border-rule-strong")}>
+            <label key={v} className={cn("flex min-h-11 cursor-pointer items-center gap-2.5 rounded-lg border-2 px-3 py-2 text-sm font-semibold transition-colors", req.include === v ? "border-ink" : "border-transparent bg-paper-2 hover:border-rule-strong")}>
               <input type="radio" name={`${id}-include`} value={v} checked={req.include === v} onChange={() => set("include", v)} className="accent-[var(--ink)]" />
               {label}
             </label>

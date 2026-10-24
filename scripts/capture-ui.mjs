@@ -83,7 +83,7 @@ await p.evaluate(() => {
 });
 await p.waitForTimeout(800);
 const all = await p.evaluate(() => {
-  const els = [...document.querySelectorAll("#studio section[data-ui].sheet")].filter((e) => e.closest(".pt-6"));
+  const els = [...document.querySelectorAll("#studio section[data-ui]")].filter((e) => e.closest(".pt-6"));
   const rs = els.map((e) => e.getBoundingClientRect());
   return { x: Math.min(...rs.map((r) => r.left)) + scrollX, y: Math.min(...rs.map((r) => r.top)) + scrollY, r: Math.max(...rs.map((r) => r.right)) + scrollX };
 });

@@ -64,7 +64,7 @@ export function FindVisual({ play }: { play: boolean }) {
         <span className="tnum shrink-0 rounded-full bg-mark-strong px-2.5 py-0.5 font-bold text-sheet-ink">{shown.length} found in the reading</span>
       </div>
       <div className="relative px-5 pt-4 pb-2 sm:px-6">
-        <div aria-hidden className="scan pointer-events-none absolute inset-x-0 top-0 z-10 h-[3px] bg-[#0e2fa3] opacity-0" />
+        <div aria-hidden className="scan pointer-events-none absolute inset-x-0 top-0 z-10 h-[3px] bg-brand opacity-0" />
         <OriginalDocument text={text} barriers={barriers} className="line-clamp-[11] text-[0.95rem] text-ink-2" />
       </div>
       <ol className="space-y-1.5 border-t border-rule bg-paper/60 px-5 py-4 text-sm sm:px-6">
@@ -92,7 +92,7 @@ export function StudentVisual({ play }: { play: boolean }) {
   });
 
   return (
-    <div ref={ref} data-ui className="sheet p-5 sm:p-6">
+    <div ref={ref} data-ui className="panel p-5 sm:p-6">
       <p className="text-lg font-bold">Your student</p>
       <p className="mt-3 text-sm font-semibold text-ink-2">Needs help with</p>
       <ul className="mt-2 flex flex-wrap gap-2">
@@ -112,7 +112,7 @@ export function StudentVisual({ play }: { play: boolean }) {
       <p className="mt-5 text-sm font-semibold text-ink-2">Kinds of help</p>
       <ul className="mt-2 flex flex-wrap gap-2">
         {NEEDS[need].defaultSupports.map((s) => (
-          <li key={s} className="help-chip inline-flex items-center gap-1.5 rounded-md bg-ink px-3 py-1.5 text-sm font-semibold text-sheet">
+          <li key={s} className="help-chip inline-flex items-center gap-1.5 rounded-md bg-ink px-3 py-1.5 text-sm font-semibold text-paper">
             <Check className="size-3.5" strokeWidth={3} aria-hidden /> {SUPPORTS[s].label}
           </li>
         ))}
@@ -160,7 +160,7 @@ export function WriteVisual({ play }: { play: boolean }) {
       {cards.map((c, i) => (
         <div
           key={c.n}
-          className={cn(`need-${c.n}`, FAN[i], "fan-card sheet absolute top-2 left-[calc(50%-5.5rem)] flex h-[17rem] w-[11rem] flex-col overflow-hidden sm:left-[calc(50%-7.25rem)] sm:h-[22rem] sm:w-[14.5rem]")}
+          className={cn(`need-${c.n}`, FAN[i], "fan-card sheet absolute top-2 border border-rule-strong left-[calc(50%-5.5rem)] flex h-[17rem] w-[11rem] flex-col overflow-hidden sm:left-[calc(50%-7.25rem)] sm:h-[22rem] sm:w-[14.5rem]")}
           style={{ transformOrigin: "50% 100%", zIndex: i === 1 || i === 2 ? 2 : 1 }}
         >
           <p className="bg-[color:var(--need)] px-4 py-2 text-sm font-bold text-[color:var(--on-need)]">{NEEDS[c.n].label}</p>
@@ -212,7 +212,7 @@ export function CheckVisual({ play }: { play: boolean }) {
   });
 
   return (
-    <div ref={ref} data-ui className="sheet overflow-hidden">
+    <div ref={ref} data-ui className="panel overflow-hidden">
       <div className="border-b border-rule px-5 py-3 sm:px-6">
         <p className="font-bold">Checked by AdaptED&apos;s code, not by the AI</p>
         <p className="text-sm text-ink-3">The same grade {SAMPLE.grade} worksheet, all four versions</p>

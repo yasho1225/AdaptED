@@ -82,20 +82,21 @@ export function TransformView({ source, profile, result, loading, runKey }: Prop
 
   return (
     <div ref={root} className="grid gap-5 lg:grid-cols-2">
-      {/* Two panes of the same height, each scrolling on its own: original and new version read side by side. */}
-      <div data-ui className="sheet relative flex h-[70svh] min-h-[28rem] flex-col overflow-hidden lg:h-[min(50rem,calc(100svh-7rem))]">
-        <div className="flex items-center justify-between border-b border-rule px-5 py-3">
+      {/* Two frames of the same height, each scrolling on its own: original and new version read side by side.
+          The frame is dark (you operate it); the document in it is paper (a student reads it). */}
+      <div data-ui className="panel relative flex h-[70svh] min-h-[28rem] flex-col overflow-hidden lg:h-[min(50rem,calc(100svh-7rem))]">
+        <div className="flex items-center justify-between gap-3 px-5 py-3">
           <p className="label !text-ink">Original</p>
           <p className="text-sm text-ink-3">
-            <span className="mark font-semibold text-ink">Highlighted</span> = could get in the way
+            <span className="mark font-semibold">Highlighted</span> = could get in the way
           </p>
         </div>
-        <div className="relative min-h-0 flex-1 overflow-y-auto px-5 py-5 sm:px-7" data-lenis-prevent tabIndex={0} aria-label="Original assignment">
-          <div className="scan-line pointer-events-none absolute inset-x-0 top-0 z-10 h-[3px] bg-[#0e2fa3] opacity-0" aria-hidden />
+        <div className="sheet relative min-h-0 flex-1 overflow-y-auto rounded-none px-5 py-5 sm:px-7" data-lenis-prevent tabIndex={0} aria-label="Original assignment">
+          <div className="scan-line pointer-events-none absolute inset-x-0 top-0 z-10 h-[3px] bg-brand opacity-0" aria-hidden />
           <OriginalDocument text={source} barriers={barriers} need={need} activeBarrier={activeBarrier} className="text-[0.95rem] text-ink-2" />
         </div>
         {shownRanges.length > 0 && (
-          <div className="max-h-[40%] shrink-0 overflow-y-auto border-t border-rule bg-paper px-5 py-4 sm:px-7" data-lenis-prevent>
+          <div className="max-h-[40%] shrink-0 overflow-y-auto px-5 py-4 sm:px-7" data-lenis-prevent>
             <p className="text-sm font-bold">What could get in the way</p>
             <ol className="mt-2 space-y-2 text-sm">
               {shownRanges.map((r, i) => {
@@ -126,16 +127,17 @@ export function TransformView({ source, profile, result, loading, runKey }: Prop
         )}
       </div>
 
-      <div data-ui className={cn("sheet adapted-pane flex h-[70svh] min-h-[28rem] flex-col overflow-hidden lg:h-[min(50rem,calc(100svh-7rem))]", `need-${need}`)}>
-        <div className="flex items-center justify-between border-b border-rule bg-[color:var(--need-soft)] px-5 py-3">
-          <p className="label !text-[color:var(--need)]">New version for {needLabel}</p>
+      <div data-ui className={cn("panel adapted-pane flex h-[70svh] min-h-[28rem] flex-col overflow-hidden lg:h-[min(50rem,calc(100svh-7rem))]", `need-${need}`)}>
+        <div className="flex items-center gap-2.5 px-5 py-3">
+          <span aria-hidden className="size-2 shrink-0 rounded-full bg-[color:var(--need)]" />
+          <p className="label !text-ink">New version for {needLabel}</p>
         </div>
         {result && !loading ? (
-          <div className="min-h-0 flex-1 overflow-y-auto" data-lenis-prevent tabIndex={0} aria-label={`New version for ${needLabel}`}>
+          <div className="sheet min-h-0 flex-1 overflow-y-auto rounded-none" data-lenis-prevent tabIndex={0} aria-label={`New version for ${needLabel}`}>
             <AdaptedDocument assignment={result.assignment} need={need} needs={profile.needs} headingLevel={3} language={writtenIn(result)} />
           </div>
         ) : (
-          <div className="p-6 sm:p-8" aria-live="polite">
+          <div className="sheet min-h-0 flex-1 rounded-none p-6 sm:p-8" aria-live="polite">
             <ol className="space-y-3">
               {steps.map((s, i) => (
                 <li key={i} className="flex items-center gap-3">

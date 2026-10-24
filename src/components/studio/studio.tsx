@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowRight, Languages, RotateCcw, Wand2 } from "lucide-react";
-import { CalmMagnet } from "@/components/motion/calm-magnet";
 import { useMotion } from "@/components/motion/motion-provider";
 import { requestAdaptation } from "@/lib/adapt/client";
 import type { CreateRequest, CreateResult } from "@/lib/adapt/create";
@@ -137,37 +136,40 @@ export function Studio() {
   const untranslated = shown && shown.source !== "ai" && viewProfile.language !== "english";
 
   return (
-    <section id="studio" ref={sectionRef} aria-labelledby="studio-heading" className="field-blue relative scroll-mt-20 pt-12 pb-28 sm:pb-40">
+    <section id="studio" ref={sectionRef} aria-labelledby="studio-heading" className="relative scroll-mt-20 pt-12 pb-24 sm:pt-16 sm:pb-32">
       <div className="container-page">
         <div className="grid gap-x-10 gap-y-6 lg:grid-cols-12 lg:items-end">
           <h2 id="studio-heading" data-reveal className="t-head lg:col-span-5">
             Try it
           </h2>
           <p className="max-w-[46ch] text-ink-2 lg:col-span-7">
-            Bring an assignment, or have AI write a new one. Tell AdaptED about your student. See the new version, what changed, and why, in English or another language.
+            Bring an assignment or have AI write one, pick your student, and see the new version, what changed, and why.
           </p>
         </div>
 
         <div className="mt-14 grid gap-4 lg:grid-cols-2">
           <SourcePanel value={source} onChange={setSource} onCreated={onCreated} />
-          <ProfilePanel profile={profile} onChange={setProfile} />
+          {/* The action closes the student panel: it uses everything set above it. */}
+          <ProfilePanel
+            profile={profile}
+            onChange={setProfile}
+            action={
+              <div className="mt-auto pt-6">
+                <button type="button" className="btn btn-brand min-h-[3.75rem] w-full text-lg [--cut:1.2rem]" onClick={() => void run(source, profile, { scroll: true })} disabled={loading}>
+                  <Wand2 className="size-5" aria-hidden />
+                  {loading ? "Adapting…" : `Adapt for ${needLabel}`}
+                  <ArrowRight className="size-4" aria-hidden />
+                </button>
+                {stale && <p className="mt-3 text-center text-sm font-semibold text-warn">You made changes. Click the button again to update.</p>}
+                {error && (
+                  <p role="alert" className="mt-3 rounded-md bg-warn-soft px-4 py-3 text-center font-semibold text-warn">
+                    {error}
+                  </p>
+                )}
+              </div>
+            }
+          />
         </div>
-
-        <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-          <CalmMagnet>
-            <button type="button" className="btn btn-brand min-h-[3.75rem] px-9 text-lg [--cut:1.2rem]" onClick={() => void run(source, profile, { scroll: true })} disabled={loading}>
-              <Wand2 className="size-5" aria-hidden />
-              {loading ? "Adapting…" : `Adapt for ${needLabel}`}
-              <ArrowRight className="size-4" aria-hidden />
-            </button>
-          </CalmMagnet>
-          {stale && <p className="text-sm font-semibold text-warn">You made changes. Click the button again to update.</p>}
-        </div>
-        {error && (
-          <p role="alert" className="mx-auto mt-4 max-w-xl bg-warn-soft px-4 py-3 text-center font-semibold text-warn">
-            {error}
-          </p>
-        )}
 
         <div ref={resultRef} className="mt-20 scroll-mt-24 space-y-5" aria-live="polite" aria-busy={loading}>
           {ran && (
@@ -203,7 +205,7 @@ export function Studio() {
               <label className="flex items-center gap-2">
                 <Languages className="size-4 text-ink-2" aria-hidden />
                 <span className="font-semibold text-ink-2">Language:</span>
-                <select className="field on-paper !w-auto !py-1.5" value={viewProfile.language} disabled={loading} onChange={(e) => switchLanguage(e.target.value as OutputLanguage)}>
+                <select className="field !w-auto !py-1.5" value={viewProfile.language} disabled={loading} onChange={(e) => switchLanguage(e.target.value as OutputLanguage)}>
                   {LANGUAGES.map((l) => (
                     <option key={l.value} value={l.value}>
                       {l.label}

@@ -30,7 +30,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0E2FA3",
+  themeColor: "#070B1D",
 };
 
 /** Applies saved calm mode before paint (no flash, no motion surprise). */

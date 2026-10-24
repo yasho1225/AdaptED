@@ -6,10 +6,10 @@ export const alt = "AdaptED: One lesson. Every learner. A worksheet adapted for 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-const BLUE = "#0e2fa3";
-const NAVY = "#0a1b52";
+const CANVAS = "#070b1d";
+const NAVY = "#0a1028";
 const YELLOW = "#ffd43b";
-const PAPER = "#fefdf8";
+const PAPER = "#f6f7fb";
 
 const NEEDS: [string, string][] = [
   ["Dyslexia", "#006697"],
@@ -33,7 +33,7 @@ export default async function OpengraphImage() {
   const [display, regular, bold] = await Promise.all([font("BricolageGrotesque-CondensedExtraBold.ttf"), font("AtkinsonHyperlegibleNext-Regular.ttf"), font("AtkinsonHyperlegibleNext-Bold.ttf")]);
   return new ImageResponse(
     (
-      <div style={{ width: "100%", height: "100%", display: "flex", position: "relative", background: BLUE, color: "white", fontFamily: "Atkinson" }}>
+      <div style={{ width: "100%", height: "100%", display: "flex", position: "relative", background: CANVAS, color: "white", fontFamily: "Atkinson" }}>
         {/* A yellow slab cropped by the right and bottom edges, holding a real piece of the dyslexia version. */}
         <div style={{ position: "absolute", right: 0, bottom: 0, width: 560, height: 470, display: "flex" }}>
           <Chisel width={560} height={470} cut={150} color={YELLOW} start />

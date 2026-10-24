@@ -76,7 +76,7 @@ No accounts, no database, no analytics. Uploaded files are read in the browser. 
 
 ## Accessibility of the site itself
 
-Designed to WCAG 2.2 AA and audited with axe-core (0 violations at 1440, 1024, 768, and 390px). Keyboard operable, visible focus, semantic structure, text alternatives for icon cues, 44px touch targets, no text under 12px. **Calm mode** (and the OS reduced-motion setting) turns off smooth scrolling and all decorative motion, and swaps animated pictures for still ones. Body type is Atkinson Hyperlegible Next; headlines use Bricolage Grotesque. Design decisions are in [DESIGN.md](DESIGN.md).
+Designed to WCAG 2.2 AA and audited with axe-core (0 violations at 1440, 1024, 768, and 390px). Keyboard operable, visible focus, semantic structure, text alternatives for icon cues, 44px touch targets, no text under 12px. **Calm mode** (and the OS reduced-motion setting) turns off smooth scrolling and all decorative motion, and swaps animated pictures for still ones. Body type is Atkinson Hyperlegible Next; headlines use Bricolage Grotesque. Design decisions are in [DESIGN.md](DESIGN.md); the latest UI audit, and the before/after measurements of the redesign it led to, are in [docs/UI-AUDIT.md](docs/UI-AUDIT.md).
 
 ## Limitations
 

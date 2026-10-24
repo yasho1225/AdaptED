@@ -63,7 +63,7 @@ function DrawnCheck() {
 
 function Metric({ label, before, after, decimals = 0, suffix, note, done }: { label: string; before?: number; after: number; decimals?: number; suffix?: string; note?: string; done?: boolean }) {
   return (
-    <div className="min-w-0 px-5 py-4">
+    <div className="min-w-0 bg-paper px-4 py-4 sm:px-5">
       <dt className="text-sm font-bold text-ink-2">{label}</dt>
       <dd className="tnum mt-1 flex items-baseline gap-2 tnum text-xl font-bold">
         {before !== undefined && (
@@ -88,7 +88,7 @@ export function MetricsStrip({ result }: { result: AdaptResult }) {
   const { before, after } = result.metrics;
   const f = result.fidelity;
   return (
-    <dl data-ui className="sheet grid grid-cols-1 divide-y divide-rule sm:grid-cols-2 sm:divide-y-0 lg:grid-cols-4 lg:divide-x">
+    <dl data-ui className="grid grid-cols-2 gap-px overflow-hidden rounded-xl bg-rule lg:grid-cols-4">
       <Metric label="Reading level (grade)" before={before.gradeLevel} after={after.gradeLevel} decimals={1} note="An estimate" />
       <Metric label="Words per sentence" before={before.avgSentenceLength} after={after.avgSentenceLength} decimals={1} note="On average" />
       <Metric label="Questions kept" done={f.originalQuestions > 0 && f.missing.length === 0 && f.restored.length === 0} after={f.matchedQuestions} suffix={`of ${f.originalQuestions}`} note={f.restored.length ? `${f.restored.length} put back word for word` : "Checked by AdaptED"} />
@@ -149,7 +149,7 @@ export function TeacherPanel({ result }: { result: AdaptResult }) {
   const p = result.profile;
   return (
     <div className="grid gap-5 md:grid-cols-2">
-      <div data-ui className="sheet p-6">
+      <div data-ui className="panel p-6">
         <h4 className="font-sans text-base font-bold">Tips for giving this to your student</h4>
         {result.assignment.teacherNotes.length ? (
           <ul className="mt-3 space-y-3">
@@ -171,7 +171,7 @@ export function TeacherPanel({ result }: { result: AdaptResult }) {
           </ul>
         )}
       </div>
-      <div data-ui className="sheet p-6">
+      <div data-ui className="panel p-6">
         <h4 className="font-sans text-base font-bold">About this student</h4>
         <dl className="mt-3 space-y-2 text-[0.95rem]">
           <div>

@@ -2,10 +2,11 @@
 
 /*
  * AdaptED design system — see DESIGN.md.
- * One motif: the highlighter's chisel stroke (a slanted cut) shapes every stage, button, bullet and band.
- * One ground (blue), one ink (white), one accent (highlighter yellow); sections change field as hard cuts.
- * Type: Bricolage Grotesque for headings on the page, Atkinson Hyperlegible Next for everything people read.
- * Flat: tone steps instead of lines and shadows outside real product fragments ([data-ui]).
+ * Dark and consistent: one blue-black ground, a ladder of lighter surfaces for depth, soft-white ink,
+ * and one accent, highlighter yellow. Everything a student reads is paper (.sheet); everything a teacher
+ * operates is dark. One motif: the highlighter's chisel stroke (a slanted cut) shapes buttons, frames,
+ * bullets and the hero stage. Type: Bricolage Grotesque for page headings, Atkinson Hyperlegible Next for
+ * everything people read. Flat: depth comes from the surface ladder, never from shadows or glows.
  */
 
 @theme inline {
@@ -18,6 +19,10 @@
   --text-xs: 0.8125rem;
   --text-xs--line-height: 1.35;
 
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
   --color-paper: var(--paper);
   --color-paper-2: var(--paper-2);
   --color-sheet: var(--sheet);
@@ -38,10 +43,7 @@
   --color-warn: var(--warn);
   --color-warn-soft: var(--warn-soft);
 
-  --color-blue: #0e2fa3;
-  --color-navy: #0a1b52;
   --color-yellow: #ffd43b;
-  --color-field-paper: #f3f4f8;
 
   --color-dyslexia: var(--dyslexia);
   --color-dyslexia-soft: var(--dyslexia-soft);
@@ -70,17 +72,67 @@
 }
 
 /*
- * Light surfaces: worksheets and studio panels (.sheet, .on-paper, .force-light) and the paper field.
- * Dark ink on light ground; worksheets keep a warm paper per the BDA style guide.
+ * The page: a blue-black ground and a ladder of surfaces, each one notch lighter and one step closer.
+ * --paper / --paper-2 always mean "the ground here" and "one step up", so a component reads right
+ * on the canvas, inside a panel, or on paper.
  */
-:root,
+:root {
+  color-scheme: dark;
+  --canvas: #070b1d;
+  --surface: #0c1330;
+  --surface-2: #141d42;
+  --surface-3: #1d2856;
+  --paper: var(--surface);
+  --paper-2: var(--surface-2);
+  --sheet: #f6f7fb;
+  --ink: #f2f4fb;
+  --ink-2: #c5cce2;
+  --ink-3: #9aa4c6;
+  --rule: rgb(197 204 226 / 0.14);
+  --rule-strong: rgb(197 204 226 / 0.3);
+  --brand: #ffd43b;
+  --brand-ink: #ffd43b;
+  --brand-soft: rgb(255 212 59 / 0.14);
+  --focus: #ffd43b;
+  --on-brand: #0a1028;
+  --sheet-ink: #0f1d4a;
+  --mark: rgb(255 212 59 / 0.9);
+  --mark-strong: #ffd43b;
+  --ok: #5ed6a6;
+  --ok-soft: rgb(94 214 166 / 0.14);
+  --warn: #ffc97a;
+  --warn-soft: rgb(255 201 122 / 0.14);
+
+  /* Need accents for dark surfaces: 6:1 or better on every surface step. */
+  --dyslexia: #7cc4f2;
+  --dyslexia-soft: rgb(124 196 242 / 0.14);
+  --adhd: #ff9f66;
+  --adhd-soft: rgb(255 159 102 / 0.14);
+  --apd: #5ed6a6;
+  --apd-soft: rgb(94 214 166 / 0.14);
+  --autism: #bba2f5;
+  --autism-soft: rgb(187 162 245 / 0.14);
+  --on-need: #0a1028;
+}
+
+/* A band: a full-width section one step up the ladder, used to mark a chapter. */
+.band {
+  background-color: var(--surface);
+  --paper: var(--surface-2);
+  --paper-2: var(--surface-3);
+}
+
+/*
+ * Paper: worksheets and anything a student reads (.sheet, .on-paper, .force-light).
+ * Dark ink on a soft, cool off-white, per the BDA style guide's advice against stark white.
+ */
 .sheet,
 .on-paper,
-.force-light,
-.field-paper {
-  --paper: #f3f4f8;
-  --paper-2: #e8eaf1;
-  --sheet: #fefdf8;
+.force-light {
+  color-scheme: light;
+  --paper: #eef1f7;
+  --paper-2: #e3e7f0;
+  --sheet: #f6f7fb;
   --ink: #0f1d4a;
   --ink-2: #3a4675;
   --ink-3: #56618a;
@@ -90,6 +142,7 @@
   --brand-ink: #0e2fa3;
   --brand-soft: #e6ebfa;
   --focus: #0e2fa3;
+  --on-brand: #ffffff;
   --mark: rgb(255 212 59 / 0.62);
   --mark-strong: #ffd43b;
   --ok: #1d7a52;
@@ -106,80 +159,8 @@
   --apd-soft: oklch(0.95 0.035 165);
   --autism: oklch(0.47 0.15 305);
   --autism-soft: oklch(0.955 0.03 305);
-
   --on-need: #ffffff;
-  --on-brand: #ffffff;
-  --sheet-ink: #0f1d4a;
-}
-
-.sheet,
-.on-paper,
-.force-light,
-.field-paper {
   color: var(--ink);
-  color-scheme: light;
-}
-
-/* The page: blue ground, white ink, yellow accent. */
-:root,
-.field-blue,
-.field-navy {
-  color-scheme: dark;
-  --field: #0e2fa3;
-  --paper: #0e2fa3;
-  --paper-2: #2443ae;
-  --ink: #ffffff;
-  --ink-2: rgb(255 255 255 / 0.86);
-  --ink-3: rgb(255 255 255 / 0.76);
-  --rule: rgb(255 255 255 / 0.2);
-  --rule-strong: rgb(255 255 255 / 0.42);
-  --brand: #ffd43b;
-  --brand-ink: #ffd43b;
-  --brand-soft: rgb(255 255 255 / 0.1);
-  --focus: #ffd43b;
-  --on-brand: #0a1b52;
-  --sheet-ink: #0a1b52;
-  --mark: rgb(255 212 59 / 0.9);
-  --mark-strong: #ffd43b;
-  --ok: #9eebc8;
-  --ok-soft: rgb(158 235 200 / 0.15);
-  --warn: #ffd99a;
-  --warn-soft: rgb(255 217 154 / 0.15);
-  --dyslexia: #a9d4ff;
-  --dyslexia-soft: rgb(169 212 255 / 0.16);
-  --adhd: #ffc891;
-  --adhd-soft: rgb(255 200 145 / 0.16);
-  --apd: #9eebc8;
-  --apd-soft: rgb(158 235 200 / 0.16);
-  --autism: #e2c6ff;
-  --autism-soft: rgb(226 198 255 / 0.16);
-  --on-need: #0a1b52;
-}
-.field-navy {
-  --field: #0a1b52;
-  --paper: #0a1b52;
-  --paper-2: #16296b;
-}
-
-/* Section fields: hard cuts at section edges, never fades. */
-.field-blue { background-color: #0e2fa3; color: var(--ink); }
-.field-navy { background-color: #0a1b52; color: var(--ink); }
-.field-paper { background-color: #f3f4f8; --field: #f3f4f8; }
-.field-yellow {
-  --field: #ffd43b;
-  --paper: #ffd43b;
-  --paper-2: #f2c623;
-  --ink: #0a1b52;
-  --ink-2: rgb(10 27 82 / 0.86);
-  --ink-3: rgb(10 27 82 / 0.78);
-  --rule: rgb(10 27 82 / 0.2);
-  --brand: #0a1b52;
-  --brand-ink: #0a1b52;
-  --on-brand: #ffd43b;
-  --focus: #0a1b52;
-  background-color: #ffd43b;
-  color: var(--ink);
-  color-scheme: light;
 }
 
 @layer base {
@@ -194,32 +175,33 @@
     scroll-padding-top: 5rem;
   }
   body {
-    background-color: #0e2fa3;
+    background-color: var(--canvas);
     color: var(--ink);
     caret-color: var(--brand);
-    scrollbar-color: rgb(255 255 255 / 0.45) #0a1b52;
+    scrollbar-color: rgb(197 204 226 / 0.32) var(--canvas);
     font-family: var(--font-sans);
     font-size: 1.125rem;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
   }
+  /* Light type on a dark ground reads heavier, so page headings sit one weight lighter. */
   h1,
   h2,
   h3 {
     font-family: var(--font-display);
-    font-weight: 800;
+    font-weight: 700;
     font-stretch: 86%;
     letter-spacing: -0.012em;
     line-height: 0.95;
     text-wrap: balance;
   }
   h1 {
+    font-weight: 800;
     font-stretch: 80%;
     letter-spacing: -0.015em;
     line-height: 0.88;
   }
   h3 {
-    font-weight: 700;
     font-stretch: 94%;
     letter-spacing: -0.01em;
     line-height: 1.1;
@@ -234,11 +216,6 @@
   h4 {
     font-weight: 700;
   }
-  .sheet textarea,
-  .sheet input,
-  .on-paper input {
-    caret-color: var(--brand);
-  }
   a {
     text-underline-offset: 0.2em;
     text-decoration-thickness: 1.5px;
@@ -249,14 +226,21 @@
   p {
     text-wrap: pretty;
   }
+  ::placeholder {
+    color: var(--ink-3);
+    opacity: 1;
+  }
   ::selection {
     background: #ffd43b;
-    color: #0a1b52;
+    color: #0a1028;
   }
   :focus-visible {
     outline: 3px solid var(--focus);
     outline-offset: 3px;
     border-radius: 6px;
+  }
+  summary {
+    cursor: pointer;
   }
   /* Calm mode / reduced motion: the finished page, nothing travels. */
   [data-calm="true"] *,
@@ -290,8 +274,7 @@
     }
   }
 
-
-  /* Type steps (DESIGN.md: display, head, lead, body, small). */
+  /* Type steps (DESIGN.md): display, head, title, lead, body, small. */
   .t-display {
     font-size: clamp(4rem, 2.4rem + 6.4vw, 8.5rem);
   }
@@ -325,16 +308,27 @@
     font-weight: 700;
     color: var(--ink-2);
   }
+  /* A raised dark surface for controls: one notch up the ladder, no border, no shadow. */
+  .panel {
+    background-color: var(--paper);
+    border-radius: var(--radius-xl);
+    --paper-2: var(--surface-2);
+  }
+  .band .panel {
+    --paper-2: var(--surface-3);
+  }
+  /* Paper: a worksheet or anything a student reads. */
   .sheet {
     background-color: var(--sheet);
-    border: 1px solid var(--rule);
     border-radius: var(--radius-xl);
   }
   .ruled {
     background-image: repeating-linear-gradient(to bottom, transparent 0 31px, color-mix(in oklch, var(--rule) 70%, transparent) 31px 32px);
   }
+  /* Highlighter: always dark ink on yellow, on paper or on the dark ground. */
   .mark {
     background-color: var(--mark);
+    color: var(--sheet-ink);
     border-radius: 0.15em;
     padding: 0.05em 0.15em;
     box-decoration-break: clone;
@@ -347,8 +341,8 @@
   .btn {
     --cut: 0.95rem;
     --btn-bg: var(--ink);
-    --btn-bg-hover: color-mix(in oklch, var(--ink) 88%, var(--field, #0e2fa3));
-    --btn-ink: var(--field, #0e2fa3);
+    --btn-bg-hover: color-mix(in oklch, var(--ink) 86%, var(--paper));
+    --btn-ink: var(--paper);
     position: relative;
     display: inline-flex;
     align-items: center;
@@ -386,20 +380,20 @@
   }
   .btn-primary {
     --btn-bg: var(--ink);
-    --btn-ink: var(--sheet-on-ink, var(--paper));
+    --btn-ink: var(--paper);
   }
-  :where(.sheet, .on-paper, .force-light, .field-paper) .btn-primary {
+  :where(.sheet, .on-paper, .force-light) .btn-primary {
     --btn-ink: #ffffff;
     --btn-bg-hover: #26356b;
   }
   .btn-brand {
     --btn-bg: var(--brand);
-    --btn-bg-hover: color-mix(in oklch, var(--brand) 84%, white);
+    --btn-bg-hover: color-mix(in oklch, var(--brand) 82%, white);
     --btn-ink: var(--on-brand);
   }
   .btn-ghost {
-    --btn-bg: color-mix(in oklch, var(--ink) 11%, transparent);
-    --btn-bg-hover: color-mix(in oklch, var(--ink) 18%, transparent);
+    --btn-bg: var(--paper-2);
+    --btn-bg-hover: color-mix(in oklch, var(--paper-2) 78%, var(--ink));
     --btn-ink: var(--ink);
   }
   .btn-sm {
@@ -408,12 +402,13 @@
     padding: 0.4rem 1.15rem;
     font-size: 0.875rem;
   }
+  /* Chips and fields are filled, a step up from their ground; the selected state is ink. */
   .chip {
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    border: 1px solid var(--rule-strong);
-    background: color-mix(in oklch, var(--ink) 5%, transparent);
+    border: 1px solid transparent;
+    background-color: var(--paper-2);
     color: var(--ink);
     border-radius: var(--radius-md);
     padding: 0.35rem 0.8rem;
@@ -422,16 +417,22 @@
     min-height: 2.5rem;
     transition: background-color var(--t-hover) ease, border-color var(--t-hover) ease, color var(--t-hover) ease, transform var(--t-press) var(--ease-out);
   }
+  @media (hover: hover) and (pointer: fine) {
+    .chip:hover:not([aria-pressed="true"]) {
+      background-color: color-mix(in oklch, var(--paper-2) 80%, var(--ink));
+    }
+  }
   .chip:active {
     transform: scale(0.97);
   }
   .field {
     width: 100%;
-    border: 1px solid var(--rule-strong);
-    background: var(--sheet);
+    border: 1px solid var(--rule);
+    background-color: var(--paper-2);
     border-radius: var(--radius-md);
     padding: 0.55rem 0.75rem;
     color: var(--ink);
+    transition: border-color var(--t-hover) ease;
   }
   .field:focus-visible {
     outline-offset: 1px;
@@ -450,9 +451,14 @@
     white-space: nowrap;
     transition: background-color var(--t-hover) ease, color var(--t-hover) ease;
   }
+  @media (hover: hover) and (pointer: fine) {
+    .tab:hover:not([aria-selected="true"]) {
+      color: var(--ink);
+    }
+  }
   .tab[aria-selected="true"] {
-    color: var(--sheet-ink);
-    background: var(--sheet);
+    background-color: var(--ink);
+    color: var(--paper);
   }
   /* Touch screens: every control is at least 44px tall. */
   @media (pointer: coarse) {
@@ -503,21 +509,6 @@ html[data-reveals="on"] [data-rise]:not([data-in]) {
 }
 @keyframes stage-settle {
   from { transform: translateY(18px) scale(1.04); }
-}
-
-/* Showcase plate: the shutter (tasteskill recipe), opened once when it enters. */
-html[data-reveals="on"] .shutter:not([data-in]) {
-  clip-path: inset(0 0 100% 0);
-}
-.shutter {
-  overflow: clip; /* the plate starts scaled up; keep it inside its frame (and off the page width) */
-  transition: clip-path 1100ms var(--ease-in-out);
-}
-.shutter > * {
-  transition: transform 1500ms var(--ease-expo);
-}
-html[data-reveals="on"] .shutter:not([data-in]) > * {
-  transform: scale(1.08);
 }
 
 /*
@@ -586,6 +577,11 @@ html[data-reveals="on"] .shutter:not([data-in]) > * {
 @keyframes check-pop {
   from { transform: scale(0.7); }
   to { transform: scale(1); }
+}
+
+/* Menus open from their bar: a short drop with opacity, never from nothing (Emil Kowalski). */
+@keyframes menu-in {
+  from { opacity: 0; transform: translateY(-8px); }
 }
 
 @keyframes grow {

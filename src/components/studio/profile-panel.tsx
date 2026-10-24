@@ -1,11 +1,11 @@
 "use client";
 
-import { Check, ChevronRight } from "lucide-react";
+import { Check, ChevronDown, ChevronRight } from "lucide-react";
 import { GRADES, LANGUAGES, NEEDS, SUPPORTS, SUPPORT_IDS, supportsForNeeds } from "@/lib/adapt/profile";
 import { NEED_IDS, type LearnerProfile, type NeedId, type SupportId } from "@/lib/adapt/types";
 import { cn } from "@/lib/utils";
 
-export function ProfilePanel({ profile, onChange }: { profile: LearnerProfile; onChange: (p: LearnerProfile) => void }) {
+export function ProfilePanel({ profile, onChange, action }: { profile: LearnerProfile; onChange: (p: LearnerProfile) => void; action?: React.ReactNode }) {
   const toggleNeed = (n: NeedId) => {
     const has = profile.needs.includes(n);
     if (has && profile.needs.length === 1) return;
@@ -19,9 +19,14 @@ export function ProfilePanel({ profile, onChange }: { profile: LearnerProfile; o
 
   const suggested = SUPPORT_IDS.filter((id) => SUPPORTS[id].needs.some((n) => profile.needs.includes(n)));
   const others = SUPPORT_IDS.filter((id) => !suggested.includes(id));
+  const summary = [
+    `${profile.supports.length} kind${profile.supports.length === 1 ? "" : "s"} of help on`,
+    profile.expectations === "accommodate" ? "same goals as the class" : "goals changed",
+    profile.notes?.trim() ? "a note added" : "",
+  ].filter(Boolean);
 
   return (
-    <div data-ui className="sheet flex h-full flex-col p-5 sm:p-6">
+    <div data-ui className="panel flex h-full flex-col p-5 sm:p-6">
       <div className="flex items-center gap-3">
         <span className="grid size-8 place-items-center rounded-full bg-ink text-sm font-bold text-paper" aria-hidden>
           2
@@ -42,8 +47,8 @@ export function ProfilePanel({ profile, onChange }: { profile: LearnerProfile; o
                 onClick={() => toggleNeed(n)}
                 className={cn(
                   `need-${n}`,
-                  "flex min-h-[4.5rem] flex-col items-start rounded-xl border-2 px-3 py-2.5 text-left transition-[border-color,background-color]",
-                  on ? "border-[color:var(--need)] bg-[color:var(--need-soft)]" : "border-rule hover:border-rule-strong",
+                  "flex min-h-[4.5rem] flex-col items-start rounded-xl border-2 px-3 py-2.5 text-left transition-[border-color,background-color] duration-200",
+                  on ? "border-[color:var(--need)] bg-[color:var(--need-soft)]" : "border-transparent bg-paper-2 hover:border-rule-strong",
                 )}
               >
                 <span className="flex w-full items-center justify-between gap-2 font-bold">
@@ -57,30 +62,6 @@ export function ProfilePanel({ profile, onChange }: { profile: LearnerProfile; o
             );
           })}
         </div>
-      </fieldset>
-
-      <fieldset className="mt-5">
-        <legend className="text-sm font-semibold text-ink-2">
-          Help to include <span className="font-normal text-ink-3">({profile.supports.length} on. Turn any of them off or on.)</span>
-        </legend>
-        <ul className="mt-2 flex flex-wrap gap-1.5">
-          {suggested.map((id) => (
-            <SupportChip key={id} id={id} on={profile.supports.includes(id)} onToggle={toggleSupport} />
-          ))}
-        </ul>
-        {others.length > 0 && (
-          <details className="group mt-2">
-            <summary className="flex min-h-11 cursor-pointer list-none items-center gap-1.5 text-sm font-semibold text-brand-ink [&::-webkit-details-marker]:hidden">
-              <ChevronRight className="size-4 transition-transform group-open:rotate-90" aria-hidden />
-              More kinds of help ({others.length})
-            </summary>
-            <ul className="mt-2 flex flex-wrap gap-1.5">
-              {others.map((id) => (
-                <SupportChip key={id} id={id} on={profile.supports.includes(id)} onToggle={toggleSupport} />
-              ))}
-            </ul>
-          </details>
-        )}
       </fieldset>
 
       <div className="mt-5 grid gap-3 sm:grid-cols-2">
@@ -107,36 +88,73 @@ export function ProfilePanel({ profile, onChange }: { profile: LearnerProfile; o
         </label>
       </div>
 
-      <fieldset className="mt-4">
-        <legend className="text-sm font-semibold text-ink-2">What should the student learn?</legend>
-        <div className="mt-1.5 grid gap-2 sm:grid-cols-2" role="radiogroup">
-          {(
-            [
-              ["accommodate", "The same as everyone (best)", "Same learning goals. Only the way in changes."],
-              ["modify", "Change the goals", "Only if the student's plan allows it. Some questions can become optional."],
-            ] as const
-          ).map(([v, label, help]) => (
-            <label key={v} className={cn("flex cursor-pointer gap-2.5 rounded-xl border-2 p-3", profile.expectations === v ? "border-ink" : "border-rule hover:border-rule-strong")}>
-              <input type="radio" name="expectations" value={v} checked={profile.expectations === v} onChange={() => onChange({ ...profile, expectations: v })} className="mt-1 accent-[var(--ink)]" />
-              <span>
-                <span className="block text-sm font-bold">{label}</span>
-                <span className="block text-xs leading-snug text-ink-2">{help}</span>
-              </span>
-            </label>
-          ))}
-        </div>
-      </fieldset>
+      {/* The finer settings fold away; the summary says what they are set to. */}
+      <details className="group/fine mt-5 border-t border-rule">
+        <summary className="flex min-h-14 list-none items-center justify-between gap-3 py-3 [&::-webkit-details-marker]:hidden">
+          <span>
+            <span className="block font-bold">Fine-tune</span>
+            <span className="block text-sm text-ink-3">{summary.join(" · ")}</span>
+          </span>
+          <ChevronDown className="size-5 shrink-0 text-ink-2 transition-transform duration-200 group-open/fine:rotate-180" aria-hidden />
+        </summary>
+        <div className="hidden pb-1 group-open/fine:block">
+          <fieldset className="mt-3">
+            <legend className="text-sm font-semibold text-ink-2">
+              Help to include <span className="font-normal text-ink-3">({profile.supports.length} on. Turn any of them off or on.)</span>
+            </legend>
+            <ul className="mt-2 flex flex-wrap gap-1.5">
+              {suggested.map((id) => (
+                <SupportChip key={id} id={id} on={profile.supports.includes(id)} onToggle={toggleSupport} />
+              ))}
+            </ul>
+            {others.length > 0 && (
+              <details className="group/more mt-2">
+                <summary className="flex min-h-11 cursor-pointer list-none items-center gap-1.5 text-sm font-semibold text-ink-2 hover:text-ink [&::-webkit-details-marker]:hidden">
+                  <ChevronRight className="size-4 transition-transform duration-200 group-open/more:rotate-90" aria-hidden />
+                  More kinds of help ({others.length})
+                </summary>
+                <ul className="mt-2 hidden flex-wrap gap-1.5 group-open/more:flex">
+                  {others.map((id) => (
+                    <SupportChip key={id} id={id} on={profile.supports.includes(id)} onToggle={toggleSupport} />
+                  ))}
+                </ul>
+              </details>
+            )}
+          </fieldset>
 
-      <label className="mt-4 block text-sm font-semibold text-ink-2">
-        Anything else that helps this student? <span className="font-normal text-ink-3">(optional)</span>
-        <textarea
-          className="field mt-1 min-h-[4.5rem] resize-y text-[0.95rem] font-normal"
-          maxLength={300}
-          value={profile.notes ?? ""}
-          onChange={(e) => onChange({ ...profile, notes: e.target.value })}
-          placeholder="For example: loves sports, likes typing more than writing. (No names or medical details.)"
-        />
-      </label>
+          <fieldset className="mt-4">
+            <legend className="text-sm font-semibold text-ink-2">What should the student learn?</legend>
+            <div className="mt-1.5 grid gap-2 sm:grid-cols-2" role="radiogroup">
+              {(
+                [
+                  ["accommodate", "The same as everyone (best)", "Same learning goals. Only the way in changes."],
+                  ["modify", "Change the goals", "Only if the student's plan allows it. Some questions can become optional."],
+                ] as const
+              ).map(([v, label, help]) => (
+                <label key={v} className={cn("flex cursor-pointer gap-2.5 rounded-xl border-2 p-3", profile.expectations === v ? "border-ink" : "border-transparent bg-paper-2 hover:border-rule-strong")}>
+                  <input type="radio" name="expectations" value={v} checked={profile.expectations === v} onChange={() => onChange({ ...profile, expectations: v })} className="mt-1 accent-[var(--ink)]" />
+                  <span>
+                    <span className="block text-sm font-bold">{label}</span>
+                    <span className="block text-xs leading-snug text-ink-2">{help}</span>
+                  </span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+
+          <label className="mt-4 block text-sm font-semibold text-ink-2">
+            Anything else that helps this student? <span className="font-normal text-ink-3">(optional)</span>
+            <textarea
+              className="field mt-1 min-h-[4.5rem] resize-y text-[0.95rem] font-normal"
+              maxLength={300}
+              value={profile.notes ?? ""}
+              onChange={(e) => onChange({ ...profile, notes: e.target.value })}
+              placeholder="For example: loves sports, likes typing more than writing. (No names or medical details.)"
+            />
+          </label>
+        </div>
+      </details>
+      {action}
     </div>
   );
 }
@@ -150,7 +168,7 @@ function SupportChip({ id, on, onToggle }: { id: SupportId; on: boolean; onToggl
         aria-pressed={on}
         onClick={() => onToggle(id)}
         title={s.description}
-        className={cn("chip transition-colors", on ? "border-ink bg-ink text-paper" : "text-ink-2 hover:border-ink-3")}
+        className={cn("chip", on ? "bg-ink text-paper" : "text-ink-2")}
       >
         {on && <Check className="size-3.5" strokeWidth={3} aria-hidden />}
         {s.label}

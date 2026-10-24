@@ -4,8 +4,9 @@ import { useEffect } from "react";
 import { useMotion } from "./motion-provider";
 
 /**
- * Section entrances. Elements marked [data-rise] (and the .shutter plate) arrive once, in reading
- * order within their [data-rise-group], when they are about 88% of the way up the viewport.
+ * Section entrances. Elements marked [data-rise] arrive once, in reading order within their
+ * [data-rise-group], when they are about 88% of the way up the viewport. Only mark elements that
+ * exist on first render: anything mounted later (a tab's panel) would stay hidden.
  *
  * The hidden state only applies after this runs (html[data-reveals="on"]), so a failed script
  * never leaves content invisible. Anything already on screen is shown at once, without motion,
@@ -20,7 +21,7 @@ export function Reveals() {
       root.removeAttribute("data-reveals");
       return;
     }
-    const els = [...document.querySelectorAll<HTMLElement>("[data-rise], .shutter")];
+    const els = [...document.querySelectorAll<HTMLElement>("[data-rise]")];
     const order = new Map<Element, number>();
     for (const el of els) {
       const group = el.closest("[data-rise-group]") ?? el.parentElement ?? root;

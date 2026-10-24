@@ -47,7 +47,7 @@ export function SourcePanel({ value, onChange, onCreated }: { value: string; onC
   };
 
   return (
-    <div data-ui className="sheet flex h-full flex-col p-5 sm:p-6">
+    <div data-ui className="panel flex h-full flex-col p-5 sm:p-6">
       <div className="flex items-center gap-3">
         <span className="grid size-8 place-items-center rounded-full bg-ink text-sm font-bold text-paper" aria-hidden>
           1
@@ -98,7 +98,7 @@ export function SourcePanel({ value, onChange, onCreated }: { value: string; onC
                 onChange(s.text);
                 setStatus({ kind: "idle" });
               }}
-              className={cn("chip text-left transition-colors", activeSample === s.id ? "border-ink bg-ink text-paper" : "hover:border-ink-3")}
+              className={cn("chip text-left", activeSample === s.id && "bg-ink text-paper")}
             >
               <span>{s.subject}</span>
               <span className={cn("text-xs font-normal", activeSample === s.id ? "text-paper/80" : "text-ink-3")}>Gr {s.grade}</span>

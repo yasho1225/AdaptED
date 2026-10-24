@@ -10,7 +10,7 @@ export function WhyPanel({ result }: { result: AdaptResult }) {
   return (
     <div className="grid gap-6 xl:grid-cols-[1fr_20rem]">
       <div>
-        <ol data-ui className="sheet divide-y divide-rule">
+        <ol data-ui className="panel divide-y divide-rule">
           {a.changes.map((c, i) => {
             const src = getResearch(c.evidence);
             const tone = c.need === "all" ? "" : `need-${c.need}`;
@@ -36,7 +36,7 @@ export function WhyPanel({ result }: { result: AdaptResult }) {
                 </div>
                 {src && (
                   <a href={src.url} target="_blank" rel="noreferrer" className="group text-sm md:col-span-4">
-                    <span className="flex items-center gap-1 font-bold text-brand-ink group-hover:underline">
+                    <span className="flex items-center gap-1 font-bold text-ink underline decoration-ink-3/60 underline-offset-[0.2em] group-hover:decoration-brand">
                       {src.label} <ArrowUpRight className="size-3.5" aria-hidden />
                       <span className="sr-only">(opens in a new tab)</span>
                     </span>
@@ -49,7 +49,7 @@ export function WhyPanel({ result }: { result: AdaptResult }) {
         </ol>
 
         {a.languageReplacements && a.languageReplacements.length > 0 && (
-          <div data-ui className="sheet mt-6 overflow-x-auto p-5">
+          <div data-ui className="panel mt-6 overflow-x-auto p-5">
             <h4 className="font-sans text-base font-bold">Sayings made clear</h4>
             <table className="mt-3 w-full min-w-[28rem] text-left text-[0.95rem]">
               <thead className="text-sm text-ink-3">
@@ -72,7 +72,7 @@ export function WhyPanel({ result }: { result: AdaptResult }) {
       </div>
 
       <aside className="space-y-4">
-        <div data-ui className="sheet p-5">
+        <div data-ui className="panel p-5">
           <h4 className="flex items-center gap-2 font-sans text-base font-bold">
             <ShieldCheck className="size-5 text-ok" aria-hidden /> Nothing was lost
           </h4>
@@ -87,7 +87,7 @@ export function WhyPanel({ result }: { result: AdaptResult }) {
           </dl>
         </div>
         {a.preserved.objectives.length > 0 && (
-          <div data-ui className="sheet p-5">
+          <div data-ui className="panel p-5">
             <h4 className="font-sans text-base font-bold">Same learning goals</h4>
             <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-ink-2">
               {a.preserved.objectives.map((o, i) => (

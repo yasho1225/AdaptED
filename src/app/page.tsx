@@ -3,7 +3,8 @@ import { Reveals } from "@/components/motion/reveals";
 import { Hero } from "@/components/site/hero";
 import { HowItWorks } from "@/components/site/how-it-works";
 import { Nav } from "@/components/site/nav";
-import { CloseCta, Footer, Principles, Research, Showcase, Stuck, VersionsMenu } from "@/components/site/sections";
+import { CloseCta, Footer, Principles, Research, Stuck } from "@/components/site/sections";
+import { Versions } from "@/components/site/versions";
 import { Studio } from "@/components/studio/studio";
 
 export default function Home() {
@@ -15,11 +16,10 @@ export default function Home() {
       <main>
         <Hero />
         <Stuck />
-        <Showcase />
         <Studio />
         <HowItWorks />
+        <Versions />
         <Research />
-        <VersionsMenu />
         <Principles />
         <CloseCta />
       </main>
