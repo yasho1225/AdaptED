@@ -41,7 +41,7 @@ export function FindVisual() {
         <OriginalDocument text={text} barriers={barriers} className="line-clamp-[11] text-[0.95rem] text-ink-2" />
       </div>
       <ol className="space-y-1.5 border-t border-rule bg-paper/60 px-5 py-4 text-sm sm:px-6">
-        {shown.slice(0, 3).map((b, i) => (
+        {shown.map((b, i) => (
           <li key={i} className="flex gap-2.5">
             <span className="tnum grid size-5 shrink-0 place-items-center rounded bg-mark-strong tnum text-xs font-bold text-sheet-ink">{i + 1}</span>
             <span className="text-ink-2">{b.issue}</span>

@@ -104,7 +104,7 @@ Eight sizes in all outside product fragments at 1440px (14, 16, 18, 24, 32, 77, 
 | Hero | canvas | Headline top-left; one sentence; one action; the measured caption (with "Open the … version" once a version is picked). The yellow chisel stage bleeds off the right edge, holding the worksheet in a dark app frame |
 | Where students get stuck | canvas | One row on wide screens: the heading on columns 1–6, the statement, a line of body text and the source on 7–12 |
 | Try it (studio) | canvas | Two dark panels (assignment, student); the Adapt button closes the student panel; results appear below once asked for |
-| How it works | band | One bar of four steps, each as wide as the step really takes; the bar is the step picker, with that step's working picture below |
+| How it works | band | The four steps as a list on columns 1–5, top-aligned with that step's working picture on 6–12. The open step is a yellow block holding its description; the others show their time and title. The row keeps the height of the tallest step, so choosing one never moves the page |
 | Built on research | canvas | Four version tabs; the chosen version's picture, purpose, and kinds of help, each with its source; one sentence naming the guidance; the seven studies behind one disclosure |
 | Close | band | The four versions on a canvas chisel slab, cropped by the section edges; the closing line and action. At least 34rem tall on wide screens, otherwise as tall as its content |
 | Footer | canvas | The logo and three links on one row; what AdaptED is and is not; accessibility notes |
