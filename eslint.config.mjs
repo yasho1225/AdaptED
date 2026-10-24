@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Third-party agent skills (see THIRD_PARTY_NOTICES.md); not part of the site.
+    ".claude/**",
   ]),
 ]);
 

@@ -94,6 +94,12 @@ AI coding assistants (including Anthropic's Claude) were used to help write and 
 
 See [docs/PRD.md](docs/PRD.md) and [docs/RESEARCH.md](docs/RESEARCH.md).
 
+### Assistant tooling
+
+`.claude/skills/` holds third-party "skills" (design and browser-testing guidance) that an AI coding assistant reads while working on this repository: taste-skill, Emil Kowalski's animation skills, Impeccable, Playwright CLI, and a library of reference DESIGN.md files. They are development aids only, they are not part of the website, and the build, lint and tests ignore them. Sources and licenses are in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+
+Impeccable is installed as a plain skill. Its plugin hooks (which would download and run a program from the network on every edit) and its sub-agent definitions are deliberately not included. Delete `.claude/skills/` to remove everything.
+
 ## Credits and licenses
 
 - The button "magnet" effect is the Magnet component from [React Bits](https://reactbits.dev) by David Haz (MIT + Commons Clause), in `src/components/vendor/magnet.tsx` with its notice.
