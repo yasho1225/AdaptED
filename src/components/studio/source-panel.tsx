@@ -127,7 +127,6 @@ export function SourcePanel({ value, onChange, onCreated }: { value: string; onC
       >
         <textarea
           id="assignment-text"
-          data-lenis-prevent
           value={value}
           maxLength={MAX}
           onChange={(e) => onChange(e.target.value)}

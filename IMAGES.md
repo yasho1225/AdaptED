@@ -12,9 +12,7 @@ The pictures in `public/images/` are crops of AdaptED's own interface, made by `
 
 | File | What it shows | Where it's used |
 | --- | --- | --- |
-| `thumb-dense.webp` | The original reading, with the parts that could get in the way highlighted | Inline in "Where students get stuck" |
-| `thumb-chunks.webp` | The same reading in the dyslexia version: a heading and a key-idea box | Inline in "Where students get stuck" |
-| `need-dyslexia.webp`, `need-adhd.webp`, `need-apd.webp`, `need-autism.webp` | The top of each adapted version | "What each version adds" |
+| `need-dyslexia.webp`, `need-adhd.webp`, `need-apd.webp`, `need-autism.webp` | The top of each adapted version | "Built on research", beside each version's kinds of help |
 | `versions.webp` | All four versions side by side, from the studio's comparison | The closing section |
 
 Re-run the script whenever the sample worksheet or the document design changes, so the pictures keep matching what the product makes.

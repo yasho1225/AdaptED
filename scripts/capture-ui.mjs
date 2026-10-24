@@ -32,11 +32,7 @@ const shot = async (name, clip) => {
 
 const sheet = () => rectOf("#hero-sheet");
 
-// 1. The dense original paragraph, with its barrier highlights.
-const doc = await rectOf("#hero-sheet .whitespace-pre-wrap");
-await shot("thumb-dense", { x: doc.x - 12, y: doc.y - 12, width: doc.w + 24, height: (doc.w + 24) / 1.6 });
-
-// 2–5. The top of each adapted version (title, intro, first part), and the dyslexia key idea.
+// 1–4. The top of each adapted version (title, intro, first part).
 // The sheet is narrowed first, so the text sets larger in the small picture on the page.
 const narrow = (on) =>
   p.evaluate((on) => {
@@ -50,27 +46,14 @@ for (const need of ["dyslexia", "adhd", "apd", "autism"]) {
   await p.waitForTimeout(400);
   const [art, box] = [await rectOf("#hero-sheet article"), await sheet()];
   await shot(`need-${need}`, { x: box.x, y: Math.max(box.y, art.y - 24), width: box.w, height: (box.w * 3) / 4 });
-  if (need === "dyslexia") {
-    await narrow(false);
-    await p.waitForTimeout(300);
-    // The hero's sheet crops its worksheet at a fixed height, so slide the part with the key idea up into view.
-    await p.evaluate(() => {
-      const art = document.querySelector("#hero-sheet article");
-      const part = [...art.querySelectorAll("section")].find((e) => e.textContent.includes("Photosynthesis turns light energy"));
-      const top = document.getElementById("hero-sheet").getBoundingClientRect().top;
-      art.style.transform = `translateY(${top + 24 - part.getBoundingClientRect().top}px)`;
-    });
-    const key = await rectOf("#hero-sheet article section", "Photosynthesis turns light energy");
-    await shot("thumb-chunks", { x: key.x - 12, y: key.y - 12, width: key.w + 24, height: (key.w + 24) / 1.6 });
-    await p.evaluate(() => (document.querySelector("#hero-sheet article").style.transform = ""));
-  }
   await narrow(false);
 }
 
-// 6. All four versions side by side (the studio's comparison), each column at its full length,
+// 5. All four versions side by side (the studio's comparison), each column at its full length,
 // with a margin of the studio's blue around them.
 const studio = p.locator("#studio");
 await studio.scrollIntoViewIfNeeded();
+await studio.getByRole("button", { name: /^Adapt for/ }).click();
 await studio.getByText("Here’s the new version").waitFor({ timeout: 15000 });
 await studio.getByRole("button", { name: "Compare all four" }).click();
 await studio.getByText("One lesson, four versions").waitFor();

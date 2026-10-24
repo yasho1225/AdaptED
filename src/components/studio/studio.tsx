@@ -18,11 +18,8 @@ import { StudentView } from "./student-view";
 import { TransformView } from "./transform-view";
 import { WhyPanel } from "./why-panel";
 
-/** Minimum time the Barrier Lens scan plays, so the transformation is visible even for instant results. */
-const MIN_SCAN_MS = 1500;
-
 export function Studio() {
-  const { calm, scrollToEl } = useMotion();
+  const { scrollToEl } = useMotion();
   const [source, setSource] = useState(SAMPLES[0].text);
   const [profile, setProfile] = useState<LearnerProfile>(defaultProfile("dyslexia"));
   const [result, setResult] = useState<AdaptResult | null>(null);
@@ -30,13 +27,10 @@ export function Studio() {
   const [loading, setLoading] = useState(false);
   const [liveBusy, setLiveBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [runKey, setRunKey] = useState(0);
   const [tab, setTab] = useState<ResultTab>("transform");
   const [comparing, setComparing] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
-  const sectionRef = useRef<HTMLElement>(null);
   const resultRef = useRef<HTMLDivElement>(null);
-  const autoRan = useRef(false);
 
   const run = useCallback(
     async (src: string, prof: LearnerProfile, opts: { live?: boolean; scroll?: boolean } = {}) => {
@@ -50,14 +44,11 @@ export function Studio() {
       setError(null);
       setLoading(true);
       setRan({ source: src, profile: prof });
-      setRunKey((k) => k + 1);
       setTab("transform");
-      if (opts.scroll && resultRef.current) scrollToEl(resultRef.current);
-      const started = performance.now();
+      // Scroll once the result area has rendered, since it only takes space when there is a result.
+      if (opts.scroll) requestAnimationFrame(() => requestAnimationFrame(() => resultRef.current && scrollToEl(resultRef.current)));
       try {
         const r = await requestAdaptation(src, prof, { signal: controller.signal, live: opts.live });
-        const wait = calm ? 0 : Math.max(0, MIN_SCAN_MS - (performance.now() - started));
-        if (wait) await new Promise((res) => setTimeout(res, wait));
         if (controller.signal.aborted) return;
         setResult(r);
       } catch (e) {
@@ -67,32 +58,14 @@ export function Studio() {
         if (!controller.signal.aborted) setLoading(false);
       }
     },
-    [calm, scrollToEl],
+    [scrollToEl],
   );
-
-  // Play the first transformation when the studio scrolls into view.
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !autoRan.current) {
-          autoRan.current = true;
-          void run(SAMPLES[0].text, defaultProfile("dyslexia"));
-        }
-      },
-      { threshold: 0.15 },
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, [run]);
 
   // The hero's "Open the … version" button: load its worksheet, pick that need, and show the result.
   useEffect(() => {
     const open = (e: Event) => {
       const { need, compare } = (e as CustomEvent<OpenInStudioDetail>).detail;
       const p = defaultProfile(need);
-      autoRan.current = true;
       setComparing(!!compare);
       setSource(SAMPLES[0].text);
       setProfile(p);
@@ -124,7 +97,6 @@ export function Studio() {
   // A new assignment from "Create one with AI": load it, match the grade, and adapt it right away.
   // A starter outline (no AI) needs the teacher's reading first, so it waits for the Adapt button.
   const onCreated = (r: CreateResult, req: CreateRequest) => {
-    autoRan.current = true;
     const p = { ...profile, grade: req.grade };
     setSource(r.text);
     setProfile(p);
@@ -136,10 +108,10 @@ export function Studio() {
   const untranslated = shown && shown.source !== "ai" && viewProfile.language !== "english";
 
   return (
-    <section id="studio" ref={sectionRef} aria-labelledby="studio-heading" className="relative scroll-mt-20 pt-12 pb-24 sm:pt-16 sm:pb-32">
+    <section id="studio" aria-labelledby="studio-heading" className="relative pt-12 pb-24 sm:pt-16 sm:pb-32">
       <div className="container-page">
         <div className="grid gap-x-10 gap-y-6 lg:grid-cols-12 lg:items-end">
-          <h2 id="studio-heading" data-reveal className="t-head lg:col-span-5">
+          <h2 id="studio-heading" className="t-head lg:col-span-5">
             Try it
           </h2>
           <p className="max-w-[46ch] text-ink-2 lg:col-span-7">
@@ -171,7 +143,7 @@ export function Studio() {
           />
         </div>
 
-        <div ref={resultRef} className="mt-20 scroll-mt-24 space-y-5" aria-live="polite" aria-busy={loading}>
+        <div ref={resultRef} className={cn("scroll-mt-24 space-y-5", ran && "mt-20")} aria-live="polite" aria-busy={loading}>
           {ran && (
             <>
               <div data-ui className="space-y-5">
@@ -227,7 +199,7 @@ export function Studio() {
 
               <div role="tabpanel" id={`panel-${tab}`} aria-labelledby={`tab-${tab}`}>
                 {tab === "transform" || !shown || loading ? (
-                  <TransformView source={viewSource} profile={viewProfile} result={loading ? null : shown} loading={loading} runKey={runKey} />
+                  <TransformView source={viewSource} profile={viewProfile} result={loading ? null : shown} loading={loading} />
                 ) : tab === "student" ? (
                   <StudentView result={shown} />
                 ) : tab === "why" ? (

@@ -1,5 +1,5 @@
 // Usage: node scripts/e2e-studio.mjs [calm=true|false] — drives the studio end to end against `npm start` on :3100.
-// Checks: auto-run, quick switch to each need, compare all four, student view (text size, checklist tick),
+// Checks: nothing runs until asked, the Adapt button, quick switch to each need, compare all four, student view (text size, checklist tick),
 // what changed, teacher notes, copy, print, "Make it with AI now" fallback labelling, and hero → studio hand-off.
 import { chromium } from "playwright";
 
@@ -21,10 +21,13 @@ const check = (name, ok, detail = "") => results.push(`${ok ? "PASS" : "FAIL"}  
 await p.goto("http://localhost:3100", { waitUntil: "networkidle" });
 const studio = p.locator("#studio");
 
-// Auto-run when the studio comes into view.
+// Nothing runs on its own: the result appears when the teacher asks for it.
 await studio.scrollIntoViewIfNeeded();
+await p.waitForTimeout(1500);
+check("no result before the Adapt button", (await studio.getByText(/Here’s the new version|Making the new version/).count()) === 0);
+await studio.getByRole("button", { name: /^Adapt for/ }).click();
 await studio.getByText("Here’s the new version").waitFor({ timeout: 15000 });
-check("auto-run shows a result", true, await studio.getByText(/Pre-made example/).first().innerText());
+check("Adapt button shows a result", true, await studio.getByText(/Pre-made example/).first().innerText());
 
 // Quick switch through every need.
 for (const need of ["ADHD", "Auditory Processing", "Autism", "Dyslexia"]) {
@@ -93,7 +96,6 @@ check("create: fills the assignment box and labels where it came from", /^the wa
 // Hero → studio hand-off.
 await p.evaluate(() => scrollTo(0, 0));
 await p.waitForTimeout(600);
-if (calm === "false") await p.getByRole("button", { name: /Pause the tour|Play the tour/ }).click();
 await p.getByRole("tab", { name: "Autism" }).first().click();
 await p.getByRole("link", { name: "Open the Autism version" }).click();
 await studio.getByText("New version for Autism").waitFor({ timeout: 15000 });

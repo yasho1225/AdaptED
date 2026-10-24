@@ -37,8 +37,8 @@ const STEPS = [
   },
 ];
 
-/** True once the element has come into view. */
-function useSeen<T extends HTMLElement>(margin = "0px 0px -20% 0px") {
+/** True once the element has come within the given margin of the viewport. */
+function useSeen<T extends HTMLElement>(margin: string) {
   const ref = useRef<T>(null);
   const [seen, setSeen] = useState(false);
   useEffect(() => {
@@ -59,7 +59,6 @@ export function HowItWorks() {
   const [active, setActive] = useState(0);
   // The pictures run real analysis code; build them only when the section is about a screen away.
   const [sectionRef, near] = useSeen<HTMLElement>("100% 0px 100% 0px");
-  const [panelRef, seen] = useSeen<HTMLDivElement>();
   const step = STEPS[active];
   const Visual = step.Visual;
 
@@ -69,18 +68,18 @@ export function HowItWorks() {
   };
 
   return (
-    <section ref={sectionRef} id="how" aria-labelledby="how-heading" className="band scroll-mt-16 overflow-x-clip py-24 sm:py-32">
+    <section ref={sectionRef} id="how" aria-labelledby="how-heading" className="band overflow-x-clip py-24 sm:py-32">
       <div className="container-page">
-        <div data-rise-group className="grid gap-x-10 gap-y-6 lg:grid-cols-12 lg:items-end">
-          <h2 id="how-heading" data-reveal className="t-head lg:col-span-7">
+        <div className="grid gap-x-10 gap-y-6 lg:grid-cols-12 lg:items-end">
+          <h2 id="how-heading" className="t-head lg:col-span-7">
             AI writes. AdaptED checks.
           </h2>
-          <p data-rise className="max-w-[44ch] text-ink-2 lg:col-span-5">
+          <p className="max-w-[44ch] text-ink-2 lg:col-span-5">
             And you decide. AdaptED follows research, sets strict rules, and checks the work before you see it.
           </p>
         </div>
 
-        <div data-rise className="mt-14">
+        <div className="mt-14">
           <div role="tablist" aria-label="How AdaptED works, in four steps" className="flex flex-col gap-1.5 lg:flex-row">
             {STEPS.map((s, i) => {
               const on = i === active;
@@ -112,14 +111,14 @@ export function HowItWorks() {
             })}
           </div>
 
-          <div ref={panelRef} role="tabpanel" id="how-panel" aria-labelledby={`how-tab-${active}`} className="mt-10 grid gap-10 lg:grid-cols-12 lg:items-center">
+          <div role="tabpanel" id="how-panel" aria-labelledby={`how-tab-${active}`} className="mt-10 grid gap-10 lg:grid-cols-12 lg:items-center">
             <div className="lg:col-span-5">
               <h3 className="text-2xl sm:text-[2rem]">{step.title}</h3>
               <p className="mt-4 max-w-[44ch] text-lg leading-relaxed text-ink-2">{step.body}</p>
               {step.note && <p className="mt-3 max-w-[44ch] text-ink-3">{step.note}</p>}
             </div>
             <div aria-hidden className="min-h-[22rem] lg:col-span-7 lg:min-h-[27rem]">
-              {near && <Visual key={active} play={seen} />}
+              {near && <Visual />}
             </div>
           </div>
         </div>

@@ -14,10 +14,11 @@ async function page(viewport, { calm = true, theme = "light" } = {}) {
   return p;
 }
 
-// Desktop, calm: full page with studio auto-run
+// Desktop, calm: full page with a studio result
 let p = await page({ width: 1440, height: 900 });
 await p.locator("#studio").scrollIntoViewIfNeeded();
-await p.waitForTimeout(1500);
+await p.locator("#studio").getByRole("button", { name: /^Adapt for/ }).click();
+await p.locator("#studio").getByText("Here’s the new version").waitFor({ timeout: 15000 });
 await p.screenshot({ path: `${out}/desktop-full.png`, fullPage: true });
 await p.locator("#studio").screenshot({ path: `${out}/desktop-studio.png` });
 for (const tab of ["Student view", "What changed", "Teacher notes"]) {
@@ -50,7 +51,8 @@ for (const y of [350, 700, 1000]) {
 p = await page({ width: 390, height: 844 });
 await p.screenshot({ path: `${out}/mobile-hero.png` });
 await p.locator("#studio").scrollIntoViewIfNeeded();
-await p.waitForTimeout(1500);
+await p.locator("#studio").getByRole("button", { name: /^Adapt for/ }).click();
+await p.locator("#studio").getByText("Here’s the new version").waitFor({ timeout: 15000 });
 await p.screenshot({ path: `${out}/mobile-full.png`, fullPage: true });
 const overflow = await p.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
 console.log("mobile horizontal overflow px:", overflow);

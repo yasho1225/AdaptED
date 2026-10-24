@@ -6,7 +6,8 @@ await ctx.addInitScript(() => localStorage.setItem("adapted-calm", "true"));
 const p = await ctx.newPage();
 await p.goto("http://localhost:3100", { waitUntil: "networkidle" });
 await p.locator("#studio").scrollIntoViewIfNeeded();
-await p.waitForTimeout(1200);
+await p.locator("#studio").getByRole("button", { name: /^Adapt for/ }).click();
+await p.locator("#studio").getByText("Here’s the new version").waitFor({ timeout: 15000 });
 const out = await p.evaluate(() => {
   const res = [];
   for (const el of document.querySelectorAll("body *")) {

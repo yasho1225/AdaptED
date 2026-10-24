@@ -172,7 +172,8 @@
   html {
     -webkit-text-size-adjust: 100%;
     text-rendering: optimizeLegibility;
-    scroll-padding-top: 5rem;
+    /* The sticky bar's height, so a section linked from the nav starts right under it. */
+    scroll-padding-top: 4rem;
   }
   body {
     background-color: var(--canvas);
@@ -241,6 +242,12 @@
   }
   summary {
     cursor: pointer;
+  }
+  /* In-page links glide to their section. Calm mode and reduced motion jump. */
+  @media (prefers-reduced-motion: no-preference) {
+    html:not([data-calm="true"]) {
+      scroll-behavior: smooth;
+    }
   }
   /* Calm mode / reduced motion: the finished page, nothing travels. */
   [data-calm="true"] *,
@@ -480,22 +487,6 @@
   margin-right: calc(-1 * (max(0px, (100vw - 76rem) / 2) + var(--pad)));
 }
 
-/*
- * Entrances (reveals.tsx): parts of a section arrive in reading order, once, rising 24px.
- * Hidden only after the script has run (html[data-reveals]), so nothing stays invisible without it.
- */
-html[data-reveals="on"] [data-rise]:not([data-in]) {
-  opacity: 0;
-  transform: translateY(24px);
-}
-[data-rise] {
-  transition: opacity 700ms var(--ease-out), transform 900ms var(--ease-expo);
-  transition-delay: calc(var(--rise-i, 0) * 70ms);
-}
-[data-rise][data-instant] {
-  transition: none;
-}
-
 /* Signature move: the hero stage opens like a highlighter stroke from its slanted edge. */
 .stage-wipe {
   animation: stage-wipe 1100ms var(--ease-in-out) 260ms both;
@@ -511,19 +502,16 @@ html[data-reveals="on"] [data-rise]:not([data-in]) {
   from { transform: translateY(18px) scale(1.04); }
 }
 
-/*
- * Barrier highlights in worksheets: a flat highlighter fill drawn in from the left (GSAP tweens
- * --mark-size). An SVG fill rather than a gradient, so it stays one flat colour.
- */
+/* Barrier highlights in worksheets: an SVG fill rather than a gradient, so it stays one flat colour. */
 .hl-mark,
 .hl-under {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1' preserveAspectRatio='none'%3E%3Crect width='1' height='1' fill='%23FFD43B' fill-opacity='0.62'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  background-size: var(--mark-size, 100%) 100%;
+  background-size: 100% 100%;
 }
 .hl-under {
   background-position: 0 100%;
-  background-size: var(--mark-size, 100%) 38%;
+  background-size: 100% 38%;
 }
 
 /* Hero: key terms that fly between worksheet versions (see term-flight.ts). */
@@ -548,11 +536,6 @@ html[data-reveals="on"] [data-rise]:not([data-in]) {
   padding-bottom: 0.18em;
   margin-bottom: -0.18em;
 }
-/* Section headline reveal (heading-reveal.tsx): same room for descenders. */
-.rv-line-mask {
-  padding-bottom: 0.18em;
-  margin-bottom: -0.18em;
-}
 .hl-word {
   display: inline-block;
   animation: word-rise 900ms var(--ease-expo) both;
@@ -569,24 +552,9 @@ html[data-reveals="on"] [data-rise]:not([data-in]) {
   from { opacity: 0; transform: translateY(12px); }
 }
 
-@keyframes draw {
-  from { stroke-dashoffset: 1; }
-  to { stroke-dashoffset: 0; }
-}
-
-@keyframes check-pop {
-  from { transform: scale(0.7); }
-  to { transform: scale(1); }
-}
-
 /* Menus open from their bar: a short drop with opacity, never from nothing (Emil Kowalski). */
 @keyframes menu-in {
   from { opacity: 0; transform: translateY(-8px); }
-}
-
-@keyframes grow {
-  from { transform: scaleX(0); }
-  to { transform: scaleX(1); }
 }
 
 /* Need themes for the adapted document */

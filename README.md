@@ -66,7 +66,7 @@ src/lib/adapt/
   create.ts, create-server.ts   "create an assignment": request checks, model prompt, starter outline
 src/app/api/adapt/   POST endpoint (input limits, rate limiting)
 src/app/api/create/  POST endpoint for new assignments (same rate limiting)
-src/components/      studio (the tool), doc renderers, site sections, motion (GSAP + Lenis)
+src/components/      studio (the tool), doc renderers, site sections, calm mode
 docs/                PRD and research basis
 ```
 
@@ -102,8 +102,7 @@ Impeccable is installed as a plain skill. Its plugin hooks (which would download
 
 ## Credits and licenses
 
-- The button "magnet" effect is the Magnet component from [React Bits](https://reactbits.dev) by David Haz (MIT + Commons Clause), in `src/components/vendor/magnet.tsx` with its notice.
 - Fonts: Atkinson Hyperlegible Next (Braille Institute) and Bricolage Grotesque, both SIL Open Font License 1.1.
-- Animation by [GSAP](https://gsap.com) (standard no-charge license) and smooth scrolling by [Lenis](https://lenis.darkroom.engineering) (MIT).
+- The hero's key-word flight uses [GSAP](https://gsap.com) (standard no-charge license).
 
 Full texts and the dependency list: [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

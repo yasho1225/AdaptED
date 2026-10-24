@@ -1,11 +1,10 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useLayoutEffect, useMemo, useRef, useState } from "react";
 import gsap from "gsap";
-import { ArrowRight, Pause, Play } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { AdaptedDocument } from "@/components/doc/adapted-document";
 import { OriginalDocument, barrierRanges } from "@/components/doc/original-document";
-import { CalmMagnet } from "@/components/motion/calm-magnet";
 import { useMotion } from "@/components/motion/motion-provider";
 import { computeMetrics, detectBarriers, normalize, originalReadingText } from "@/lib/adapt/analyze";
 import { SCIENCE } from "@/lib/adapt/curated/science";
@@ -20,7 +19,6 @@ import { captureTerms, flyTerms, tagTerms, type TermSnapshot } from "./term-flig
 type Version = "original" | NeedId;
 const VERSIONS: Version[] = ["original", ...NEED_IDS];
 const SAMPLE = SAMPLES[0];
-const CYCLE_MS = 5200;
 const TITLE = SCIENCE.dyslexia.title;
 
 function Word({ i, children }: { i: number; children: React.ReactNode }) {
@@ -55,7 +53,6 @@ function Change({ from, to }: { from: number; to: number }) {
 export function Hero() {
   const { calm } = useMotion();
   const [active, setActive] = useState<Version>("original");
-  const [playing, setPlaying] = useState(false);
   const sheetRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const before = useRef<Map<string, TermSnapshot> | null>(null);
@@ -64,29 +61,12 @@ export function Hero() {
     return barrierRanges(normalize(SAMPLE.text).trim(), all).map((r) => all[r.index]);
   }, []);
 
-  // Auto-advance once through every version (WCAG 2.2.2: visible pause, stops on interaction, off in calm mode).
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setPlaying(!calm);
-  }, [calm]);
-
   const go = (v: Version) => {
     const doc = sheetRef.current?.querySelector<HTMLElement>("[data-version]");
     // Tag lazily, on the first switch, so hydration never repaints the sheet (it is the LCP element).
     before.current = !calm && doc ? (tagTerms(doc, TITLE), captureTerms(doc)) : null;
     setActive(v);
   };
-
-  useEffect(() => {
-    if (!playing) return;
-    const t = window.setTimeout(() => {
-      const i = VERSIONS.indexOf(active);
-      if (i === VERSIONS.length - 1) setPlaying(false);
-      else go(VERSIONS[i + 1]);
-    }, CYCLE_MS);
-    return () => window.clearTimeout(t);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [playing, active]);
 
   // Tag the key words in the version that just rendered, then fly them in from where they were.
   useLayoutEffect(() => {
@@ -107,14 +87,12 @@ export function Hero() {
   }, [active, calm]);
 
   const choose = (v: Version) => {
-    setPlaying(false);
     if (v !== active) go(v);
   };
 
   const openInStudio = (e: React.MouseEvent) => {
-    // The studio scrolls itself to the result; keep Lenis's anchor handler from scrolling to #studio instead.
+    // The studio scrolls itself to the result, so the link's own jump to #studio is skipped.
     e.preventDefault();
-    e.stopPropagation();
     window.dispatchEvent(new CustomEvent<OpenInStudioDetail>(OPEN_IN_STUDIO, { detail: { need: active === "original" ? "dyslexia" : active } }));
   };
 
@@ -153,13 +131,7 @@ export function Hero() {
   );
 
   return (
-    <section
-      id="top"
-      aria-labelledby="hero-heading"
-      className="relative overflow-hidden"
-      // Keyboard focus inside the hero ends the tour, so nothing changes under it.
-      onFocus={(e) => playing && e.target.matches(":focus-visible") && setPlaying(false)}
-    >
+    <section id="top" aria-labelledby="hero-heading" className="relative overflow-hidden">
       <div className="container-page grid lg:min-h-[max(46rem,calc(100svh-4rem))] lg:grid-cols-[minmax(0,38fr)_minmax(0,62fr)] lg:grid-rows-[auto_1fr] lg:gap-x-10">
         {/* Words rise out of their lines on first paint (pure CSS, so no flash before hydration); calm mode shows them still. */}
         <div className="pt-12 sm:pt-16 lg:col-span-2 lg:pt-20">
@@ -176,11 +148,9 @@ export function Hero() {
         <div className="pt-8 pb-10 lg:pb-16">
           <p className="hero-rise t-lead max-w-[34ch]">Paste in any assignment. Get a version your student can use, with the same goals and every change explained.</p>
           <div className="hero-rise mt-8" style={{ "--i": 1 } as React.CSSProperties}>
-            <CalmMagnet>
-              <a href="#studio" className="btn btn-brand">
-                Try it now <ArrowRight className="size-4" aria-hidden />
-              </a>
-            </CalmMagnet>
+            <a href="#studio" className="btn btn-brand">
+              Try it now <ArrowRight className="size-4" aria-hidden />
+            </a>
           </div>
           <div className="mt-14 hidden lg:block">{caption}</div>
         </div>
@@ -192,8 +162,8 @@ export function Hero() {
           <div className="stage-settle relative px-4 pt-4 sm:px-8 sm:pt-8 lg:absolute lg:inset-0 lg:pt-14 lg:pr-0 lg:pl-14">
             {/* A dark app frame: the version tabs, with the selected one joined to the paper below it. */}
             <div data-ui className="relative flex h-[30rem] w-full flex-col overflow-hidden rounded-t-xl bg-surface sm:h-[34rem] lg:h-[40rem] lg:max-w-[42rem]">
-              <div className="flex items-end gap-2 px-2 pt-2">
-                <div role="tablist" aria-label="Version of the worksheet" className="flex min-w-0 flex-1 gap-1 overflow-x-auto">
+              <div className="px-2 pt-2">
+                <div role="tablist" aria-label="Version of the worksheet" className="flex min-w-0 gap-1 overflow-x-auto">
                   {VERSIONS.map((v) => {
                     const on = v === active;
                     return (
@@ -217,26 +187,16 @@ export function Hero() {
                         }}
                         className={cn(
                           v !== "original" && `need-${v}`,
-                          "relative inline-flex min-h-11 shrink-0 items-center gap-2 rounded-t-lg px-3.5 text-sm font-semibold transition-colors duration-200",
+                          "inline-flex min-h-11 shrink-0 items-center gap-2 rounded-t-lg px-3.5 text-sm font-semibold transition-colors duration-200",
                           on ? "bg-sheet text-sheet-ink" : "text-ink-2 hover:text-ink",
                         )}
                       >
                         <span aria-hidden className={cn("size-2 shrink-0 rounded-full", v === "original" ? "bg-yellow" : "bg-[color:var(--need)]")} />
                         {label(v)}
-                        {playing && on && (
-                          <span aria-hidden className="absolute inset-x-3 top-1.5 h-0.5 overflow-hidden rounded bg-sheet-ink/10">
-                            <span key={active} className="block h-full origin-left animate-[grow_linear_forwards] bg-sheet-ink/50" style={{ animationDuration: `${CYCLE_MS}ms` }} />
-                          </span>
-                        )}
                       </button>
                     );
                   })}
                 </div>
-                {!calm && (
-                  <button type="button" onClick={() => setPlaying((p) => !p)} className="mb-0.5 grid size-10 shrink-0 place-items-center rounded-md text-ink-2 transition-colors hover:bg-surface-3 hover:text-ink" aria-label={playing ? "Pause the tour" : "Play the tour"}>
-                    {playing ? <Pause className="size-4" aria-hidden /> : <Play className="size-4" aria-hidden />}
-                  </button>
-                )}
               </div>
               <div id="hero-sheet" ref={sheetRef} role="tabpanel" aria-labelledby={`hero-tab-${active}`} className="sheet relative min-h-0 flex-1 overflow-hidden rounded-none" tabIndex={0}>
                 <div data-version key={active}>

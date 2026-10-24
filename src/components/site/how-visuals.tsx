@@ -1,11 +1,8 @@
 "use client";
 
-import { useMemo, useRef } from "react";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
+import { useMemo } from "react";
 import { Check, Lock } from "lucide-react";
 import { OriginalDocument, barrierRanges } from "@/components/doc/original-document";
-import { useMotion } from "@/components/motion/motion-provider";
 import { detectBarriers, normalize, parseAssignment } from "@/lib/adapt/analyze";
 import { SCIENCE } from "@/lib/adapt/curated/science";
 import { checkFidelity } from "@/lib/adapt/fidelity";
@@ -13,8 +10,6 @@ import { NEEDS, SUPPORTS } from "@/lib/adapt/profile";
 import { SAMPLES } from "@/lib/adapt/samples";
 import { NEED_IDS } from "@/lib/adapt/types";
 import { cn } from "@/lib/utils";
-
-gsap.registerPlugin(useGSAP);
 
 /*
  * The four "How it works" pictures. Each one is the product itself, built from the same
@@ -24,24 +19,9 @@ gsap.registerPlugin(useGSAP);
 
 const SAMPLE = SAMPLES[0];
 
-/** Plays a visual's entrance once, the first time it is shown. Calm mode: no entrance. */
-function useEntrance(scope: React.RefObject<HTMLElement | null>, play: boolean, build: (tl: gsap.core.Timeline) => void) {
-  const { calm } = useMotion();
-  const played = useRef(false);
-  useGSAP(
-    () => {
-      if (!play || calm || played.current) return;
-      played.current = true;
-      build(gsap.timeline({ defaults: { ease: "power3.out" } }));
-    },
-    { scope, dependencies: [play, calm] },
-  );
-}
-
 /* 1 · Find what's hard ------------------------------------------------ */
 
-export function FindVisual({ play }: { play: boolean }) {
-  const ref = useRef<HTMLDivElement>(null);
+export function FindVisual() {
   const { text, barriers, shown } = useMemo(() => {
     const p = parseAssignment(SAMPLE.text);
     const text = [p.title, ...p.passages].filter(Boolean).join("\n\n");
@@ -50,26 +30,19 @@ export function FindVisual({ play }: { play: boolean }) {
     return { text, barriers, shown };
   }, []);
 
-  useEntrance(ref, play, (tl) => {
-    tl.fromTo(".scan", { top: "0%", opacity: 1 }, { top: "100%", duration: 1.3, ease: "power1.inOut" })
-      .to(".scan", { opacity: 0, duration: 0.2 })
-      .fromTo(".barrier-mark", { "--mark-size": "0%" }, { "--mark-size": "100%", duration: 0.45, stagger: 0.12, ease: "power2.out" }, 0.2)
-      .from(".issue", { x: -12, opacity: 0, duration: 0.5, stagger: 0.1 }, 0.6);
-  });
 
   return (
-    <div ref={ref} data-ui className="sheet relative overflow-hidden">
+    <div data-ui className="sheet overflow-hidden">
       <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1.5 border-b border-rule px-5 py-3 text-sm">
         <span className="font-bold">Original · grade {SAMPLE.grade} science</span>
         <span className="tnum shrink-0 rounded-full bg-mark-strong px-2.5 py-0.5 font-bold text-sheet-ink">{shown.length} found in the reading</span>
       </div>
-      <div className="relative px-5 pt-4 pb-2 sm:px-6">
-        <div aria-hidden className="scan pointer-events-none absolute inset-x-0 top-0 z-10 h-[3px] bg-brand opacity-0" />
+      <div className="px-5 pt-4 pb-2 sm:px-6">
         <OriginalDocument text={text} barriers={barriers} className="line-clamp-[11] text-[0.95rem] text-ink-2" />
       </div>
       <ol className="space-y-1.5 border-t border-rule bg-paper/60 px-5 py-4 text-sm sm:px-6">
         {shown.slice(0, 3).map((b, i) => (
-          <li key={i} className="issue flex gap-2.5">
+          <li key={i} className="flex gap-2.5">
             <span className="tnum grid size-5 shrink-0 place-items-center rounded bg-mark-strong tnum text-xs font-bold text-sheet-ink">{i + 1}</span>
             <span className="text-ink-2">{b.issue}</span>
           </li>
@@ -81,18 +54,11 @@ export function FindVisual({ play }: { play: boolean }) {
 
 /* 2 · Learn about the student ---------------------------------------- */
 
-export function StudentVisual({ play }: { play: boolean }) {
-  const ref = useRef<HTMLDivElement>(null);
+export function StudentVisual() {
   const need = "dyslexia" as const;
-  useEntrance(ref, play, (tl) => {
-    tl.from(".need-pill", { y: 10, opacity: 0, duration: 0.4, stagger: 0.06 })
-      .fromTo(".need-pill.on", { scale: 1 }, { scale: 1.08, duration: 0.18, yoyo: true, repeat: 1, ease: "power1.inOut" })
-      .from(".help-chip", { scale: 0.85, opacity: 0, duration: 0.35, stagger: 0.07, ease: "back.out(2)" }, "-=0.1")
-      .from(".privacy", { opacity: 0, y: 8, duration: 0.4 }, "-=0.1");
-  });
 
   return (
-    <div ref={ref} data-ui className="panel p-5 sm:p-6">
+    <div data-ui className="panel p-5 sm:p-6">
       <p className="text-lg font-bold">Your student</p>
       <p className="mt-3 text-sm font-semibold text-ink-2">Needs help with</p>
       <ul className="mt-2 flex flex-wrap gap-2">
@@ -101,8 +67,8 @@ export function StudentVisual({ play }: { play: boolean }) {
             key={n}
             className={cn(
               `need-${n}`,
-              "need-pill rounded-md border px-3 py-1.5 text-sm font-bold",
-              n === need ? "on border-[color:var(--need)] bg-[color:var(--need)] text-[color:var(--on-need)]" : "border-rule-strong text-ink-2",
+              "rounded-md border px-3 py-1.5 text-sm font-bold",
+              n === need ? "border-[color:var(--need)] bg-[color:var(--need)] text-[color:var(--on-need)]" : "border-rule-strong text-ink-2",
             )}
           >
             {NEEDS[n].label}
@@ -112,14 +78,14 @@ export function StudentVisual({ play }: { play: boolean }) {
       <p className="mt-5 text-sm font-semibold text-ink-2">Kinds of help</p>
       <ul className="mt-2 flex flex-wrap gap-2">
         {NEEDS[need].defaultSupports.map((s) => (
-          <li key={s} className="help-chip inline-flex items-center gap-1.5 rounded-md bg-ink px-3 py-1.5 text-sm font-semibold text-paper">
+          <li key={s} className="inline-flex items-center gap-1.5 rounded-md bg-ink px-3 py-1.5 text-sm font-semibold text-paper">
             <Check className="size-3.5" strokeWidth={3} aria-hidden /> {SUPPORTS[s].label}
           </li>
         ))}
       </ul>
       <p className="mt-5 text-sm font-semibold text-ink-2">Learning goals</p>
       <p className="mt-1 font-bold">The same as the rest of the class</p>
-      <p className="privacy mt-6 flex items-center gap-2 border-t border-rule pt-4 text-sm text-ink-2">
+      <p className="mt-6 flex items-center gap-2 border-t border-rule pt-4 text-sm text-ink-2">
         <Lock className="size-4 shrink-0" aria-hidden /> No names. No medical details. Nothing is saved.
       </p>
     </div>
@@ -138,8 +104,7 @@ const FAN = [
 
 const plain = (s: string) => s.replace(/\*\*/g, "");
 
-export function WriteVisual({ play }: { play: boolean }) {
-  const ref = useRef<HTMLDivElement>(null);
+export function WriteVisual() {
   const cards = useMemo(
     () =>
       NEED_IDS.map((n) => {
@@ -150,17 +115,13 @@ export function WriteVisual({ play }: { play: boolean }) {
       }),
     [],
   );
-  useEntrance(ref, play, (tl) => {
-    // GSAP reads each card's resting fan transform from CSS and deals the cards out to it from one stack.
-    tl.from(".fan-card", { x: 0, y: 60, rotation: 0, opacity: 0, duration: 0.9, stagger: 0.08, ease: "expo.out" });
-  });
 
   return (
-    <div ref={ref} data-ui className="relative mx-auto h-[20rem] w-full max-w-[40rem] sm:h-[26rem]">
+    <div data-ui className="relative mx-auto h-[20rem] w-full max-w-[40rem] sm:h-[26rem]">
       {cards.map((c, i) => (
         <div
           key={c.n}
-          className={cn(`need-${c.n}`, FAN[i], "fan-card sheet absolute top-2 border border-rule-strong left-[calc(50%-5.5rem)] flex h-[17rem] w-[11rem] flex-col overflow-hidden sm:left-[calc(50%-7.25rem)] sm:h-[22rem] sm:w-[14.5rem]")}
+          className={cn(`need-${c.n}`, FAN[i], "sheet absolute top-2 border border-rule-strong left-[calc(50%-5.5rem)] flex h-[17rem] w-[11rem] flex-col overflow-hidden sm:left-[calc(50%-7.25rem)] sm:h-[22rem] sm:w-[14.5rem]")}
           style={{ transformOrigin: "50% 100%", zIndex: i === 1 || i === 2 ? 2 : 1 }}
         >
           <p className="bg-[color:var(--need)] px-4 py-2 text-sm font-bold text-[color:var(--on-need)]">{NEEDS[c.n].label}</p>
@@ -183,16 +144,15 @@ export function WriteVisual({ play }: { play: boolean }) {
 
 /* 4 · Check the work -------------------------------------------------- */
 
-function TickDraw() {
+function Tick() {
   return (
-    <svg viewBox="0 0 24 24" className="tick size-5 shrink-0 text-ok" aria-hidden>
-      <path d="M5 12.5l4.2 4.2L19 7.4" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" pathLength={1} strokeDasharray="1" />
+    <svg viewBox="0 0 24 24" className="size-5 shrink-0 text-ok" aria-hidden>
+      <path d="M5 12.5l4.2 4.2L19 7.4" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
 
-export function CheckVisual({ play }: { play: boolean }) {
-  const ref = useRef<HTMLDivElement>(null);
+export function CheckVisual() {
   const rows = useMemo(
     () =>
       NEED_IDS.map((n) => {
@@ -202,17 +162,9 @@ export function CheckVisual({ play }: { play: boolean }) {
       }),
     [],
   );
-  useEntrance(ref, play, (tl) => {
-    tl.from(".ledger-row", { opacity: 0, y: 10, duration: 0.4, stagger: 0.1 }).fromTo(
-      ".tick path",
-      { strokeDashoffset: 1 },
-      { strokeDashoffset: 0, duration: 0.35, stagger: 0.06, ease: "power2.out" },
-      0.25,
-    );
-  });
 
   return (
-    <div ref={ref} data-ui className="panel overflow-hidden">
+    <div data-ui className="panel overflow-hidden">
       <div className="border-b border-rule px-5 py-3 sm:px-6">
         <p className="font-bold">Checked by AdaptED&apos;s code, not by the AI</p>
         <p className="text-sm text-ink-3">The same grade {SAMPLE.grade} worksheet, all four versions</p>
@@ -228,7 +180,7 @@ export function CheckVisual({ play }: { play: boolean }) {
         </thead>
         <tbody>
           {rows.map(({ n, f, vocab }) => (
-            <tr key={n} className={cn(`need-${n}`, "ledger-row border-b border-rule last:border-0")}>
+            <tr key={n} className={cn(`need-${n}`, "border-b border-rule last:border-0")}>
               <th scope="row" className="px-5 py-3 font-bold sm:px-6">
                 <span className="flex items-center gap-2">
                   <span aria-hidden className="size-2.5 shrink-0 rounded-full bg-[color:var(--need)]" />
@@ -237,15 +189,15 @@ export function CheckVisual({ play }: { play: boolean }) {
               </th>
               <td className="px-2 py-3">
                 <span className="tnum flex items-center gap-1.5 tnum font-bold">
-                  {f.matchedQuestions}/{f.originalQuestions} {f.missing.length === 0 && <TickDraw />}
+                  {f.matchedQuestions}/{f.originalQuestions} {f.missing.length === 0 && <Tick />}
                 </span>
               </td>
               <td className="px-2 py-3">
-                <span className="flex items-center gap-1.5 font-bold">{f.choicesPreserved ? <>kept <TickDraw /></> : "missing"}</span>
+                <span className="flex items-center gap-1.5 font-bold">{f.choicesPreserved ? <>kept <Tick /></> : "missing"}</span>
               </td>
               <td className="px-2 py-3 pr-5 sm:pr-6">
                 <span className="tnum flex items-center gap-1.5 tnum font-bold">
-                  {f.vocabularyKept.length}/{vocab} {f.vocabularyDropped.length === 0 && <TickDraw />}
+                  {f.vocabularyKept.length}/{vocab} {f.vocabularyDropped.length === 0 && <Tick />}
                 </span>
               </td>
             </tr>

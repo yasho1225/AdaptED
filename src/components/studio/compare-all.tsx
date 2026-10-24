@@ -50,7 +50,7 @@ export function CompareAll({ source, base }: { source: string; base: LearnerProf
                     </li>
                   ))}
                 </ul>
-                <div className="sheet max-h-[34rem] overflow-y-auto rounded-none" data-lenis-prevent tabIndex={0} aria-label={`${NEEDS[n].label} adapted assignment, scrollable`}>
+                <div className="sheet max-h-[34rem] overflow-y-auto rounded-none" tabIndex={0} aria-label={`${NEEDS[n].label} adapted assignment, scrollable`}>
                   <AdaptedDocument assignment={slot.result.assignment} need={n} compact headingLevel={3} language={writtenIn(slot.result)} />
                 </div>
               </>

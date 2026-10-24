@@ -18,7 +18,8 @@ for (const [name, width, height] of VPS) {
   p.on("pageerror", (e) => errors.push(e.message));
   await p.goto("http://localhost:3100", { waitUntil: "networkidle" });
   await p.locator("#studio").scrollIntoViewIfNeeded();
-  await p.waitForTimeout(1500);
+  await p.locator("#studio").getByRole("button", { name: /^Adapt for/ }).click();
+  await p.locator("#studio").getByText("Here’s the new version").waitFor({ timeout: 15000 });
   await p.evaluate(() => scrollTo(0, 0));
   await p.screenshot({ path: `${out}/${name}-full.png`, fullPage: true });
   // Touch layouts must meet 44px (Apple/Google guidance); pointer layouts 36px (well above WCAG 2.5.8's 24px).

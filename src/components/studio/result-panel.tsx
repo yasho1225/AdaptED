@@ -52,11 +52,11 @@ export function SourceBadge({ result, onRunLive, liveBusy }: { result: AdaptResu
 }
 
 /** Hand-drawn check that strokes itself in once: a small moment of relief when nothing was lost. */
-function DrawnCheck() {
+function CheckMark() {
   return (
     <svg viewBox="0 0 24 24" className="size-6 shrink-0 self-center text-ok" aria-hidden>
       <circle cx="12" cy="12" r="10.5" fill="none" stroke="currentColor" strokeWidth="1.5" opacity="0.35" />
-      <path d="M7 12.5l3.2 3.2L17.2 8.6" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" pathLength={1} strokeDasharray="1" style={{ animation: "draw 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both" }} />
+      <path d="M7 12.5l3.2 3.2L17.2 8.6" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -76,7 +76,7 @@ function Metric({ label, before, after, decimals = 0, suffix, note, done }: { la
         )}
         <span>{after.toFixed(decimals)}</span>
         {suffix && <span className="font-sans text-sm font-bold text-ink-2">{suffix}</span>}
-        {done && <DrawnCheck />}
+        {done && <CheckMark />}
       </dd>
       {note && <dd className="mt-0.5 text-sm text-ink-3">{note}</dd>}
     </div>

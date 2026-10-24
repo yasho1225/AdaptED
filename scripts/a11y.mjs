@@ -10,7 +10,8 @@ for (const theme of ["blue"]) {
   const p = await ctx.newPage();
   await p.goto(base, { waitUntil: "networkidle" });
   await p.locator("#studio").scrollIntoViewIfNeeded();
-  await p.waitForTimeout(1500);
+  await p.locator("#studio").getByRole("button", { name: /^Adapt for/ }).click();
+  await p.locator("#studio").getByText("Here’s the new version").waitFor({ timeout: 15000 });
   const views = [["Before and after"], ["Student view"], ["What changed"], ["Teacher notes"]];
   for (const [tab] of views) {
     await p.locator("#studio").getByRole("tab", { name: tab }).click();

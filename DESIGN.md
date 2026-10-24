@@ -100,16 +100,14 @@ Eight sizes in all outside product fragments at 1440px (14, 16, 18, 24, 32, 77, 
 
 | Section | Ground | Composition |
 | --- | --- | --- |
-| Nav | canvas, 85% with blur | Logomark and wordmark; three links with an active-section bar; Calm mode; Try it. Phones: Try it and a menu |
+| Nav | canvas, 85% with blur | Logomark and wordmark; two links with an active-section bar; Calm mode; Try it. Phones: Try it and a menu |
 | Hero | canvas | Headline top-left; one sentence; one action; the measured caption. The yellow chisel stage bleeds off the right edge, holding the worksheet in a dark app frame |
-| Where students get stuck | canvas | Statement with two inline pictures, from column 6 |
-| Try it (studio) | canvas | Two dark panels (assignment, student); the Adapt button closes the student panel; results below |
+| Where students get stuck | canvas | One statement from column 6, a line of body text, the source |
+| Try it (studio) | canvas | Two dark panels (assignment, student); the Adapt button closes the student panel; results appear below once asked for |
 | How it works | band | One bar of four steps, each as wide as the step really takes; the bar is the step picker, with that step's working picture below |
-| What each version adds | canvas | Four tabs; the chosen version's picture, purpose, and kinds of help with sources |
-| Built on research | band | Six source tiles; the seven studies behind one disclosure |
-| What you can count on | canvas | Heading across the top, two columns of plain statements |
+| Built on research | canvas | Four version tabs; the chosen version's picture, purpose, and kinds of help, each with its source; one sentence naming the guidance; the seven studies behind one disclosure |
 | Close | band | The four versions on a canvas chisel slab, cropped by the section edges; the closing line and action |
-| Footer | canvas | The wordmark built from chisel blocks ("Adapt" in ink, "ED" in yellow); links; disclaimers |
+| Footer | canvas | The logo and three links on one row; what AdaptED is and is not; accessibility notes |
 
 ## Elevation & Depth
 
@@ -118,13 +116,13 @@ Flat. Depth comes from the surface ladder: each step lighter is one step closer.
 ## Shapes
 
 - **The chisel:** a parallelogram whose short sides slant at about 18° (horizontal offset ≈ 0.32 × height). Custom property `--cut`.
-- Buttons, picture frames, bullets, the hero stage and the footer blocks are chisels. Tiles are square. Panels and worksheets keep a 12px radius (they are the product, not the page).
+- Buttons, picture frames, bullets and the hero stage are chisels. Tiles are square. Panels and worksheets keep a 12px radius (they are the product, not the page).
 
 ## Components
 
 **Logo.** A logomark (a worksheet's three lines, the middle one on a yellow chisel stroke, on a `surface-3` tile; the same drawing as the favicon) and the wordmark "Adapt" + "ED", with ED in yellow.
 
-**Navigation.** Sticky, canvas at 85% with a 12px blur (the one blurred surface). Three links; the section on screen gets a 3px yellow bar and `aria-current="location"`. On phones the links move into a menu that opens below the bar (200ms, from 8px above), takes focus, and closes on Escape, on a tap outside, or when the screen widens.
+**Navigation.** Sticky, canvas at 85% with a 12px blur (the one blurred surface). Two links; the section on screen gets a 3px yellow bar and `aria-current="location"`. On phones the links move into a menu that opens below the bar (200ms, from 8px above), takes focus, and closes on Escape, on a tap outside, or when the screen widens.
 
 **Buttons.** Flat chisels, 48px tall (40px small, 44px on touch). Primary: yellow with `on-yellow` type. Neutral: ink with dark type. Quiet: one surface step up. Press `scale(0.97)` in 140ms; hover only on fine pointers; on keyboard focus the button squares up and shows a 3px yellow ring.
 
@@ -143,16 +141,18 @@ Flat. Depth comes from the surface ladder: each step lighter is one step closer.
 | Token | Value | Use |
 | --- | --- | --- |
 | `--ease-out` | `cubic-bezier(0.23, 1, 0.32, 1)` | Entrances, press, menus |
-| `--ease-expo` | `cubic-bezier(0.16, 1, 0.3, 1)` | Reveals of 800ms and longer |
+| `--ease-expo` | `cubic-bezier(0.16, 1, 0.3, 1)` | The hero headline and stage, once on load |
 | `--ease-in-out` | `cubic-bezier(0.77, 0, 0.175, 1)` | The stage wipe |
 | `--t-press` / `--t-hover` / `--t-ui` | 140 / 180 / 240ms | Press, colour hover, UI changes |
 
-- **Signature move:** the hero stage opens like a highlighter stroke, a clip-path wipe from its slanted edge, while the worksheet settles from a slight scale.
-- **The live move:** the key-word flight in the hero.
-- **Entrances:** a section's heading, intro and main block arrive in order, 70ms apart, rising 24px, once. Only content present on first render is marked; anything a tab mounts later appears at once.
-- **Feedback:** every control responds to press; hover only behind `(hover: hover) and (pointer: fine)`; UI changes stay under 300ms.
-- **Smooth scrolling:** Lenis at `lerp: 0.12`; a native scroll during a glide hands the scroll back to the browser.
-- **Calm mode** (and `prefers-reduced-motion`): the finished page; no travel, no smoothing, no autoplay.
+Motion is spent in one place, the hero, and nowhere else. The audience includes students and teachers who find movement distracting, so the rest of the page is still.
+
+- **Signature move:** on load, the hero headline rises out of its lines and the stage opens like a highlighter stroke, a clip-path wipe from its slanted edge. Once per visit.
+- **The live move:** when someone picks a version in the hero, the key words fly to their new places. Nothing changes until they choose; there is no autoplay.
+- **No scroll effects:** sections do not animate in, and scrolling is the browser's own. In-page links glide with native `scroll-behavior: smooth`.
+- **No waiting for show:** a result appears as soon as it is ready; nothing is held back to play an animation.
+- **Feedback:** every control responds to press; hover only behind `(hover: hover) and (pointer: fine)`; UI changes stay under 300ms; no overshoot or bounce.
+- **Calm mode** (and `prefers-reduced-motion`): the finished page; no travel, and in-page links jump.
 
 ## Do's and Don'ts
 

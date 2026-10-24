@@ -59,7 +59,7 @@ export const OriginalDocument = forwardRef<HTMLDivElement, Props>(function Origi
         key={`m${i}`}
         data-mark={r.index}
         className={cn(
-          "barrier-mark rounded-[0.15em] bg-transparent px-0.5 text-inherit [box-decoration-break:clone] [-webkit-box-decoration-break:clone]",
+          "rounded-[0.15em] bg-transparent px-0.5 text-inherit [box-decoration-break:clone] [-webkit-box-decoration-break:clone]",
           relevant ? "hl-mark" : "hl-under",
           activeBarrier === r.index && "outline outline-2 outline-offset-2 outline-[color:var(--mark-strong)]",
         )}
