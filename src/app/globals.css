@@ -409,7 +409,16 @@
     padding: 0.4rem 1.15rem;
     font-size: 0.875rem;
   }
-  /* Chips and fields are filled, a step up from their ground; the selected state is ink. */
+  /* Inside the product's own panels every control is a plain rectangle; the chisel stays on the one main action. */
+  [data-ui] .btn:not(.btn-brand) {
+    clip-path: none;
+    border-radius: var(--radius-md);
+    padding-inline: 1rem;
+  }
+  /*
+   * Chips, fields and choice cards are filled, a step up from their ground. Selected is the same
+   * everywhere: one more step up, with an outline (in the need's colour when the choice is a need).
+   */
   .chip {
     display: inline-flex;
     align-items: center;
@@ -429,8 +438,49 @@
       background-color: color-mix(in oklch, var(--paper-2) 80%, var(--ink));
     }
   }
+  .chip[aria-pressed="true"] {
+    background-color: color-mix(in oklch, var(--paper-2) 84%, var(--ink));
+    border-color: var(--ink-3);
+    color: var(--ink);
+  }
   .chip:active {
     transform: scale(0.97);
+  }
+  .option {
+    display: flex;
+    border: 2px solid transparent;
+    border-radius: var(--radius-md);
+    background-color: var(--paper-2);
+    text-align: left;
+    cursor: pointer;
+    transition: background-color var(--t-hover) ease, border-color var(--t-hover) ease;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .option:not([aria-pressed="true"]):not(:has(input:checked)):hover {
+      border-color: var(--rule-strong);
+    }
+  }
+  .option:is([aria-pressed="true"], :has(input:checked)) {
+    background-color: color-mix(in oklch, var(--paper-2) 86%, var(--ink));
+    border-color: var(--ink-3);
+  }
+  /* Radios drawn to match the square need boxes: an empty ring, then a ring with a dot. */
+  .option input[type="radio"] {
+    appearance: none;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    width: 1.125rem;
+    height: 1.125rem;
+    margin: 0;
+    padding: 2px;
+    border: 2px solid var(--rule-strong);
+    border-radius: 999px;
+    background-clip: content-box;
+    transition: border-color var(--t-hover) ease;
+  }
+  .option input[type="radio"]:checked {
+    border-color: var(--ink);
+    background-color: var(--ink);
   }
   .field {
     width: 100%;
@@ -439,7 +489,16 @@
     border-radius: var(--radius-md);
     padding: 0.55rem 0.75rem;
     color: var(--ink);
+    font-weight: 400;
+    /* Thin, with no track of its own, so Windows doesn't draw a dark stripe with arrows inside the field. */
+    scrollbar-width: thin;
+    scrollbar-color: var(--rule-strong) transparent;
     transition: border-color var(--t-hover) ease;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .field:hover {
+      border-color: var(--rule-strong);
+    }
   }
   .field:focus-visible {
     outline-offset: 1px;
@@ -464,8 +523,9 @@
     }
   }
   .tab[aria-selected="true"] {
-    background-color: var(--ink);
-    color: var(--paper);
+    background-color: color-mix(in oklch, var(--paper-2) 82%, var(--ink));
+    box-shadow: inset 0 0 0 1px var(--rule-strong);
+    color: var(--ink);
   }
   /* Touch screens: every control is at least 44px tall. */
   @media (pointer: coarse) {

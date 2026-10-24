@@ -48,14 +48,9 @@ export function SourcePanel({ value, onChange, onCreated }: { value: string; onC
 
   return (
     <div data-ui className="panel flex h-full flex-col p-5 sm:p-6">
-      <div className="flex items-center gap-3">
-        <span className="grid size-8 place-items-center rounded-full bg-ink text-sm font-bold text-paper" aria-hidden>
-          1
-        </span>
-        <h3 className="text-xl">Your assignment</h3>
-      </div>
+      <h3 className="text-xl">Your assignment</h3>
 
-      <div role="tablist" aria-label="How to start" className="mt-5 grid grid-cols-2 gap-1 rounded-lg bg-paper-2 p-1">
+      <div role="tablist" aria-label="How to start" className="mt-5 grid grid-cols-2 gap-1 rounded-xl bg-paper-2 p-1">
         {tabs.map(([m, label, Icon]) => (
           <button
             key={m}
@@ -98,10 +93,11 @@ export function SourcePanel({ value, onChange, onCreated }: { value: string; onC
                 onChange(s.text);
                 setStatus({ kind: "idle" });
               }}
-              className={cn("chip text-left", activeSample === s.id && "bg-ink text-paper")}
+              className="group chip text-left"
             >
               <span>{s.subject}</span>
-              <span className={cn("text-xs font-normal", activeSample === s.id ? "text-paper/80" : "text-ink-3")}>Gr {s.grade}</span>
+              <span aria-hidden className="text-xs font-normal text-ink-3 group-aria-pressed:text-ink-2">Gr {s.grade}</span>
+              <span className="sr-only">, grade {s.grade}</span>
             </button>
           ))}
         </div>
@@ -131,13 +127,13 @@ export function SourcePanel({ value, onChange, onCreated }: { value: string; onC
           maxLength={MAX}
           onChange={(e) => onChange(e.target.value)}
           placeholder={"Paste your assignment here: the directions, any reading, and the questions.\n\nYou can also drag a PDF or Word file here."}
-          className="field h-full min-h-[15rem] resize-y font-sans text-[0.95rem] leading-7"
+          className="field h-full min-h-[14rem] resize-y font-sans text-[0.95rem] leading-relaxed lg:min-h-[9rem]"
           aria-describedby="source-help source-status"
         />
         {!value && <FileText className="pointer-events-none absolute right-4 bottom-4 size-8 text-rule-strong" aria-hidden />}
       </div>
 
-      <div className="mt-2 flex flex-wrap items-start justify-between gap-2 text-sm">
+      <div className="mt-2 grid grid-cols-[1fr_auto] items-start gap-x-4 text-sm">
         <p id="source-help" className="flex items-start gap-1.5 text-ink-3">
           <ShieldCheck className="mt-0.5 size-4 shrink-0 text-ok" aria-hidden />
           Files open on your computer. Leave out student names. Emails and phone numbers are removed before anything is sent.

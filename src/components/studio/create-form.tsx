@@ -5,7 +5,6 @@ import { Loader2, Sparkles } from "lucide-react";
 import { requestCreate } from "@/lib/adapt/client";
 import { DEFAULT_CREATE, LEVELS, QUESTION_COUNTS, TOPIC_MAX, type CreateRequest, type CreateResult } from "@/lib/adapt/create";
 import { GRADES } from "@/lib/adapt/profile";
-import { cn } from "@/lib/utils";
 
 const IDEAS = ["The water cycle", "Equivalent fractions", "Causes of the American Revolution", "How volcanoes form"];
 
@@ -43,7 +42,7 @@ export function CreateForm({ onCreated, onError }: { onCreated: (r: CreateResult
       <input
         ref={topicRef}
         id={`${id}-topic`}
-        className="field mt-1.5 min-h-12 text-base"
+        className="field mt-2 min-h-12 text-base"
         value={req.topic}
         maxLength={TOPIC_MAX}
         placeholder="For example: how volcanoes form"
@@ -76,8 +75,8 @@ export function CreateForm({ onCreated, onError }: { onCreated: (r: CreateResult
               ["questions", "Questions only"],
             ] as const
           ).map(([v, label]) => (
-            <label key={v} className={cn("flex min-h-11 cursor-pointer items-center gap-2.5 rounded-lg border-2 px-3 py-2 text-sm font-semibold transition-colors", req.include === v ? "border-ink" : "border-transparent bg-paper-2 hover:border-rule-strong")}>
-              <input type="radio" name={`${id}-include`} value={v} checked={req.include === v} onChange={() => set("include", v)} className="accent-[var(--ink)]" />
+            <label key={v} className="option min-h-11 items-center gap-2.5 px-3 py-2 text-sm font-semibold">
+              <input type="radio" name={`${id}-include`} value={v} checked={req.include === v} onChange={() => set("include", v)} />
               {label}
             </label>
           ))}
@@ -87,7 +86,7 @@ export function CreateForm({ onCreated, onError }: { onCreated: (r: CreateResult
       <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
         <label className="text-sm font-semibold text-ink-2">
           Grade
-          <select className="field mt-1.5" value={req.grade} onChange={(e) => set("grade", e.target.value)}>
+          <select className="field mt-2" value={req.grade} onChange={(e) => set("grade", e.target.value)}>
             {GRADES.map((g) => (
               <option key={g} value={g}>
                 Grade {g}
@@ -97,7 +96,7 @@ export function CreateForm({ onCreated, onError }: { onCreated: (r: CreateResult
         </label>
         <label className="text-sm font-semibold text-ink-2">
           Questions
-          <select className="field mt-1.5" value={req.questions} onChange={(e) => set("questions", Number(e.target.value))}>
+          <select className="field mt-2" value={req.questions} onChange={(e) => set("questions", Number(e.target.value))}>
             {QUESTION_COUNTS.map((n) => (
               <option key={n} value={n}>
                 {n}
@@ -107,7 +106,7 @@ export function CreateForm({ onCreated, onError }: { onCreated: (r: CreateResult
         </label>
         <label className="col-span-2 text-sm font-semibold text-ink-2 sm:col-span-1">
           Level
-          <select className="field mt-1.5" value={req.level} onChange={(e) => set("level", e.target.value as CreateRequest["level"])}>
+          <select className="field mt-2" value={req.level} onChange={(e) => set("level", e.target.value as CreateRequest["level"])}>
             {LEVELS.map((l) => (
               <option key={l.value} value={l.value}>
                 {l.label}

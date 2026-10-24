@@ -27,12 +27,7 @@ export function ProfilePanel({ profile, onChange, action }: { profile: LearnerPr
 
   return (
     <div data-ui className="panel flex h-full flex-col p-5 sm:p-6">
-      <div className="flex items-center gap-3">
-        <span className="grid size-8 place-items-center rounded-full bg-ink text-sm font-bold text-paper" aria-hidden>
-          2
-        </span>
-        <h3 className="text-xl">Your student</h3>
-      </div>
+      <h3 className="text-xl">Your student</h3>
 
       <fieldset className="mt-5">
         <legend className="text-sm font-semibold text-ink-2">What does this student need? <span className="font-normal text-ink-3">(pick one or more)</span></legend>
@@ -45,19 +40,17 @@ export function ProfilePanel({ profile, onChange, action }: { profile: LearnerPr
                 type="button"
                 aria-pressed={on}
                 onClick={() => toggleNeed(n)}
-                className={cn(
-                  `need-${n}`,
-                  "flex min-h-[4.5rem] flex-col items-start rounded-xl border-2 px-3 py-2.5 text-left transition-[border-color,background-color] duration-200",
-                  on ? "border-[color:var(--need)] bg-[color:var(--need-soft)]" : "border-transparent bg-paper-2 hover:border-rule-strong",
-                )}
+                className={cn(`need-${n}`, "option min-h-[4.5rem] flex-col items-start gap-1 px-3.5 py-3", on && "border-[color:var(--need)] bg-[color:var(--need-soft)]")}
               >
-                <span className="flex w-full items-center justify-between gap-2 font-bold">
-                  <span className={on ? "text-[color:var(--need)]" : ""}>{NEEDS[n].label}</span>
-                  <span className={cn("grid size-5 shrink-0 place-items-center rounded-full border-2", on ? "border-[color:var(--need)] bg-[color:var(--need)] text-[color:var(--on-need)]" : "border-rule-strong")} aria-hidden>
-                    {on && <Check className="size-3" strokeWidth={3.5} />}
+                <span className="flex w-full items-start gap-2 text-base leading-tight font-semibold">
+                  <span aria-hidden className="mt-[0.4em] size-2 shrink-0 rounded-full bg-[color:var(--need)]" />
+                  {NEEDS[n].label}
+                  {/* A square box, because more than one need can be picked. */}
+                  <span className={cn("ml-auto grid size-5 shrink-0 place-items-center rounded-[5px] border-2", on ? "border-[color:var(--need)] bg-[color:var(--need)] text-[color:var(--on-need)]" : "border-rule-strong")} aria-hidden>
+                    {on && <Check className="size-3.5" strokeWidth={3.5} />}
                   </span>
                 </span>
-                <span className="mt-0.5 text-xs leading-snug text-ink-2">{NEEDS[n].tagline}</span>
+                <span className="text-xs leading-snug text-ink-2">{NEEDS[n].tagline}</span>
               </button>
             );
           })}
@@ -67,8 +60,8 @@ export function ProfilePanel({ profile, onChange, action }: { profile: LearnerPr
       <div className="mt-5 grid gap-3 sm:grid-cols-2">
         <label className="text-sm font-semibold text-ink-2">
           Grade
-          <select className="field mt-1" value={profile.grade ?? ""} onChange={(e) => onChange({ ...profile, grade: e.target.value || undefined })}>
-            <option value="">Figure it out from the assignment</option>
+          <select className="field mt-2" value={profile.grade ?? ""} onChange={(e) => onChange({ ...profile, grade: e.target.value || undefined })}>
+            <option value="">Same as the assignment</option>
             {GRADES.map((g) => (
               <option key={g} value={g}>
                 Grade {g}
@@ -78,7 +71,7 @@ export function ProfilePanel({ profile, onChange, action }: { profile: LearnerPr
         </label>
         <label className="text-sm font-semibold text-ink-2">
           Language for the student
-          <select className="field mt-1" value={profile.language} onChange={(e) => onChange({ ...profile, language: e.target.value as LearnerProfile["language"] })}>
+          <select className="field mt-2" value={profile.language} onChange={(e) => onChange({ ...profile, language: e.target.value as LearnerProfile["language"] })}>
             {LANGUAGES.map((l) => (
               <option key={l.value} value={l.value}>
                 {l.label}
@@ -131,8 +124,8 @@ export function ProfilePanel({ profile, onChange, action }: { profile: LearnerPr
                   ["modify", "Change the goals", "Only if the student's plan allows it. Some questions can become optional."],
                 ] as const
               ).map(([v, label, help]) => (
-                <label key={v} className={cn("flex cursor-pointer gap-2.5 rounded-xl border-2 p-3", profile.expectations === v ? "border-ink" : "border-transparent bg-paper-2 hover:border-rule-strong")}>
-                  <input type="radio" name="expectations" value={v} checked={profile.expectations === v} onChange={() => onChange({ ...profile, expectations: v })} className="mt-1 accent-[var(--ink)]" />
+                <label key={v} className="option items-start gap-2.5 p-3">
+                  <input type="radio" name="expectations" value={v} checked={profile.expectations === v} onChange={() => onChange({ ...profile, expectations: v })} className="mt-1" />
                   <span>
                     <span className="block text-sm font-bold">{label}</span>
                     <span className="block text-xs leading-snug text-ink-2">{help}</span>
@@ -145,7 +138,7 @@ export function ProfilePanel({ profile, onChange, action }: { profile: LearnerPr
           <label className="mt-4 block text-sm font-semibold text-ink-2">
             Anything else that helps this student? <span className="font-normal text-ink-3">(optional)</span>
             <textarea
-              className="field mt-1 min-h-[4.5rem] resize-y text-[0.95rem] font-normal"
+              className="field mt-2 min-h-[4.5rem] resize-y text-[0.95rem]"
               maxLength={300}
               value={profile.notes ?? ""}
               onChange={(e) => onChange({ ...profile, notes: e.target.value })}
@@ -168,7 +161,7 @@ function SupportChip({ id, on, onToggle }: { id: SupportId; on: boolean; onToggl
         aria-pressed={on}
         onClick={() => onToggle(id)}
         title={s.description}
-        className={cn("chip", on ? "bg-ink text-paper" : "text-ink-2")}
+        className={cn("chip", !on && "text-ink-2")}
       >
         {on && <Check className="size-3.5" strokeWidth={3} aria-hidden />}
         {s.label}

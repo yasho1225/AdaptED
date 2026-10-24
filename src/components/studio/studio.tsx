@@ -167,8 +167,9 @@ export function Studio() {
                       aria-pressed={on}
                       disabled={loading}
                       onClick={() => quickSwitch(n)}
-                      className={cn(`need-${n}`, "chip transition-colors", on ? "border-[color:var(--need)] bg-[color:var(--need)] text-[color:var(--on-need)]" : "hover:border-[color:var(--need)]")}
+                      className={cn(`need-${n}`, "chip", on ? "border-[color:var(--need)] bg-[color:var(--need-soft)]" : "text-ink-2")}
                     >
+                      <span aria-hidden className="size-2 shrink-0 rounded-full bg-[color:var(--need)]" />
                       {NEEDS[n].label}
                     </button>
                   );

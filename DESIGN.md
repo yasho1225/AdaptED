@@ -28,7 +28,8 @@ typography:
 rounded:
   panel: 12px
   field: 8px
-  button: chisel (no radius)
+  control-in-panel: 8px
+  button: chisel (no radius) on the page and for the main action
   tile: 0
 
 motion:
@@ -116,7 +117,7 @@ Flat. Depth comes from the surface ladder: each step lighter is one step closer.
 ## Shapes
 
 - **The chisel:** a parallelogram whose short sides slant at about 18° (horizontal offset ≈ 0.32 × height). Custom property `--cut`.
-- Buttons, picture frames, bullets and the hero stage are chisels. Tiles are square. Panels and worksheets keep a 12px radius (they are the product, not the page).
+- Page buttons, the main action, picture frames, bullets and the hero stage are chisels. Tiles are square. Panels and worksheets keep a 12px radius (they are the product, not the page), and every control inside a panel steps down to 8px.
 
 ## Components
 
@@ -124,15 +125,19 @@ Flat. Depth comes from the surface ladder: each step lighter is one step closer.
 
 **Navigation.** Sticky, canvas at 85% with a 12px blur (the one blurred surface). Two links; the section on screen gets a 3px yellow bar and `aria-current="location"`. On phones the links move into a menu that opens below the bar (200ms, from 8px above), takes focus, and closes on Escape, on a tap outside, or when the screen widens.
 
-**Buttons.** Flat chisels, 48px tall (40px small, 44px on touch). Primary: yellow with `on-yellow` type. Neutral: ink with dark type. Quiet: one surface step up. Press `scale(0.97)` in 140ms; hover only on fine pointers; on keyboard focus the button squares up and shows a 3px yellow ring.
+**Buttons.** Flat chisels on the page, 48px tall (40px small, 44px on touch). Primary: yellow with `on-yellow` type. Neutral: ink with dark type. Quiet: one surface step up. Inside the product's panels (`data-ui`) every button except the yellow main action is an 8px rectangle, the same shape as the fields and chips beside it, so the chisel marks only the one thing to press. Press `scale(0.97)` in 140ms; hover only on fine pointers; on keyboard focus a chisel squares up and shows a 3px yellow ring.
 
 **Panels.** `surface` on the canvas (`surface-2` on a band), 12px radius, no border. Never a panel inside a panel.
 
 **Document frames.** A panel whose header names the document (with the need dot) and whose body is paper. Used for the hero worksheet, before/after, the four-up comparison and the student view.
 
-**Tabs.** Text tabs on a `surface` rail; the selected tab is ink with dark type. In the hero frame the selected tab is paper, joined to the worksheet below it. Arrow keys move between tabs.
+**Selected, everywhere.** One look for every chosen thing: one more surface step up, with an outline. Never a white fill: white is for the one primary button in a region, and a white selected tab or chip reads as a button and out-shouts the content.
 
-**Chips and fields.** Filled one step up from their ground; a selected chip is ink with dark type and a check. Fields carry a quiet 1px line and a yellow focus ring.
+**Tabs.** Text tabs on a `surface` rail with 4px of padding, the rail 12px round and the tabs 8px; the selected tab lifts a step with a 1px `rule-strong` outline. In the hero frame the selected tab is paper, joined to the worksheet below it. Arrow keys move between tabs.
+
+**Chips and fields.** Filled one step up from their ground; a selected chip lifts a step and takes a 1px `ink-3` outline (and a check when it is an on/off setting). A need chip takes its need's colour as the outline, on its pale tint. Fields carry a quiet 1px line that strengthens on hover, normal-weight type, a thin scrollbar with no track of its own, and a yellow focus ring.
+
+**Choice cards** (`.option`). A need, or one of a few answers, shown as an 8px card one step up from the panel. The chosen card lifts and takes a 2px outline, in the need's colour for a need. A choice where several can be picked shows a square box; a choice of one shows a round radio, drawn to match (an empty ring, then a ring with a dot).
 
 **Disclosures.** A plain row with a bold label, a one-line summary of what is inside ("4 kinds of help on · same goals as the class"), and a chevron that turns in 200ms. Closed content is out of layout (`display: none`).
 

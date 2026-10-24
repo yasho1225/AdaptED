@@ -204,7 +204,7 @@ export function ResultTabs({ tab, onTab, onCompare, comparing }: { tab: ResultTa
   ];
   return (
     <div data-ui className="flex flex-wrap items-center justify-between gap-3">
-      <div role="tablist" aria-label="Result views" className="grid w-full grid-cols-2 gap-1 rounded-xl bg-paper-2 p-1 sm:inline-flex sm:w-auto sm:rounded-full">
+      <div role="tablist" aria-label="Result views" className="grid w-full grid-cols-2 gap-1 rounded-xl bg-paper-2 p-1 sm:inline-flex sm:w-auto">
         {tabs.map(([id, label]) => (
           <button
             key={id}
