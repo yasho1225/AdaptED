@@ -38,7 +38,7 @@ export function Research() {
   };
 
   return (
-    <section id="research" aria-labelledby="research-heading" className="py-24 sm:py-32">
+    <section id="research" aria-labelledby="research-heading" className="py-16 sm:py-20">
       <div className="container-page">
         <div className="grid gap-x-10 gap-y-6 lg:grid-cols-12 lg:items-end">
           <h2 id="research-heading" className="t-head lg:col-span-7">
@@ -49,7 +49,7 @@ export function Research() {
           </p>
         </div>
 
-        <div className="mt-12">
+        <div className="mt-10">
           <div role="tablist" aria-label="Versions" className="grid grid-cols-2 gap-1 rounded-xl bg-surface p-1 sm:inline-flex">
             {NEED_IDS.map((n, i) => (
               <button
@@ -74,7 +74,7 @@ export function Research() {
             ))}
           </div>
 
-          <div role="tabpanel" id="versions-panel" aria-labelledby={`versions-tab-${active}`} className={cn(`need-${active}`, "mt-10 grid gap-10 lg:grid-cols-12")}>
+          <div role="tabpanel" id="versions-panel" aria-labelledby={`versions-tab-${active}`} className={cn(`need-${active}`, "mt-8 grid gap-10 lg:grid-cols-12")}>
             <div className="lg:col-span-5">
               {/* The picture starts past the slanted edge, so the cut only trims paper. */}
               <div className="chisel-start relative aspect-[4/3] w-full max-w-[30rem] overflow-hidden bg-sheet [--cut:2.5rem]">
@@ -108,7 +108,7 @@ export function Research() {
           </div>
         </div>
 
-        <p className="mt-20 max-w-[60ch] text-lg text-ink-2">
+        <p className="mt-14 max-w-[60ch] text-lg text-ink-2">
           The rules follow guidance from{" "}
           {ORGS.map((o, i) => (
             <span key={o.name}>
@@ -121,7 +121,7 @@ export function Research() {
           .
         </p>
 
-        <details className="group/studies mt-8 rounded-xl bg-surface">
+        <details className="group/studies mt-6 rounded-xl bg-surface">
           <summary className="flex min-h-16 list-none items-center justify-between gap-4 rounded-xl px-6 py-4 text-xl font-bold transition-colors duration-200 hover:bg-surface-2 sm:px-7 [&::-webkit-details-marker]:hidden">
             Peer-reviewed studies ({STUDIES.length})
             <ChevronDown className="size-5 shrink-0 transition-transform duration-200 group-open/studies:rotate-180" aria-hidden />

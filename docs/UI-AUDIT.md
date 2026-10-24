@@ -136,6 +136,43 @@ The three inspector warnings that remain are deliberate:
 - **No video.** The hero transformation is the moving picture.
 - **The typefaces.** The page uses Bricolage Grotesque and Atkinson Hyperlegible, chosen for readability.
 
+## Clean pass: the hero animation and the spacing
+
+The team's note: make the animation cleaner and less buggy, use less blank space, keep the site clean. The hero was recorded frame by frame (Chrome screencast, about 45 frames a second) before and after.
+
+| # | Severity | Location | Finding | Fix |
+| --- | --- | --- | --- | --- |
+| 1 | HIGH | `site/term-flight.ts` | Switching versions flew eight yellow copies of the key words across the new worksheet in different directions. They crossed the text, collided ("chlorophyll" landed on "ecosystem"), flew off the bottom of the sheet, arrived at the wrong size where the word is set larger, and were still on screen after 1.1 seconds. | Replaced. The new version fades in (200ms) and each key word glows yellow where it now sits, in reading order, gone in about a second. Nothing crosses the text. The file is now `site/key-terms.ts`, and GSAP is no longer used. |
+| 2 | HIGH | `site/hero.tsx` | The old version vanished at once and the new one started nearly transparent, so the sheet flashed almost blank. | The 200ms fade starts from the new version in place, 4px low. |
+| 3 | MEDIUM | `globals.css` (`stage-wipe`, `stage-settle`) | On load the stage opened with a clip-path wipe from its slanted edge, so a thin yellow sliver flashed at the bottom of the screen first, and the worksheet scaled down from 104% while it moved, which made the text shimmer. Everything took about 1.8 seconds to settle. | The stage fades up and the frame rises into it. Only opacity and transform, nothing scales, settled in about 0.6 seconds. |
+| 4 | MEDIUM | `globals.css` (`word-rise`) | In the first frames the tops of the tall letters peeked out under each headline line before rising. | The words start further down, outside the line's mask. |
+| 5 | LOW | `site/hero.tsx` | The caption appeared at once while everything around it was still animating. | It rises in sequence after the button. |
+| 6 | LOW | `site/hero.tsx` (tabs) | On a switch, the old and new tabs both flashed grey while their white fill faded. | The selected tab's fill switches at once; only the text colour eases on hover. |
+| 7 | LOW | `site/hero.tsx` | Turning Calm mode off replayed the glow on the version already on screen. | The glow belongs to the switch, once per version shown. |
+| 8 | MEDIUM | every section | 128px of padding above and below each section's content, so about 256px of empty dark between two sections. | 80px (64px on phones) everywhere, and 40px from a heading to its content. |
+| 9 | MEDIUM | `site/sections.tsx` (`Stuck`) | Two sentences took 652px: the heading alone on one row, the statement starting below it. | One row: the heading on the left, the statement beside it. 373px. |
+| 10 | LOW | `site/sections.tsx` (`CloseCta`) | The closing section was up to 768px tall whatever its content. | At least 34rem on wide screens, otherwise as tall as its content. |
+| 11 | LOW | `site/hero.tsx` | "Try it now" and "Try it on this worksheet" sat a few lines apart and went to the same place. | The caption's button appears once a version is picked ("Open the Autism version"). Before that, one line says to pick a version. |
+
+Also fixed: the selected-tab outline added in the previous round was drawn with an inset shadow, which the tasteskill inspector fails as a button effect. It is now a 1px border, with the padding reduced by 1px so selecting never shifts the text.
+
+Rapid switching was stress-tested (five switches in about 250ms, then two adapted versions in a row, back to Original, and Calm mode on and off). The right version always lands, each key word is wrapped once, and there are no console errors.
+
+| Measure | Before | After |
+| --- | --- | --- |
+| Page length, desktop | 6.5 screens | 5.6 screens |
+| Page length, phone | 10.1 screens | 9.6 screens |
+| Space between two sections (desktop) | about 256px | 160px |
+| Hero settled after load | about 1.8 s | about 0.6 s |
+| Version switch | 8 words flying for 1.1 s or more | a 200 ms fade, then a glow of about 1 s |
+| JavaScript transferred | 242 KB | 215 KB |
+| Lighthouse mobile performance, three runs | 87–92 (LCP 3.4 s, Speed Index 1.3–1.4 s) | 93–96 (LCP 2.7–3.2 s, Speed Index 0.9–1.0 s) |
+| Lighthouse desktop | 100 / 100 / 100 / 100 | 100 / 100 / 100 / 100 |
+| tasteskill inspector | 0 FAIL, 3 WARN (before the tab outline) | 0 FAIL, 3 WARN |
+| axe (WCAG 2.2 AA), 4 widths | 0 violations | 0 violations |
+| Studio end-to-end, motion on and off | 18 / 18 | 18 / 18 |
+| Samples without AI (`npm run e2e:samples`) | 33 / 33 | 33 / 33 |
+
 ## What was kept
 
 Every feature: the hero transformation, pasting or uploading an assignment, "Create one with AI", the four needs and 21 kinds of help, language choice and translation, before/after, student view (text size, spacing, backgrounds, one section at a time, read aloud), what changed and why with sources, teacher notes, compare all four, PDF, print, copy, Calm mode, and every research link.

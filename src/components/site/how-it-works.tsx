@@ -68,7 +68,7 @@ export function HowItWorks() {
   };
 
   return (
-    <section ref={sectionRef} id="how" aria-labelledby="how-heading" className="band overflow-x-clip py-24 sm:py-32">
+    <section ref={sectionRef} id="how" aria-labelledby="how-heading" className="band overflow-x-clip py-16 sm:py-20">
       <div className="container-page">
         <div className="grid gap-x-10 gap-y-6 lg:grid-cols-12 lg:items-end">
           <h2 id="how-heading" className="t-head lg:col-span-7">
@@ -79,7 +79,7 @@ export function HowItWorks() {
           </p>
         </div>
 
-        <div className="mt-14">
+        <div className="mt-10">
           <div role="tablist" aria-label="How AdaptED works, in four steps" className="flex flex-col gap-1.5 lg:flex-row">
             {STEPS.map((s, i) => {
               const on = i === active;
@@ -111,7 +111,7 @@ export function HowItWorks() {
             })}
           </div>
 
-          <div role="tabpanel" id="how-panel" aria-labelledby={`how-tab-${active}`} className="mt-10 grid gap-10 lg:grid-cols-12 lg:items-center">
+          <div role="tabpanel" id="how-panel" aria-labelledby={`how-tab-${active}`} className="mt-8 grid gap-10 lg:grid-cols-12 lg:items-center">
             <div className="lg:col-span-5">
               <h3 className="text-2xl sm:text-[2rem]">{step.title}</h3>
               <p className="mt-4 max-w-[44ch] text-lg leading-relaxed text-ink-2">{step.body}</p>

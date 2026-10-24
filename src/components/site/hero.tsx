@@ -1,7 +1,6 @@
 "use client";
 
 import { useLayoutEffect, useMemo, useRef, useState } from "react";
-import gsap from "gsap";
 import { ArrowRight } from "lucide-react";
 import { AdaptedDocument } from "@/components/doc/adapted-document";
 import { OriginalDocument, barrierRanges } from "@/components/doc/original-document";
@@ -14,7 +13,7 @@ import { SAMPLES } from "@/lib/adapt/samples";
 import { NEED_IDS, type NeedId } from "@/lib/adapt/types";
 import { OPEN_IN_STUDIO, type OpenInStudioDetail } from "@/lib/events";
 import { cn } from "@/lib/utils";
-import { captureTerms, flyTerms, tagTerms, type TermSnapshot } from "./term-flight";
+import { tagTerms } from "./key-terms";
 
 type Version = "original" | NeedId;
 const VERSIONS: Version[] = ["original", ...NEED_IDS];
@@ -45,49 +44,40 @@ function Change({ from, to }: { from: number; to: number }) {
 
 /**
  * First viewport: the headline and one action top-left; a flat highlighter-yellow stage, its corner
- * cut on the chisel slant, opens like a pen stroke and carries the real worksheet in a dark app frame.
- * Switching versions flies the key science words from where they were to where they land (the
- * vocabulary is kept, only the way in changes), and the caption quotes what AdaptED's own code
- * measured for that version: the same numbers the studio shows.
+ * cut on the chisel slant, carries the real worksheet in a dark app frame. Picking a version fades it
+ * in and makes the key science words glow where they now sit (the vocabulary is kept, only the way
+ * in changes), and the caption quotes what AdaptED's own code measured for that version: the same
+ * numbers the studio shows.
  */
 export function Hero() {
   const { calm } = useMotion();
   const [active, setActive] = useState<Version>("original");
+  // The version shown on load never animates: it is the page's largest paint.
+  const [switched, setSwitched] = useState(false);
+  const glowedFor = useRef<Version | null>(null);
   const sheetRef = useRef<HTMLDivElement>(null);
-  const overlayRef = useRef<HTMLDivElement>(null);
-  const before = useRef<Map<string, TermSnapshot> | null>(null);
   const barriers = useMemo(() => {
     const all = detectBarriers(SAMPLE.text);
     return barrierRanges(normalize(SAMPLE.text).trim(), all).map((r) => all[r.index]);
   }, []);
 
-  const go = (v: Version) => {
-    const doc = sheetRef.current?.querySelector<HTMLElement>("[data-version]");
-    // Tag lazily, on the first switch, so hydration never repaints the sheet (it is the LCP element).
-    before.current = !calm && doc ? (tagTerms(doc, TITLE), captureTerms(doc)) : null;
-    setActive(v);
-  };
-
-  // Tag the key words in the version that just rendered, then fly them in from where they were.
+  // After a switch, the key words in the new version glow in place, in reading order. Once per
+  // switch: turning Calm mode off later doesn't replay it.
   useLayoutEffect(() => {
-    const stage = sheetRef.current;
-    const doc = stage?.querySelector<HTMLElement>("[data-version]");
-    if (!stage || !doc || !overlayRef.current) return;
-    const prev = before.current;
-    before.current = null;
-    if (calm || !prev) return;
-    const terms = tagTerms(doc, TITLE);
-    const fade = gsap.from(doc, { opacity: 0, y: 10, duration: 0.6, delay: 0.1, ease: "power2.out", clearProps: "opacity,transform" });
-    const stop = flyTerms(stage, overlayRef.current, terms, prev);
-    return () => {
-      fade.kill();
-      gsap.set(doc, { clearProps: "opacity,transform" });
-      stop();
-    };
-  }, [active, calm]);
+    if (!switched || glowedFor.current === active) return;
+    glowedFor.current = active;
+    const doc = sheetRef.current?.querySelector<HTMLElement>("[data-version]");
+    if (calm || !doc) return;
+    tagTerms(doc, TITLE).forEach((el, i) => {
+      el.style.setProperty("--i", String(i));
+      el.classList.add("key-term-glow");
+    });
+  }, [active, switched, calm]);
 
   const choose = (v: Version) => {
-    if (v !== active) go(v);
+    if (v === active) return;
+    setSwitched(true);
+    setActive(v);
   };
 
   const openInStudio = (e: React.MouseEvent) => {
@@ -124,9 +114,13 @@ export function Hero() {
           A grade {SAMPLE.grade} science worksheet, as written. <span className="mark font-semibold">Highlighted</span>: {barriers.length} things that could get in the way.
         </p>
       )}
-      <a href="#studio" onClick={openInStudio} className="btn btn-ghost btn-sm mt-5">
-        {active === "original" ? "Try it on this worksheet" : `Open the ${label(active)} version`} <ArrowRight className="size-4" aria-hidden />
-      </a>
+      {active === "original" ? (
+        <p className="mt-5 text-sm text-ink-3">Pick a version in the tabs to see what changes.</p>
+      ) : (
+        <a href="#studio" onClick={openInStudio} className="btn btn-ghost btn-sm mt-5">
+          Open the {label(active)} version <ArrowRight className="size-4" aria-hidden />
+        </a>
+      )}
     </div>
   );
 
@@ -152,14 +146,16 @@ export function Hero() {
               Try it now <ArrowRight className="size-4" aria-hidden />
             </a>
           </div>
-          <div className="mt-14 hidden lg:block">{caption}</div>
+          <div className="hero-rise mt-10 hidden lg:block" style={{ "--i": 2 } as React.CSSProperties}>
+            {caption}
+          </div>
         </div>
 
         {/* The stage: a flat yellow field cut on the chisel slant, bleeding off the right and bottom edges. */}
-        <div className="stage-wipe bleed-x relative mt-2 overflow-hidden lg:bleed-right lg:mt-8">
+        <div className="stage-in bleed-x relative mt-2 overflow-hidden lg:bleed-right lg:mt-8">
           <div aria-hidden className="chisel-start absolute inset-0 bg-yellow [--cut:4.5rem] lg:[--cut:9rem]" />
           {/* On large screens the worksheet is cropped by the section's bottom edge instead of setting its height. */}
-          <div className="stage-settle relative px-4 pt-4 sm:px-8 sm:pt-8 lg:absolute lg:inset-0 lg:pt-14 lg:pr-0 lg:pl-14">
+          <div className="stage-frame-in relative px-4 pt-4 sm:px-8 sm:pt-8 lg:absolute lg:inset-0 lg:pt-14 lg:pr-0 lg:pl-14">
             {/* A dark app frame: the version tabs, with the selected one joined to the paper below it. */}
             <div data-ui className="relative flex h-[30rem] w-full flex-col overflow-hidden rounded-t-xl bg-surface sm:h-[34rem] lg:h-[40rem] lg:max-w-[42rem]">
               <div className="px-2 pt-2">
@@ -187,7 +183,7 @@ export function Hero() {
                         }}
                         className={cn(
                           v !== "original" && `need-${v}`,
-                          "inline-flex min-h-11 shrink-0 items-center gap-2 rounded-t-lg px-3.5 text-sm font-semibold transition-colors duration-200",
+                          "inline-flex min-h-11 shrink-0 items-center gap-2 rounded-t-lg px-3.5 text-sm font-semibold transition-[color] duration-200",
                           on ? "bg-sheet text-sheet-ink" : "text-ink-2 hover:text-ink",
                         )}
                       >
@@ -198,8 +194,8 @@ export function Hero() {
                   })}
                 </div>
               </div>
-              <div id="hero-sheet" ref={sheetRef} role="tabpanel" aria-labelledby={`hero-tab-${active}`} className="sheet relative min-h-0 flex-1 overflow-hidden rounded-none" tabIndex={0}>
-                <div data-version key={active}>
+              <div id="hero-sheet" ref={sheetRef} role="tabpanel" aria-labelledby={`hero-tab-${active}`} className="sheet min-h-0 flex-1 overflow-hidden rounded-none" tabIndex={0}>
+                <div data-version key={active} className={switched ? "version-in" : undefined}>
                   {active === "original" ? (
                     <div className="px-6 py-6 sm:px-9 sm:py-8">
                       <p className="label !text-ink-3">Original assignment · grade {SAMPLE.grade} science</p>
@@ -209,7 +205,6 @@ export function Hero() {
                     <AdaptedDocument assignment={SCIENCE[active]} need={active} headingLevel={3} />
                   )}
                 </div>
-                <div ref={overlayRef} aria-hidden className="pointer-events-none absolute inset-0" />
               </div>
             </div>
           </div>

@@ -108,7 +108,7 @@ export function Studio() {
   const untranslated = shown && shown.source !== "ai" && viewProfile.language !== "english";
 
   return (
-    <section id="studio" aria-labelledby="studio-heading" className="relative pt-12 pb-24 sm:pt-16 sm:pb-32">
+    <section id="studio" aria-labelledby="studio-heading" className="relative py-16 sm:py-20">
       <div className="container-page">
         <div className="grid gap-x-10 gap-y-6 lg:grid-cols-12 lg:items-end">
           <h2 id="studio-heading" className="t-head lg:col-span-5">
@@ -119,7 +119,7 @@ export function Studio() {
           </p>
         </div>
 
-        <div className="mt-14 grid gap-4 lg:grid-cols-2">
+        <div className="mt-10 grid gap-4 lg:grid-cols-2">
           <SourcePanel value={source} onChange={setSource} onCreated={onCreated} />
           {/* The action closes the student panel: it uses everything set above it. */}
           <ProfilePanel
@@ -143,7 +143,7 @@ export function Studio() {
           />
         </div>
 
-        <div ref={resultRef} className={cn("scroll-mt-24 space-y-5", ran && "mt-20")} aria-live="polite" aria-busy={loading}>
+        <div ref={resultRef} className={cn("scroll-mt-24 space-y-5", ran && "mt-14")} aria-live="polite" aria-busy={loading}>
           {ran && (
             <>
               <div data-ui className="space-y-5">

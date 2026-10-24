@@ -104,6 +104,5 @@ Impeccable is installed as a plain skill. Its plugin hooks (which would download
 ## Credits and licenses
 
 - Fonts: Atkinson Hyperlegible Next (Braille Institute) and Bricolage Grotesque, both SIL Open Font License 1.1.
-- The hero's key-word flight uses [GSAP](https://gsap.com) (standard no-charge license).
 
 Full texts and the dependency list: [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

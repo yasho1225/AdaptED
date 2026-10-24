@@ -29,7 +29,6 @@ These are instructions and helper scripts that an AI coding assistant reads whil
 
 | Package | Use | License |
 | --- | --- | --- |
-| [GSAP](https://gsap.com) | The hero's key-word flight (off in calm mode) | [Standard "no charge" license](https://gsap.com/standard-license) |
 | [Lucide](https://lucide.dev) (`lucide-react`) | Icons | ISC |
 | [Next.js](https://nextjs.org), [React](https://react.dev) | Framework | MIT |
 | [Zod](https://zod.dev) | Checking the AI's answer format | MIT |

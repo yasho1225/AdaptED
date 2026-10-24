@@ -35,7 +35,6 @@ rounded:
 motion:
   ease-out: "cubic-bezier(0.23, 1, 0.32, 1)"
   ease-expo: "cubic-bezier(0.16, 1, 0.3, 1)"
-  ease-in-out: "cubic-bezier(0.77, 0, 0.175, 1)"
   press: 140ms
   hover: 180ms
   ui: 240ms
@@ -96,18 +95,18 @@ Eight sizes in all outside product fragments at 1440px (14, 16, 18, 24, 32, 77, 
 
 - One container: max 76rem, margins 16 / 24 / 32px, equal on both sides.
 - A 12-column grid with 40px gutters in every section; a section heading sits on columns 1–7 with its one-sentence intro on 8–12.
-- Sections are 96–128px apart; bands (a full-width `surface`) mark every other chapter instead of lines.
+- Every section has the same padding, 64px on phones and 80px from 640px up; a heading sits 40px above its content. Bands (a full-width `surface`) mark every other chapter instead of lines.
 - One idea per section, said once.
 
 | Section | Ground | Composition |
 | --- | --- | --- |
 | Nav | canvas, 85% with blur | Logomark and wordmark; two links with an active-section bar; Calm mode; Try it. Phones: Try it and a menu |
-| Hero | canvas | Headline top-left; one sentence; one action; the measured caption. The yellow chisel stage bleeds off the right edge, holding the worksheet in a dark app frame |
-| Where students get stuck | canvas | One statement from column 6, a line of body text, the source |
+| Hero | canvas | Headline top-left; one sentence; one action; the measured caption (with "Open the … version" once a version is picked). The yellow chisel stage bleeds off the right edge, holding the worksheet in a dark app frame |
+| Where students get stuck | canvas | One row on wide screens: the heading on columns 1–6, the statement, a line of body text and the source on 7–12 |
 | Try it (studio) | canvas | Two dark panels (assignment, student); the Adapt button closes the student panel; results appear below once asked for |
 | How it works | band | One bar of four steps, each as wide as the step really takes; the bar is the step picker, with that step's working picture below |
 | Built on research | canvas | Four version tabs; the chosen version's picture, purpose, and kinds of help, each with its source; one sentence naming the guidance; the seven studies behind one disclosure |
-| Close | band | The four versions on a canvas chisel slab, cropped by the section edges; the closing line and action |
+| Close | band | The four versions on a canvas chisel slab, cropped by the section edges; the closing line and action. At least 34rem tall on wide screens, otherwise as tall as its content |
 | Footer | canvas | The logo and three links on one row; what AdaptED is and is not; accessibility notes |
 
 ## Elevation & Depth
@@ -146,14 +145,13 @@ Flat. Depth comes from the surface ladder: each step lighter is one step closer.
 | Token | Value | Use |
 | --- | --- | --- |
 | `--ease-out` | `cubic-bezier(0.23, 1, 0.32, 1)` | Entrances, press, menus |
-| `--ease-expo` | `cubic-bezier(0.16, 1, 0.3, 1)` | The hero headline and stage, once on load |
-| `--ease-in-out` | `cubic-bezier(0.77, 0, 0.175, 1)` | The stage wipe |
+| `--ease-expo` | `cubic-bezier(0.16, 1, 0.3, 1)` | The hero headline and the worksheet frame, once on load |
 | `--t-press` / `--t-hover` / `--t-ui` | 140 / 180 / 240ms | Press, colour hover, UI changes |
 
 Motion is spent in one place, the hero, and nowhere else. The audience includes students and teachers who find movement distracting, so the rest of the page is still.
 
-- **Signature move:** on load, the hero headline rises out of its lines and the stage opens like a highlighter stroke, a clip-path wipe from its slanted edge. Once per visit.
-- **The live move:** when someone picks a version in the hero, the key words fly to their new places. Nothing changes until they choose; there is no autoplay.
+- **Signature move:** on load, the hero headline rises out of its lines (700ms, 60ms apart), the sentence, action and caption rise after it, and the yellow stage fades up while the worksheet frame rises into it. Settled in under a second, once per visit. Only opacity and transform: no clip-path wipe and no scaling of text.
+- **The live move:** when someone picks a version in the hero, the new version fades in (200ms) and its key words glow yellow where they now sit, one after another in reading order, gone in about a second. Nothing travels across the text. Nothing changes until they choose; there is no autoplay; Calm mode shows the new version at once, with no glow.
 - **No scroll effects:** sections do not animate in, and scrolling is the browser's own. In-page links glide with native `scroll-behavior: smooth`.
 - **No waiting for show:** a result appears as soon as it is ready; nothing is held back to play an animation.
 - **Feedback:** every control responds to press; hover only behind `(hover: hover) and (pointer: fine)`; UI changes stay under 300ms; no overshoot or bounce.
