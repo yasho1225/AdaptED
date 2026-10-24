@@ -40,3 +40,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+eval-output/
+
+# design tooling output
+.taste-skill/
+.playwright-cli/

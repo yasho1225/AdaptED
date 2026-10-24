@@ -1,448 +1,666 @@
 @import "tailwindcss";
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
 
-@custom-variant dark (&:is(.dark *));
+/*
+ * AdaptED design system — see DESIGN.md.
+ * Dark and consistent: one blue-black ground, a ladder of lighter surfaces for depth, soft-white ink,
+ * and one accent, highlighter yellow. Everything a student reads is paper (.sheet); everything a teacher
+ * operates is dark. One motif: the highlighter's chisel stroke (a slanted cut) shapes buttons, frames,
+ * bullets and the hero stage. Type: Bricolage Grotesque for page headings, Atkinson Hyperlegible Next for
+ * everything people read. Flat: depth comes from the surface ladder, never from shadows or glows.
+ */
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-heading: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-warning: var(--warning);
-  --color-warning-foreground: var(--warning-foreground);
-  --color-warning-border: var(--warning-border);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
-  --color-card-muted-foreground: var(--card-muted-foreground);
-  --color-card-accent: var(--card-accent);
-  --color-card-border: var(--card-border);
-  --color-card: var(--card);
-  --color-section: var(--section);
-  --color-mode-dyslexia: var(--mode-dyslexia);
-  --color-mode-dyslexia-muted: var(--mode-dyslexia-muted);
-  --color-mode-dyslexia-border: var(--mode-dyslexia-border);
-  --color-mode-adhd: var(--mode-adhd);
-  --color-mode-adhd-muted: var(--mode-adhd-muted);
-  --color-mode-adhd-border: var(--mode-adhd-border);
-  --color-mode-apd: var(--mode-apd);
-  --color-mode-apd-muted: var(--mode-apd-muted);
-  --color-mode-apd-border: var(--mode-apd-border);
-  --color-mode-autism: var(--mode-autism);
-  --color-mode-autism-muted: var(--mode-autism-muted);
-  --color-mode-autism-border: var(--mode-autism-border);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-display-face), var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  /* No monospace on this site: numbers and syllables use the text face with tabular figures. */
+  --font-mono: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+
+  /* Nothing anyone reads goes below 13px. */
+  --text-xs: 0.8125rem;
+  --text-xs--line-height: 1.35;
+
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
+  --color-sheet: var(--sheet);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-rule: var(--rule);
+  --color-rule-strong: var(--rule-strong);
+  --color-brand: var(--brand);
+  --color-brand-ink: var(--brand-ink);
+  --color-brand-soft: var(--brand-soft);
+  --color-on-brand: var(--on-brand);
+  --color-sheet-ink: var(--sheet-ink);
+  --color-mark: var(--mark);
+  --color-mark-strong: var(--mark-strong);
+  --color-ok: var(--ok);
+  --color-ok-soft: var(--ok-soft);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+
+  --color-yellow: #ffd43b;
+
+  --color-dyslexia: var(--dyslexia);
+  --color-dyslexia-soft: var(--dyslexia-soft);
+  --color-adhd: var(--adhd);
+  --color-adhd-soft: var(--adhd-soft);
+  --color-apd: var(--apd);
+  --color-apd-soft: var(--apd-soft);
+  --color-autism: var(--autism);
+  --color-autism-soft: var(--autism-soft);
+
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.625rem;
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
 }
 
-/* Blue canvas + white reading surfaces (foreground = on blue, card-* = on white) */
+/* Motion tokens (Emil Kowalski's curves; tasteskill durations). */
 :root {
-  --background: oklch(0.28 0.095 252);
-  --foreground: oklch(0.98 0.01 252);
-  --card: oklch(0.985 0.012 252);
-  --card-foreground: oklch(0.26 0.05 252);
-  --card-muted-foreground: oklch(0.46 0.03 252);
-  --card-accent: oklch(0.38 0.11 235);
-  --card-border: oklch(0.84 0.022 252);
-  --section: oklch(0.3 0.088 252);
-  --popover: oklch(0.96 0.018 252);
-  --popover-foreground: oklch(0.26 0.05 252);
-  --primary: oklch(0.78 0.12 235);
-  --primary-foreground: oklch(0.28 0.09 252);
-  --secondary: oklch(0.42 0.085 252);
-  --secondary-foreground: oklch(0.96 0.01 252);
-  --muted: oklch(0.925 0.02 252);
-  --muted-foreground: oklch(0.82 0.04 252);
-  --accent: oklch(0.45 0.09 252);
-  --accent-foreground: oklch(0.98 0.01 252);
-  --destructive: oklch(0.65 0.18 25);
-  --destructive-foreground: oklch(0.99 0 0);
-  --warning: oklch(0.96 0.04 85);
-  --warning-foreground: oklch(0.32 0.06 85);
-  --warning-border: oklch(0.82 0.08 85);
-  --border: oklch(0.5 0.075 252);
-  --input: oklch(0.97 0.014 252);
-  --ring: oklch(0.78 0.12 235 / 45%);
-  --radius: 0.75rem;
-
-  /* Mode accents — icons, borders, rings, tints on white panels only */
-  /* Dyslexia: slate blue (original) */
-  --mode-dyslexia: oklch(0.48 0.09 220);
-  --mode-dyslexia-muted: oklch(0.93 0.02 220);
-  --mode-dyslexia-border: oklch(0.88 0.04 220);
-
-  --mode-adhd: oklch(0.48 0.1 155);
-  --mode-adhd-muted: oklch(0.93 0.032 155);
-  --mode-adhd-border: oklch(0.76 0.07 155);
-
-  /* APD: teal/cyan (structured, cool — not another slate blue) */
-  --mode-apd: oklch(0.48 0.11 195);
-  --mode-apd-muted: oklch(0.93 0.03 195);
-  --mode-apd-border: oklch(0.76 0.08 195);
-
-  --mode-autism: oklch(0.5 0.08 285);
-  --mode-autism-muted: oklch(0.93 0.028 285);
-  --mode-autism-border: oklch(0.76 0.065 285);
-
-  --shadow-soft: 0 2px 8px oklch(0.08 0.06 252 / 0.25),
-    0 12px 32px oklch(0.06 0.08 252 / 0.35);
-  --shadow-elevated: 0 4px 12px oklch(0.08 0.06 252 / 0.2),
-    0 24px 56px oklch(0.05 0.1 252 / 0.45);
-  --shadow-glow: 0 0 0 1px oklch(1 0 0 / 0.08), 0 0 80px oklch(0.65 0.14 235 / 0.25);
-
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.965 0.008 95);
-  --sidebar-foreground: oklch(0.22 0.025 265);
-  --sidebar-primary: oklch(0.42 0.1 200);
-  --sidebar-primary-foreground: oklch(0.99 0 0);
-  --sidebar-accent: oklch(0.94 0.012 95);
-  --sidebar-accent-foreground: oklch(0.22 0.025 265);
-  --sidebar-border: oklch(0.87 0.012 95);
-  --sidebar-ring: oklch(0.42 0.1 200 / 35%);
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --t-press: 140ms;
+  --t-hover: 180ms;
+  --t-ui: 240ms;
 }
 
-.dark {
-  --background: oklch(0.17 0.015 265);
-  --foreground: oklch(0.94 0.01 265);
-  --card: oklch(0.22 0.015 265);
-  --card-foreground: oklch(0.94 0.01 265);
-  --card-muted-foreground: oklch(0.7 0.02 265);
-  --card-accent: oklch(0.68 0.12 200);
-  --card-border: oklch(0.32 0.015 265);
-  --section: oklch(0.2 0.015 265);
-  --popover: oklch(0.22 0.015 265);
-  --popover-foreground: oklch(0.94 0.01 265);
-  --primary: oklch(0.68 0.12 200);
-  --primary-foreground: oklch(0.15 0.02 265);
-  --secondary: oklch(0.26 0.015 265);
-  --secondary-foreground: oklch(0.94 0.01 265);
-  --muted: oklch(0.26 0.015 265);
-  --muted-foreground: oklch(0.7 0.02 265);
-  --accent: oklch(0.28 0.02 265);
-  --accent-foreground: oklch(0.94 0.01 265);
-  --destructive: oklch(0.65 0.18 25);
-  --warning: oklch(0.28 0.04 85);
-  --warning-foreground: oklch(0.92 0.04 85);
-  --warning-border: oklch(0.42 0.06 85);
-  --border: oklch(0.32 0.015 265);
-  --input: oklch(0.24 0.015 265);
-  --ring: oklch(0.68 0.12 200 / 40%);
+/*
+ * The page: a blue-black ground and a ladder of surfaces, each one notch lighter and one step closer.
+ * --paper / --paper-2 always mean "the ground here" and "one step up", so a component reads right
+ * on the canvas, inside a panel, or on paper.
+ */
+:root {
+  color-scheme: dark;
+  --canvas: #070b1d;
+  --surface: #0c1330;
+  --surface-2: #141d42;
+  --surface-3: #1d2856;
+  --paper: var(--surface);
+  --paper-2: var(--surface-2);
+  --sheet: #f6f7fb;
+  --ink: #f2f4fb;
+  --ink-2: #c5cce2;
+  --ink-3: #9aa4c6;
+  --rule: rgb(197 204 226 / 0.14);
+  --rule-strong: rgb(197 204 226 / 0.3);
+  --brand: #ffd43b;
+  --brand-ink: #ffd43b;
+  --brand-soft: rgb(255 212 59 / 0.14);
+  --focus: #ffd43b;
+  --on-brand: #0a1028;
+  --sheet-ink: #0f1d4a;
+  --mark: rgb(255 212 59 / 0.9);
+  --mark-strong: #ffd43b;
+  --ok: #5ed6a6;
+  --ok-soft: rgb(94 214 166 / 0.14);
+  --warn: #ffc97a;
+  --warn-soft: rgb(255 201 122 / 0.14);
 
-  --mode-dyslexia: oklch(0.68 0.065 220);
-  --mode-dyslexia-muted: oklch(0.26 0.02 220);
-  --mode-dyslexia-border: oklch(0.34 0.026 220);
+  /* Need accents for dark surfaces: 6:1 or better on every surface step. */
+  --dyslexia: #7cc4f2;
+  --dyslexia-soft: rgb(124 196 242 / 0.14);
+  --adhd: #ff9f66;
+  --adhd-soft: rgb(255 159 102 / 0.14);
+  --apd: #5ed6a6;
+  --apd-soft: rgb(94 214 166 / 0.14);
+  --autism: #bba2f5;
+  --autism-soft: rgb(187 162 245 / 0.14);
+  --on-need: #0a1028;
+}
 
-  --mode-adhd: oklch(0.68 0.09 155);
-  --mode-adhd-muted: oklch(0.26 0.03 155);
-  --mode-adhd-border: oklch(0.4 0.05 155);
+/* A band: a full-width section one step up the ladder, used to mark a chapter. */
+.band {
+  background-color: var(--surface);
+  --paper: var(--surface-2);
+  --paper-2: var(--surface-3);
+}
 
-  --mode-apd: oklch(0.7 0.1 195);
-  --mode-apd-muted: oklch(0.26 0.03 195);
-  --mode-apd-border: oklch(0.4 0.055 195);
+/*
+ * Paper: worksheets and anything a student reads (.sheet, .on-paper, .force-light).
+ * Dark ink on a soft, cool off-white, per the BDA style guide's advice against stark white.
+ */
+.sheet,
+.on-paper,
+.force-light {
+  color-scheme: light;
+  --paper: #eef1f7;
+  --paper-2: #e3e7f0;
+  --sheet: #f6f7fb;
+  --ink: #0f1d4a;
+  --ink-2: #3a4675;
+  --ink-3: #56618a;
+  --rule: #dcdfe8;
+  --rule-strong: #c2c7d6;
+  --brand: #0e2fa3;
+  --brand-ink: #0e2fa3;
+  --brand-soft: #e6ebfa;
+  --focus: #0e2fa3;
+  --on-brand: #ffffff;
+  --mark: rgb(255 212 59 / 0.62);
+  --mark-strong: #ffd43b;
+  --ok: #1d7a52;
+  --ok-soft: #e3f4ec;
+  --warn: #8a5300;
+  --warn-soft: #fbf0dc;
 
-  --mode-autism: oklch(0.68 0.07 285);
-  --mode-autism-muted: oklch(0.26 0.02 285);
-  --mode-autism-border: oklch(0.4 0.04 285);
-
-  --shadow-soft: 0 4px 24px oklch(0 0 0 / 0.25);
-  --shadow-elevated: 0 12px 40px oklch(0 0 0 / 0.35);
-
-  --sidebar: oklch(0.22 0.015 265);
-  --sidebar-foreground: oklch(0.94 0.01 265);
-  --sidebar-primary: oklch(0.68 0.12 200);
-  --sidebar-primary-foreground: oklch(0.15 0.02 265);
-  --sidebar-accent: oklch(0.26 0.015 265);
-  --sidebar-accent-foreground: oklch(0.94 0.01 265);
-  --sidebar-border: oklch(0.32 0.015 265);
-  --sidebar-ring: oklch(0.68 0.12 200 / 40%);
+  /* Need accents: AA (4.5:1+) on paper for text use. */
+  --dyslexia: oklch(0.48 0.12 235);
+  --dyslexia-soft: oklch(0.95 0.03 235);
+  --adhd: oklch(0.52 0.15 45);
+  --adhd-soft: oklch(0.955 0.04 60);
+  --apd: oklch(0.47 0.11 165);
+  --apd-soft: oklch(0.95 0.035 165);
+  --autism: oklch(0.47 0.15 305);
+  --autism-soft: oklch(0.955 0.03 305);
+  --on-need: #ffffff;
+  color: var(--ink);
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
+  *,
+  ::before,
+  ::after {
+    border-color: var(--rule);
   }
-
   html {
-    @apply font-sans;
+    -webkit-text-size-adjust: 100%;
     text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    /* The sticky bar's height, so a section linked from the nav starts right under it. */
+    scroll-padding-top: 4rem;
   }
-
   body {
-    @apply bg-background text-foreground text-[15px] leading-relaxed;
-    font-feature-settings: "cv02", "cv03", "cv04", "cv11", "ss01";
-    background-image:
-      radial-gradient(
-        ellipse 80% 50% at 50% -20%,
-        oklch(0.45 0.14 235 / 0.55),
-        transparent 55%
-      ),
-      radial-gradient(
-        ellipse 60% 40% at 100% 0%,
-        oklch(0.38 0.12 280 / 0.35),
-        transparent 50%
-      ),
-      radial-gradient(
-        ellipse 50% 35% at 0% 100%,
-        oklch(0.32 0.1 220 / 0.4),
-        transparent 45%
-      );
+    background-color: var(--canvas);
+    color: var(--ink);
+    caret-color: var(--brand);
+    scrollbar-color: rgb(197 204 226 / 0.32) var(--canvas);
+    font-family: var(--font-sans);
+    font-size: 1.125rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
   }
-
+  /* Light type on a dark ground reads heavier, so page headings sit one weight lighter. */
   h1,
   h2,
-  h3,
-  h4 {
-    @apply font-heading text-foreground;
-    letter-spacing: -0.025em;
-  }
-
-  h1 {
-    @apply text-4xl font-bold leading-[1.08] sm:text-5xl md:text-[3.5rem];
-  }
-
-  h2 {
-    @apply text-3xl font-bold leading-[1.12] md:text-[2.75rem];
-  }
-
-  a:focus-visible,
-  button:focus-visible {
-    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
-  }
-
   h3 {
-    @apply text-lg font-semibold leading-snug md:text-xl;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-stretch: 86%;
+    letter-spacing: -0.012em;
+    line-height: 0.95;
+    text-wrap: balance;
   }
-
+  h1 {
+    font-weight: 800;
+    font-stretch: 80%;
+    letter-spacing: -0.015em;
+    line-height: 0.88;
+  }
+  h3 {
+    font-stretch: 94%;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+  }
+  /* Anything a student reads stays in Atkinson Hyperlegible. */
+  :where(.sheet, .on-paper) :is(h1, h2, h3, h4) {
+    font-family: var(--font-sans);
+    font-stretch: normal;
+    letter-spacing: -0.005em;
+    line-height: 1.25;
+  }
+  h4 {
+    font-weight: 700;
+  }
+  a {
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: 1.5px;
+  }
+  .tnum {
+    font-variant-numeric: tabular-nums;
+  }
   p {
-    @apply leading-relaxed;
+    text-wrap: pretty;
+  }
+  ::placeholder {
+    color: var(--ink-3);
+    opacity: 1;
+  }
+  ::selection {
+    background: #ffd43b;
+    color: #0a1028;
+  }
+  :focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+  summary {
+    cursor: pointer;
+  }
+  /* In-page links glide to their section. Calm mode and reduced motion jump. */
+  @media (prefers-reduced-motion: no-preference) {
+    html:not([data-calm="true"]) {
+      scroll-behavior: smooth;
+    }
+  }
+  /* Calm mode / reduced motion: the finished page, nothing travels. */
+  [data-calm="true"] *,
+  [data-calm="true"] *::before,
+  [data-calm="true"] *::after {
+    animation-duration: 0.001ms !important;
+    animation-delay: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    transition-delay: 0s !important;
+    scroll-behavior: auto !important;
   }
 }
 
 @layer components {
-  .section-eyebrow {
-    @apply inline-flex items-center rounded-full border border-primary/25 bg-primary/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-primary;
+  .container-page {
+    --pad: 1rem;
+    margin-inline: auto;
+    width: 100%;
+    max-width: 76rem;
+    padding-inline: var(--pad);
+  }
+  @media (min-width: 640px) {
+    .container-page {
+      --pad: 1.5rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .container-page {
+      --pad: 2rem;
+    }
   }
 
-  .section-title {
-    @apply mt-4 font-bold tracking-[-0.035em] text-foreground;
+  /* Type steps (DESIGN.md): display, head, title, lead, body, small. */
+  .t-display {
+    font-size: clamp(4rem, 2.4rem + 6.4vw, 8.5rem);
+  }
+  .t-head {
+    font-size: clamp(2.5rem, 1.6rem + 3.6vw, 5rem);
+  }
+  .t-lead {
+    font-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);
+    line-height: 1.4;
   }
 
-  .section-description {
-    @apply mx-auto mt-4 max-w-2xl text-[16px] leading-[1.75] text-muted-foreground/95 md:text-[17px];
+  /* The motif: a highlighter's chisel cut. --cut is the horizontal offset of the slant. */
+  .chisel {
+    clip-path: polygon(var(--cut, 1rem) 0, 100% 0, calc(100% - var(--cut, 1rem)) 100%, 0 100%);
+  }
+  .chisel-start {
+    clip-path: polygon(var(--cut, 1rem) 0, 100% 0, 100% 100%, 0 100%);
+  }
+  .bullet {
+    display: inline-block;
+    flex-shrink: 0;
+    width: 1.1em;
+    height: 0.55em;
+    background: currentColor;
+    clip-path: polygon(0.18em 0, 100% 0, calc(100% - 0.18em) 100%, 0 100%);
   }
 
-  .panel-label {
-    @apply text-[13px] font-semibold tracking-[-0.02em] text-card-foreground;
+  /* Standalone panel label (never a kicker above a heading). */
+  .label {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--ink-2);
+  }
+  /* A raised dark surface for controls: one notch up the ladder, no border, no shadow. */
+  .panel {
+    background-color: var(--paper);
+    border-radius: var(--radius-xl);
+    --paper-2: var(--surface-2);
+  }
+  .band .panel {
+    --paper-2: var(--surface-3);
+  }
+  /* Paper: a worksheet or anything a student reads. */
+  .sheet {
+    background-color: var(--sheet);
+    border-radius: var(--radius-xl);
+  }
+  .ruled {
+    background-image: repeating-linear-gradient(to bottom, transparent 0 31px, color-mix(in oklch, var(--rule) 70%, transparent) 31px 32px);
+  }
+  /* Highlighter: always dark ink on yellow, on paper or on the dark ground. */
+  .mark {
+    background-color: var(--mark);
+    color: var(--sheet-ink);
+    border-radius: 0.15em;
+    padding: 0.05em 0.15em;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
   }
 
-  .panel-sublabel {
-    @apply text-[12px] text-card-muted-foreground;
+  /*
+   * Buttons: one shape on the whole site, the chisel.
+   */
+  .btn {
+    --cut: 0.95rem;
+    --btn-bg: var(--ink);
+    --btn-bg-hover: color-mix(in oklch, var(--ink) 86%, var(--paper));
+    --btn-ink: var(--paper);
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 3rem;
+    padding: 0.55rem 1.7rem;
+    border: 0;
+    background-color: var(--btn-bg);
+    color: var(--btn-ink);
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.2;
+    white-space: nowrap;
+    cursor: pointer;
+    clip-path: polygon(var(--cut) 0, 100% 0, calc(100% - var(--cut)) 100%, 0 100%);
+    transition: transform var(--t-press) var(--ease-out), background-color var(--t-hover) ease, color var(--t-hover) ease;
   }
-
-  .gradient-text {
-    @apply text-primary;
+  /* A clip-path would cut the focus ring off, so a focused button squares up and shows the ring whole. */
+  .btn:focus-visible {
+    clip-path: none;
+    border-radius: 0;
   }
-
-  .interactive-hover {
-    @apply transition-[transform,box-shadow,background-color,border-color,color] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)];
+  .btn:active:not(:disabled) {
+    transform: scale(0.97);
   }
-
-  .interactive-hover:hover {
-    @apply -translate-y-0.5;
+  .btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
   }
-
-  .interactive-hover:active {
-    @apply translate-y-0 scale-[0.99];
+  @media (hover: hover) and (pointer: fine) {
+    .btn:hover:not(:disabled) {
+      background-color: var(--btn-bg-hover);
+    }
   }
-
   .btn-primary {
-    @apply inline-flex h-11 min-w-[9.5rem] items-center justify-center gap-2 rounded-full border border-white/40 bg-card px-6 text-[14px] font-semibold text-card-accent shadow-[var(--shadow-soft)] transition-[transform,box-shadow,background-color] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-px hover:shadow-[var(--shadow-elevated)] active:translate-y-0 active:scale-[0.99];
+    --btn-bg: var(--ink);
+    --btn-ink: var(--paper);
   }
+  :where(.sheet, .on-paper, .force-light) .btn-primary {
+    --btn-ink: #ffffff;
+    --btn-bg-hover: #26356b;
+  }
+  .btn-brand {
+    --btn-bg: var(--brand);
+    --btn-bg-hover: color-mix(in oklch, var(--brand) 82%, white);
+    --btn-ink: var(--on-brand);
+  }
+  .btn-ghost {
+    --btn-bg: var(--paper-2);
+    --btn-bg-hover: color-mix(in oklch, var(--paper-2) 78%, var(--ink));
+    --btn-ink: var(--ink);
+  }
+  .btn-sm {
+    --cut: 0.75rem;
+    min-height: 2.5rem;
+    padding: 0.4rem 1.15rem;
+    font-size: 0.875rem;
+  }
+  /* Inside the product's own panels every control is a plain rectangle; the chisel stays on the one main action. */
+  [data-ui] .btn:not(.btn-brand) {
+    clip-path: none;
+    border-radius: var(--radius-md);
+    padding-inline: 1rem;
+  }
+  /*
+   * Chips, fields and choice cards are filled, a step up from their ground. Selected is the same
+   * everywhere: one more step up, with an outline (in the need's colour when the choice is a need).
+   */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border: 1px solid transparent;
+    background-color: var(--paper-2);
+    color: var(--ink);
+    border-radius: var(--radius-md);
+    padding: 0.35rem 0.8rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    min-height: 2.5rem;
+    transition: background-color var(--t-hover) ease, border-color var(--t-hover) ease, color var(--t-hover) ease, transform var(--t-press) var(--ease-out);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .chip:hover:not([aria-pressed="true"]) {
+      background-color: color-mix(in oklch, var(--paper-2) 80%, var(--ink));
+    }
+  }
+  .chip[aria-pressed="true"] {
+    background-color: color-mix(in oklch, var(--paper-2) 84%, var(--ink));
+    border-color: var(--ink-3);
+    color: var(--ink);
+  }
+  .chip:active {
+    transform: scale(0.97);
+  }
+  .option {
+    display: flex;
+    border: 2px solid transparent;
+    border-radius: var(--radius-md);
+    background-color: var(--paper-2);
+    text-align: left;
+    cursor: pointer;
+    transition: background-color var(--t-hover) ease, border-color var(--t-hover) ease;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .option:not([aria-pressed="true"]):not(:has(input:checked)):hover {
+      border-color: var(--rule-strong);
+    }
+  }
+  .option:is([aria-pressed="true"], :has(input:checked)) {
+    background-color: color-mix(in oklch, var(--paper-2) 86%, var(--ink));
+    border-color: var(--ink-3);
+  }
+  /* Radios drawn to match the square need boxes: an empty ring, then a ring with a dot. */
+  .option input[type="radio"] {
+    appearance: none;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    width: 1.125rem;
+    height: 1.125rem;
+    margin: 0;
+    padding: 2px;
+    border: 2px solid var(--rule-strong);
+    border-radius: 999px;
+    background-clip: content-box;
+    transition: border-color var(--t-hover) ease;
+  }
+  .option input[type="radio"]:checked {
+    border-color: var(--ink);
+    background-color: var(--ink);
+  }
+  .field {
+    width: 100%;
+    border: 1px solid var(--rule);
+    background-color: var(--paper-2);
+    border-radius: var(--radius-md);
+    padding: 0.55rem 0.75rem;
+    color: var(--ink);
+    font-weight: 400;
+    /* Thin, with no track of its own, so Windows doesn't draw a dark stripe with arrows inside the field. */
+    scrollbar-width: thin;
+    scrollbar-color: var(--rule-strong) transparent;
+    transition: border-color var(--t-hover) ease;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .field:hover {
+      border-color: var(--rule-strong);
+    }
+  }
+  .field:focus-visible {
+    outline-offset: 1px;
+  }
+  select.field {
+    min-height: 2.5rem;
+  }
+  .tab {
+    position: relative;
+    /* A border, not a shadow, draws the selected outline; it is always there, so selecting never shifts the text. */
+    border: 1px solid transparent;
+    padding: calc(0.6rem - 1px) calc(0.9rem - 1px);
+    font-weight: 600;
+    font-size: 0.925rem;
+    color: var(--ink-2);
+    border-radius: var(--radius-md);
+    min-height: 2.5rem;
+    white-space: nowrap;
+    transition: background-color var(--t-hover) ease, border-color var(--t-hover) ease, color var(--t-hover) ease;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .tab:hover:not([aria-selected="true"]) {
+      color: var(--ink);
+    }
+  }
+  .tab[aria-selected="true"] {
+    background-color: color-mix(in oklch, var(--paper-2) 82%, var(--ink));
+    border-color: var(--rule-strong);
+    color: var(--ink);
+  }
+  /* Touch screens: every control is at least 44px tall. */
+  @media (pointer: coarse) {
+    .btn-sm,
+    .chip,
+    .tab,
+    select.field {
+      min-height: 2.75rem;
+    }
+  }
+}
 
-  .btn-secondary {
-    @apply inline-flex h-11 items-center justify-center gap-2 rounded-full border border-white/25 bg-white/[0.08] px-6 text-[14px] font-medium text-foreground backdrop-blur-sm transition-[transform,background-color,border-color] duration-200 hover:border-white/35 hover:bg-white/[0.14] active:scale-[0.99];
-  }
+/* Run a block from the content edge out to the viewport edge (the section clips the overflow). */
+@utility bleed-x {
+  margin-inline: calc(-1 * var(--pad));
+}
+@utility bleed-right {
+  margin-left: 0;
+  margin-right: calc(-1 * (max(0px, (100vw - 76rem) / 2) + var(--pad)));
+}
 
-  .trust-pill {
-    @apply inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/[0.06] px-3.5 py-1.5 text-[13px] font-medium text-foreground/90 backdrop-blur-md;
-  }
+/* The hero on load, once: the yellow stage fades up and the worksheet frame rises into it. Settled in under a second. */
+.stage-in {
+  animation: fade-in 500ms var(--ease-out) 200ms both;
+}
+.stage-frame-in {
+  animation: frame-rise 700ms var(--ease-expo) 200ms both;
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+}
+@keyframes frame-rise {
+  from { transform: translateY(24px); }
+}
 
-  .surface-card {
-    @apply rounded-2xl border border-white/20 bg-card text-card-foreground shadow-[var(--shadow-soft)] ring-1 ring-white/[0.08];
-    --border: var(--card-border);
-  }
+/* Barrier highlights in worksheets: an SVG fill rather than a gradient, so it stays one flat colour. */
+.hl-mark,
+.hl-under {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1' preserveAspectRatio='none'%3E%3Crect width='1' height='1' fill='%23FFD43B' fill-opacity='0.62'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+.hl-under {
+  background-position: 0 100%;
+  background-size: 100% 38%;
+}
 
-  .surface-card-static {
-    @apply rounded-2xl border border-white/25 bg-card text-card-foreground shadow-[var(--shadow-soft)] ring-1 ring-white/[0.1];
-    --border: var(--card-border);
-  }
+/*
+ * Hero version switch: the new version fades in, then each key word glows where it now sits
+ * (key-terms.ts), one after another in reading order. Nothing moves across the text.
+ */
+.version-in {
+  animation: version-in 200ms var(--ease-out) both;
+}
+@keyframes version-in {
+  from { opacity: 0; transform: translateY(4px); }
+}
+@property --hl {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+.key-term-glow {
+  border-radius: 0.15em;
+  background-color: rgb(255 212 59 / calc(var(--hl) * 0.85));
+  box-shadow: 0 0 0 0.12em rgb(255 212 59 / calc(var(--hl) * 0.85));
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  animation: key-term-glow 1000ms var(--ease-out) calc(160ms + var(--i, 0) * 40ms) both;
+}
+@keyframes key-term-glow {
+  0% { --hl: 0; }
+  18% { --hl: 1; }
+  60% { --hl: 1; }
+  100% { --hl: 0; }
+}
+/* Hero headline: each line is a mask the words rise out of (room left for descenders). */
+.hl-line {
+  display: block;
+  overflow: clip;
+  padding-bottom: 0.18em;
+  margin-bottom: -0.18em;
+}
+.hl-word {
+  display: inline-block;
+  animation: word-rise 700ms var(--ease-expo) both;
+  animation-delay: calc(var(--i, 0) * 60ms + 60ms);
+}
+.hero-rise {
+  animation: rise-in 500ms var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 70ms + 300ms);
+}
+/* From far enough down that no ascender peeks into the descender room under the line's mask. */
+@keyframes word-rise {
+  from { transform: translateY(140%); }
+}
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(12px); }
+}
 
-  .surface-card-interactive {
-    @apply rounded-2xl border border-white/20 bg-card text-card-foreground ring-1 ring-white/[0.08] shadow-[var(--shadow-soft)] transition-[box-shadow,transform] duration-200 hover:shadow-[var(--shadow-elevated)] hover:-translate-y-px;
-    --border: var(--card-border);
-  }
+/* Menus open from their bar: a short drop with opacity, never from nothing (Emil Kowalski). */
+@keyframes menu-in {
+  from { opacity: 0; transform: translateY(-8px); }
+}
 
-  .surface-elevated {
-    @apply rounded-2xl border border-white/30 bg-card text-card-foreground shadow-[var(--shadow-elevated)] ring-1 ring-white/[0.12];
-    --border: var(--card-border);
-  }
+/* Need themes for the adapted document */
+.need-dyslexia { --need: var(--dyslexia); --need-soft: var(--dyslexia-soft); }
+.need-adhd { --need: var(--adhd); --need-soft: var(--adhd-soft); }
+.need-apd { --need: var(--apd); --need-soft: var(--apd-soft); }
+.need-autism { --need: var(--autism); --need-soft: var(--autism-soft); }
 
-  .demo-shell {
-    @apply rounded-[1.75rem] border border-white/[0.12] bg-gradient-to-b from-white/[0.09] to-white/[0.04] p-5 shadow-[var(--shadow-elevated)] backdrop-blur-md md:p-7;
+/* Print: only the student document */
+@media print {
+  @page {
+    margin: 16mm;
   }
-
-  .panel-header {
-    @apply border-b border-card-border/70 bg-[oklch(0.975_0.014_252)] px-5 py-4;
+  body {
+    background: white !important;
   }
-
-  .step-pill {
-    @apply rounded-full border border-white/15 bg-white/[0.06] px-3.5 py-1.5 text-[12px] font-semibold text-foreground/85 backdrop-blur-sm;
+  body * {
+    visibility: hidden;
   }
-
-  .step-pill-active {
-    @apply rounded-full border border-white/30 bg-card px-3.5 py-1.5 text-[12px] font-semibold text-card-accent shadow-[var(--shadow-soft)];
+  #print-root,
+  #print-root * {
+    visibility: visible;
   }
-
-  .toolbar-cluster {
-    @apply inline-flex flex-wrap items-center gap-1 rounded-xl border border-card-border/60 bg-[oklch(0.99_0.008_252)] p-1 shadow-sm;
+  #print-root {
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 100%;
+    box-shadow: none !important;
+    border: 0 !important;
   }
-
-  .glass-nav {
-    @apply border-b border-white/10 bg-background/75 backdrop-blur-xl backdrop-saturate-150;
-  }
-
-  .nav-link {
-    @apply relative text-[13px] font-medium text-muted-foreground transition-colors duration-200 hover:text-foreground;
-  }
-
-  .nav-link::after {
-    @apply absolute -bottom-1 left-0 h-0.5 w-0 rounded-full bg-primary transition-all duration-200 content-[''];
-  }
-
-  .nav-link:hover::after {
-    @apply w-full;
-  }
-
-  .section-band {
-    @apply border-t border-white/10 bg-section;
-  }
-
-  .on-canvas {
-    @apply text-foreground;
-  }
-
-  .on-surface {
-    @apply text-card-foreground;
-  }
-
-  .on-surface-muted {
-    @apply text-card-muted-foreground;
-  }
-
-  .mode-icon-dyslexia {
-    @apply bg-mode-dyslexia text-white;
-  }
-  .mode-icon-adhd {
-    @apply bg-mode-adhd text-white;
-  }
-  .mode-icon-apd {
-    @apply bg-mode-apd text-white;
-  }
-  .mode-icon-autism {
-    @apply bg-mode-autism text-white;
-  }
-  .mode-tint-dyslexia {
-    @apply bg-mode-dyslexia-muted;
-  }
-  .mode-tint-adhd {
-    @apply bg-mode-adhd-muted;
-  }
-  .mode-tint-apd {
-    @apply bg-mode-apd-muted;
-  }
-  .mode-tint-autism {
-    @apply bg-mode-autism-muted;
-  }
-  .mode-ring-dyslexia {
-    @apply ring-mode-dyslexia/35;
-  }
-  .mode-ring-adhd {
-    @apply ring-mode-adhd/35;
-  }
-  .mode-ring-apd {
-    @apply ring-mode-apd/35;
-  }
-  .mode-ring-autism {
-    @apply ring-mode-autism/35;
-  }
-  .mode-border-dyslexia {
-    @apply border-mode-dyslexia-border;
-  }
-  .mode-border-adhd {
-    @apply border-mode-adhd-border;
-  }
-  .mode-border-apd {
-    @apply border-mode-apd-border;
-  }
-  .mode-border-autism {
-    @apply border-mode-autism-border;
-  }
-
-  .text-mode-dyslexia {
-    color: var(--mode-dyslexia);
-  }
-  .text-mode-adhd {
-    color: var(--mode-adhd);
-  }
-  .text-mode-apd {
-    color: var(--mode-apd);
-  }
-  .text-mode-autism {
-    color: var(--mode-autism);
-  }
-  .bg-mode-adhd {
-    background-color: var(--mode-adhd);
-  }
-
-  .alert-warning {
-    @apply border border-warning-border bg-warning text-[13px] leading-snug text-warning-foreground;
+  .no-print {
+    display: none !important;
   }
 }

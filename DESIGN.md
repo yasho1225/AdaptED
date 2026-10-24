@@ -1,0 +1,195 @@
+---
+version: 3
+name: AdaptED
+description: A dark, calm workspace for teachers. One blue-black ground with a ladder of lighter surfaces, soft-white type, and one accent, highlighter yellow. Everything a student reads is paper; everything a teacher operates is dark. The only ornament is a highlighter's chisel cut.
+
+colors:
+  canvas: "#070B1D"
+  surface: "#0C1330"
+  surface-2: "#141D42"
+  surface-3: "#1D2856"
+  ink: "#F2F4FB"
+  ink-2: "#C5CCE2"
+  ink-3: "#9AA4C6"
+  yellow: "#FFD43B"
+  on-yellow: "#0A1028"
+  paper: "#F6F7FB"
+  paper-ink: "#0F1D4A"
+  need-dyslexia: "#7CC4F2"
+  need-adhd: "#FF9F66"
+  need-apd: "#5ED6A6"
+  need-autism: "#BBA2F5"
+
+typography:
+  display: "Bricolage Grotesque, 700–800, width 80–94%"
+  text: "Atkinson Hyperlegible Next, 400/700"
+  scale: [14, 16, 18, 24, 32, "head clamp(40–80)", "display clamp(64–136)"]
+
+rounded:
+  panel: 12px
+  field: 8px
+  control-in-panel: 8px
+  button: chisel (no radius) on the page and for the main action
+  tile: 0
+
+motion:
+  ease-out: "cubic-bezier(0.23, 1, 0.32, 1)"
+  ease-expo: "cubic-bezier(0.16, 1, 0.3, 1)"
+  press: 140ms
+  hover: 180ms
+  ui: 240ms
+---
+
+# AdaptED — DESIGN.md
+
+The design system for the AdaptED site, in the DESIGN.md format. Version 3 replaces the blue page and its colour-block sections with one consistent dark ground, at the team's request, and removes the clutter an audit found (see [docs/UI-AUDIT.md](docs/UI-AUDIT.md)). House rules come from tasteskill and Impeccable, motion rules from Emil Kowalski's design-engineering skill, and the dark-surface ladder from studying Linear's and Raycast's DESIGN.md files (awesome-design-md).
+
+## Overview
+
+**The idea.** A teacher marks what is hard with a highlighter. Its chisel tip makes a stroke that starts and ends on a slant, and that one slanted cut is the only ornament on the page: the hero stage, every button, every picture frame, the list bullets, the footer's wordmark blocks.
+
+**The rule that makes it consistent.** Everything a student reads is paper (`paper` #F6F7FB, dark ink). Everything a teacher operates is dark (the canvas and its surfaces, light ink). A worksheet always sits in a dark frame, like a document in an app window.
+
+**The live thing.** The hero worksheet in its dark app frame: switch versions and the science words lift off as highlighted copies and land where the same words sit in the new version, while the caption quotes what AdaptED's own code measured for that version (reading level, words per sentence, questions kept: the same numbers the studio shows). The studio below is the whole working product.
+
+**Pictures.** The product is the picture: live HTML fragments marked `data-ui`, and crops of real worksheet versions captured from the app (`scripts/capture-ui.mjs`). No stock photos, no illustrations of "AI".
+
+## Colors
+
+Restrained: one ground family, one ink family, one accent.
+
+| Token | Value | Role |
+| --- | --- | --- |
+| `canvas` | `#070B1D` | The page ground: blue-black, never pure black |
+| `surface` | `#0C1330` | One step up: panels, frames, bands that mark a chapter |
+| `surface-2` | `#141D42` | Two steps up: fields, chips, tab rails, tiles on a band |
+| `surface-3` | `#1D2856` | Three steps up: hover, the logomark tile |
+| `ink` | `#F2F4FB` | Headings and running text (17.8:1 on canvas) |
+| `ink-2` | `#C5CCE2` | Secondary text (12.2:1 on canvas) |
+| `ink-3` | `#9AA4C6` | Notes and metadata (7.9:1 on canvas, 5.7:1 on surface-3) |
+| `yellow` | `#FFD43B` | The one accent: primary actions, the hero stage, highlights, the active step, focus rings |
+| `on-yellow` | `#0A1028` | Type on yellow (13.2:1) |
+| `paper` | `#F6F7FB` | Worksheets only: a soft cool off-white, never stark white (BDA style guide) |
+
+Need colours label the four versions and nothing else: sky `#7CC4F2`, apricot `#FF9F66`, mint `#5ED6A6`, lavender `#BBA2F5` on dark (6:1 or better on every surface); deeper tones of the same hues on paper. Barriers are yellow, never red: the barrier is in the worksheet, not the student. The highlighter always carries dark ink, on paper or on the dark ground.
+
+Tokens in code: `--paper` and `--paper-2` always mean "the ground here" and "one step up", so a component reads right on the canvas, inside a panel, on a band, or on paper (`.sheet` resets them to the light values).
+
+## Typography
+
+- **Display: Bricolage Grotesque** (variable, self-hosted subset, weights 700–800). Page headings only. h1 at 800 and width 80%; h2 and h3 at 700, one weight lighter because light type on a dark ground reads heavier.
+- **Text: Atkinson Hyperlegible Next** (Braille Institute). Everything people read, including every heading inside a worksheet. Tabular figures for numbers. No monospace.
+
+Eight sizes in all outside product fragments at 1440px (14, 16, 18, 24, 32, 77, 131 and the footer mark):
+
+| Step | Size | Use |
+| --- | --- | --- |
+| display | `clamp(4rem, 2.4rem + 6.4vw, 8.5rem)` | The hero headline |
+| head | `clamp(2.5rem, 1.6rem + 3.6vw, 5rem)` | Section headings, two lines or fewer at every width |
+| title | `2rem` | The statement, step headings |
+| lead | `clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem)` | The hero sentence, tile names, the studies summary |
+| body | `1.125rem` / 1.6 | Running text |
+| small | `0.875rem` | Captions, sources, notes. Nothing anyone reads goes below 13px |
+
+## Layout
+
+- One container: max 76rem, margins 16 / 24 / 32px, equal on both sides.
+- A 12-column grid with 40px gutters in every section; a section heading sits on columns 1–7 with its one-sentence intro on 8–12.
+- Every section has the same padding, 64px on phones and 80px from 640px up; a heading sits 40px above its content. Bands (a full-width `surface`) mark every other chapter instead of lines.
+- One idea per section, said once.
+
+| Section | Ground | Composition |
+| --- | --- | --- |
+| Nav | canvas, 85% with blur | Logomark and wordmark; two links with an active-section bar; Calm mode; Try it. Phones: Try it and a menu |
+| Hero | canvas | Headline top-left; one sentence; one action; the measured caption (with "Open the … version" once a version is picked). The yellow chisel stage bleeds off the right edge, holding the worksheet in a dark app frame |
+| Where students get stuck | canvas | One row on wide screens: the heading on columns 1–6, the statement, a line of body text and the source on 7–12 |
+| Try it (studio) | canvas | Two dark panels (assignment, student); the Adapt button closes the student panel; results appear below once asked for |
+| How it works | band | The four steps as a list on columns 1–5, top-aligned with that step's working picture on 6–12. The open step is a yellow block holding its description; the others show their time and title. The row keeps the height of the tallest step, so choosing one never moves the page |
+| Built on research | canvas | Four version tabs; the chosen version's picture, purpose, and kinds of help, each with its source; one sentence naming the guidance; the seven studies behind one disclosure |
+| Close | band | The four versions on a canvas chisel slab, cropped by the section edges; the closing line and action. At least 34rem tall on wide screens, otherwise as tall as its content |
+| Footer | canvas | The logo and three links on one row; what AdaptED is and is not; accessibility notes |
+
+## Elevation & Depth
+
+Flat. Depth comes from the surface ladder: each step lighter is one step closer. No shadows, no glows, no gradients. Lines appear only inside product fragments (`data-ui`), where a form field or a table needs them.
+
+## Shapes
+
+- **The chisel:** a parallelogram whose short sides slant at about 18° (horizontal offset ≈ 0.32 × height). Custom property `--cut`.
+- Page buttons, the main action, picture frames, bullets and the hero stage are chisels. Tiles are square. Panels and worksheets keep a 12px radius (they are the product, not the page), and every control inside a panel steps down to 8px.
+
+## Components
+
+**Logo.** A logomark (a worksheet's three lines, the middle one on a yellow chisel stroke, on a `surface-3` tile; the same drawing as the favicon) and the wordmark "Adapt" + "ED", with ED in yellow.
+
+**Navigation.** Sticky, canvas at 85% with a 12px blur (the one blurred surface). Two links; the section on screen gets a 3px yellow bar and `aria-current="location"`. On phones the links move into a menu that opens below the bar (200ms, from 8px above), takes focus, and closes on Escape, on a tap outside, or when the screen widens.
+
+**Buttons.** Flat chisels on the page, 48px tall (40px small, 44px on touch). Primary: yellow with `on-yellow` type. Neutral: ink with dark type. Quiet: one surface step up. Inside the product's panels (`data-ui`) every button except the yellow main action is an 8px rectangle, the same shape as the fields and chips beside it, so the chisel marks only the one thing to press. Press `scale(0.97)` in 140ms; hover only on fine pointers; on keyboard focus a chisel squares up and shows a 3px yellow ring.
+
+**Panels.** `surface` on the canvas (`surface-2` on a band), 12px radius, no border. Never a panel inside a panel.
+
+**Document frames.** A panel whose header names the document (with the need dot) and whose body is paper. Used for the hero worksheet, before/after, the four-up comparison and the student view.
+
+**Selected, everywhere.** One look for every chosen thing: one more surface step up, with an outline. Never a white fill: white is for the one primary button in a region, and a white selected tab or chip reads as a button and out-shouts the content.
+
+**Tabs.** Text tabs on a `surface` rail with 4px of padding, the rail 12px round and the tabs 8px; the selected tab lifts a step with a 1px `rule-strong` outline. In the hero frame the selected tab is paper, joined to the worksheet below it. Arrow keys move between tabs.
+
+**Chips and fields.** Filled one step up from their ground; a selected chip lifts a step and takes a 1px `ink-3` outline (and a check when it is an on/off setting). A need chip takes its need's colour as the outline, on its pale tint. Fields carry a quiet 1px line that strengthens on hover, normal-weight type, a thin scrollbar with no track of its own, and a yellow focus ring.
+
+**Choice cards** (`.option`). A need, or one of a few answers, shown as an 8px card one step up from the panel. The chosen card lifts and takes a 2px outline, in the need's colour for a need. A choice where several can be picked shows a square box; a choice of one shows a round radio, drawn to match (an empty ring, then a ring with a dot).
+
+**Disclosures.** A plain row with a bold label, a one-line summary of what is inside ("4 kinds of help on · same goals as the class"), and a chevron that turns in 200ms. Closed content is out of layout (`display: none`).
+
+## Motion
+
+| Token | Value | Use |
+| --- | --- | --- |
+| `--ease-out` | `cubic-bezier(0.23, 1, 0.32, 1)` | Entrances, press, menus |
+| `--ease-expo` | `cubic-bezier(0.16, 1, 0.3, 1)` | The hero headline and the worksheet frame, once on load |
+| `--t-press` / `--t-hover` / `--t-ui` | 140 / 180 / 240ms | Press, colour hover, UI changes |
+
+Motion is spent in one place, the hero, and nowhere else. The audience includes students and teachers who find movement distracting, so the rest of the page is still.
+
+- **Signature move:** on load, the hero headline rises out of its lines (700ms, 60ms apart), the sentence, action and caption rise after it, and the yellow stage fades up while the worksheet frame rises into it. Settled in under a second, once per visit. Only opacity and transform: no clip-path wipe and no scaling of text.
+- **The live move:** when someone picks a version in the hero, the new version fades in (200ms) and its key words glow yellow where they now sit, one after another in reading order, gone in about a second. Nothing travels across the text. Nothing changes until they choose; there is no autoplay; Calm mode shows the new version at once, with no glow.
+- **No scroll effects:** sections do not animate in, and scrolling is the browser's own. In-page links glide with native `scroll-behavior: smooth`.
+- **No waiting for show:** a result appears as soon as it is ready; nothing is held back to play an animation.
+- **Feedback:** every control responds to press; hover only behind `(hover: hover) and (pointer: fine)`; UI changes stay under 300ms; no overshoot or bounce.
+- **Calm mode** (and `prefers-reduced-motion`): the finished page; no travel, and in-page links jump.
+
+## Do's and Don'ts
+
+**Do**
+- Put student-facing text on paper and teacher controls on dark.
+- Use yellow for one thing per screen region: the action, the highlight, or the selected step.
+- Show measured numbers, computed by code, and label estimates as estimates.
+- Hide the finer options behind a disclosure that says what they are set to.
+- Keep headings to two lines and running text in full ink at 16px or more.
+
+**Don't**
+- No second accent colour, no gradients, glows, glass panels or shadows at rest.
+- No colour-block sections: chapters change by one surface step, never by hue.
+- No eyebrow labels, index numbering, tiny letter-spaced capitals or monospace.
+- No icon-topped feature cards; no panel inside a panel.
+- No invented proof: no testimonials, logos or statistics that are not sourced.
+
+## Responsive Behavior
+
+| Width | Changes |
+| --- | --- |
+| < 768px | Nav: logo, Try it, menu. One column. The hero stage runs full width under the action; the caption follows it. Studio panels stack, the Adapt button closing the student panel. Result numbers two by two. Step bar and version tabs stack. |
+| 768–1023px | Nav links visible; tiles two across. |
+| ≥ 1024px | Full compositions: the stage on the right columns, panels side by side, the step bar in one row sized by time, tiles three across. |
+
+Touch targets: 44px on coarse pointers (source links get a 44px hit area). Text never under 13px.
+
+## Iteration Guide
+
+- Add a section by choosing its ground (canvas or band, alternating) and one composition not used by its neighbours.
+- Add a control inside the studio from the existing chip, field, tab and button classes; never introduce a new colour.
+- Re-run `scripts/capture-ui.mjs` whenever the worksheet design or the studio's look changes, so the pictures match.
+
+## Known Gaps
+
+- The page is dark only. Worksheets stay on paper, and the student view offers cream, soft-blue and grey reading backgrounds, but there is no light theme for the page itself.
+- No video: the hero transformation is the moving picture.
