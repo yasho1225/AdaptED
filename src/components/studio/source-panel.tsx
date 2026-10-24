@@ -132,7 +132,7 @@ export function SourcePanel({ value, onChange, onCreated }: { value: string; onC
           maxLength={MAX}
           onChange={(e) => onChange(e.target.value)}
           placeholder={"Paste your assignment here: the directions, any reading, and the questions.\n\nYou can also drag a PDF or Word file here."}
-          className="field min-h-[18rem] h-full resize-y font-sans text-[0.95rem] leading-7"
+          className="field h-full min-h-[15rem] resize-y font-sans text-[0.95rem] leading-7"
           aria-describedby="source-help source-status"
         />
         {!value && <FileText className="pointer-events-none absolute right-4 bottom-4 size-8 text-rule-strong" aria-hidden />}
