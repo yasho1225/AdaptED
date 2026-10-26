@@ -14,7 +14,8 @@
     "shots": "node scripts/shots.mjs",
     "audit:ui": "node scripts/audit.mjs",
     "e2e:studio": "node scripts/e2e-studio.mjs",
-    "e2e:samples": "node scripts/e2e-samples.mjs"
+    "e2e:samples": "node scripts/e2e-samples.mjs",
+    "e2e:ai-mock": "tsx scripts/e2e-ai-mock.mts"
   },
   "dependencies": {
     "@google/genai": "^2.31.0",

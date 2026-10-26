@@ -5,6 +5,19 @@ import type { AdaptResult, LearnerProfile } from "./types";
 
 const cache = new Map<string, AdaptResult>();
 
+/** Reads a JSON answer from our API; a page the hosting platform sent instead (a timeout, an outage) gets a plain message. */
+async function readJson(res: Response): Promise<unknown> {
+  try {
+    return await res.json();
+  } catch {
+    throw new Error(
+      res.status === 504 || res.status === 408
+        ? "The AI took too long to answer. Please try again."
+        : `The server didn’t answer properly (error ${res.status}). Please try again.`,
+    );
+  }
+}
+
 function key(source: string, profile: LearnerProfile) {
   return JSON.stringify([source.trim(), [...profile.needs].sort(), [...profile.supports].sort(), profile.expectations, profile.language, profile.grade ?? "", profile.notes ?? ""]);
 }
@@ -30,12 +43,7 @@ export async function requestAdaptation(source: string, profile: LearnerProfile,
     body: JSON.stringify({ source, profile }),
     signal: opts.signal,
   });
-  let data: unknown;
-  try {
-    data = await res.json();
-  } catch {
-    throw new Error("The server returned an unexpected response. Please try again.");
-  }
+  const data = await readJson(res);
   if (!res.ok) {
     const msg = data && typeof data === "object" && "error" in data ? String((data as { error: unknown }).error) : "Something went wrong.";
     throw new Error(msg);
@@ -53,12 +61,7 @@ export async function requestCreate(req: CreateRequest, signal?: AbortSignal): P
     body: JSON.stringify(req),
     signal,
   });
-  let data: unknown;
-  try {
-    data = await res.json();
-  } catch {
-    throw new Error("The server returned an unexpected response. Please try again.");
-  }
+  const data = await readJson(res);
   if (!res.ok) {
     throw new Error(data && typeof data === "object" && "error" in data ? String((data as { error: unknown }).error) : "Something went wrong.");
   }

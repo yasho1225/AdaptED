@@ -44,7 +44,18 @@ npm run a11y      # axe-core WCAG 2.2 AA audit (needs `npm start` on :3100)
 npm run audit:ui -- <outDir>   # 4 breakpoints: overflow, tap targets, text size, headings, axe, console errors
 npm run e2e:studio -- false    # 18 studio checks with motion on (pass `true` for calm mode), incl. create + language
 npm run e2e:samples            # the 3 samples without AI: 12 pre-made versions with no server call, then 21 checks of the no-AI path
+npm run e2e:ai-mock            # the AI path against a local stand-in for Gemini (after `npm run build`): working, bad key, slow, dropped question
 ```
+
+### Is AI working on a deployment?
+
+Open `/api/status` on the site. It never shows the key, only where it was found, and makes one tiny real Gemini call:
+
+- `/api/status`: is a key configured, and does Gemini accept it? On failure it shows Google's own message (for example "API key not valid").
+- `/api/status?check=translate`: a real Spanish adaptation of the science sample, timed.
+- `/api/status?check=create`: a real "Create one with AI", timed.
+
+The key is read only on the server (`GEMINI_API_KEY`; `GOOGLE_API_KEY` and `GOOGLE_GENERATIVE_AI_API_KEY` also work), in modules marked `server-only`, so it never reaches the browser. Every AI request shares a 50-second budget (45 seconds to create an assignment), so it answers inside the hosting platform's 60-second limit even when the AI is slow, falling back with the reason shown.
 
 Measured on a local production build (Lighthouse 12.8, October 2026): mobile (simulated slow 4G, 4× slower CPU) Performance 89–90, Accessibility 100, Best Practices 100, SEO 100; desktop 100 in all four.
 

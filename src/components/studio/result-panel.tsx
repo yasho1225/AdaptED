@@ -4,19 +4,12 @@ import { useState } from "react";
 import { Copy, Download, Info, LayoutGrid, Printer, Sparkles } from "lucide-react";
 import { AdaptedDocument } from "@/components/doc/adapted-document";
 import { NEEDS, writtenIn } from "@/lib/adapt/profile";
-import type { AdaptResult, FallbackReason } from "@/lib/adapt/types";
+import { FALLBACK_REASONS } from "@/lib/adapt/reasons";
+import type { AdaptResult } from "@/lib/adapt/types";
 import { PDF_UNSUPPORTED_LANGUAGES, assignmentToPlainText, downloadAdaptedPdf } from "@/lib/export-pdf";
 import { cn } from "@/lib/utils";
 
 export type ResultTab = "transform" | "student" | "why" | "teacher";
-
-const REASONS: Record<FallbackReason, string> = {
-  no_api_key: "AI isn’t set up on this server",
-  quota_exceeded: "the AI has reached its limit for now",
-  rate_limited: "the AI is busy right now",
-  api_error: "the AI had a problem",
-  invalid_output: "the AI’s answer didn’t pass AdaptED’s checks",
-};
 
 export function SourceBadge({ result, onRunLive, liveBusy }: { result: AdaptResult; onRunLive?: () => void; liveBusy?: boolean }) {
   if (result.source === "ai") {
@@ -46,7 +39,7 @@ export function SourceBadge({ result, onRunLive, liveBusy }: { result: AdaptResu
       <span className="inline-flex items-center gap-1.5 rounded-full bg-warn-soft px-3 py-1 font-bold text-warn">
         <Info className="size-4" aria-hidden /> Made without AI
       </span>
-      <span className="text-ink-3">AI wasn&apos;t used because {REASONS[result.fallbackReason ?? "api_error"]}. The help you picked is added, but the wording stays close to the original.</span>
+      <span className="text-ink-3">AI wasn&apos;t used because {FALLBACK_REASONS[result.fallbackReason ?? "api_error"]}. The help you picked is added, but the wording stays close to the original.</span>
     </p>
   );
 }

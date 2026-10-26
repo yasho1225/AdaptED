@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { FileText, ShieldCheck, Sparkles, Upload } from "lucide-react";
 import type { CreateRequest, CreateResult } from "@/lib/adapt/create";
+import { FALLBACK_REASONS } from "@/lib/adapt/reasons";
 import { SAMPLES } from "@/lib/adapt/samples";
 import { extractFileText } from "@/lib/extract-file";
 import { cn } from "@/lib/utils";
@@ -22,7 +23,10 @@ export function SourcePanel({ value, onChange, onCreated }: { value: string; onC
     setStatus(
       r.source === "ai"
         ? { kind: "ok", msg: `Created just now by AI: “${r.title}”. Check the facts and change anything you like. It is being adapted for your student below.` }
-        : { kind: "ok", msg: r.source === "outline" && req.include === "reading" ? "AI isn’t available right now, so this is a starter outline with question ideas. Replace the line in [brackets] with your own reading, then press Adapt." : "AI isn’t available right now, so this is a starter outline with question ideas. Edit it, then press Adapt." },
+        : {
+            kind: "ok",
+            msg: `AI wasn’t used because ${FALLBACK_REASONS[r.fallbackReason ?? "api_error"]}, so this is a starter outline with question ideas. ${req.include === "reading" ? "Replace the line in [brackets] with your own reading, then press Adapt." : "Edit it, then press Adapt."}`,
+          },
     );
     onCreated(r, req);
   };

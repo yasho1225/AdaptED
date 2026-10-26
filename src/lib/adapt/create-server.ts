@@ -63,9 +63,12 @@ Level: ${LEVEL_RULE[req.level]}`;
 }
 
 function reasonFor(e: unknown): FallbackReason {
-  if (e instanceof GeminiError) return e.kind === "quota" ? "quota_exceeded" : e.kind === "rate" ? "rate_limited" : "api_error";
+  if (e instanceof GeminiError) return e.kind === "quota" ? "quota_exceeded" : e.kind === "rate" ? "rate_limited" : e.kind === "timeout" ? "timeout" : "api_error";
   return "invalid_output";
 }
+
+/** Writing a new assignment is one call; it must answer well inside the route's 60 s. */
+const CREATE_BUDGET_MS = 45_000;
 
 export class TopicNotSuitableError extends Error {}
 
@@ -79,7 +82,7 @@ export async function createAssignment(req: CreateRequest): Promise<CreateResult
   let created: CreatedAssignment;
   let model: string;
   try {
-    const res = await generateJson({ system: SYSTEM, user: userPrompt(req), schema: SCHEMA, temperature: 0.5, maxOutputTokens: 4096, thinkingBudget: 1024 });
+    const res = await generateJson({ system: SYSTEM, user: userPrompt(req), schema: SCHEMA, temperature: 0.5, maxOutputTokens: 4096, thinkingBudget: 1024, deadline: Date.now() + CREATE_BUDGET_MS });
     const parsed = Created.safeParse(res.data);
     if (!parsed.success) return outline(req, "invalid_output");
     created = parsed.data;

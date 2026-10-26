@@ -171,7 +171,8 @@ export type FallbackReason =
   | "quota_exceeded"
   | "rate_limited"
   | "api_error"
-  | "invalid_output";
+  | "invalid_output"
+  | "timeout";
 
 export interface AdaptResult {
   assignment: AdaptedAssignment;

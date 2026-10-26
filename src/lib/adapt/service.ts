@@ -8,6 +8,13 @@ import { buildSystemPrompt, buildUserPrompt } from "./prompt";
 import { parseAdaptedAssignment } from "./schema";
 import type { AdaptResult, AdaptedAssignment, FallbackReason, LearnerProfile } from "./types";
 
+/**
+ * The whole request must answer inside the hosting limit (the route allows 60 s), so every AI call
+ * shares one deadline. The optional second passes only start when there is clearly time for them.
+ */
+const BUDGET_MS = 50_000;
+const SECOND_PASS_MIN_MS = 18_000;
+
 /** After quota errors, skip the model for a while so the app stays fast. */
 let cooldownUntil = 0;
 let cooldownReason: FallbackReason = "quota_exceeded";
@@ -51,25 +58,28 @@ export async function adaptAssignment(rawSource: string, profile: LearnerProfile
 
   const system = buildSystemPrompt();
   const user = buildUserPrompt(source, profile);
+  const deadline = Date.now() + BUDGET_MS;
+  const timeLeft = () => deadline - Date.now();
 
   try {
-    let { data, model } = await generateJson({ system, user, temperature: 0.4 });
+    let { data, model } = await generateJson({ system, user, temperature: 0.4, deadline });
     let assignment = parseAdaptedAssignment(data);
-    if (!assignment) {
-      ({ data, model } = await generateJson({ system, user: `${user}\n\nYour previous output did not match the schema. Return complete JSON with at least one section.`, temperature: 0.3 }));
+    if (!assignment && timeLeft() > SECOND_PASS_MIN_MS) {
+      ({ data, model } = await generateJson({ system, user: `${user}\n\nYour previous output did not match the schema. Return complete JSON with at least one section.`, temperature: 0.3, deadline }));
       assignment = parseAdaptedAssignment(data);
     }
     if (!assignment) return offline(source, profile, "invalid_output", notices);
 
-    // One corrective pass if academic content was lost.
+    // One corrective pass if academic content was lost, when there is time; missing questions are restored verbatim below either way.
     const report = checkFidelity(source, assignment, profile.language);
     const feedback = fidelityFeedback(report, source);
-    if (feedback) {
+    if (feedback && timeLeft() > SECOND_PASS_MIN_MS) {
       try {
         const retry = await generateJson({
           system,
           user: `${user}\n\nA fidelity check of your previous answer found problems. Fix them and return the full corrected JSON.\n${feedback}`,
           temperature: 0.3,
+          deadline,
         });
         const fixed = parseAdaptedAssignment(retry.data);
         if (fixed && checkFidelity(source, fixed, profile.language).matchedQuestions >= report.matchedQuestions) {
@@ -83,7 +93,7 @@ export async function adaptAssignment(rawSource: string, profile: LearnerProfile
     return finalize(source, assignment, profile, { source: "ai", model }, notices);
   } catch (error) {
     const kind = error instanceof GeminiError ? error.kind : "other";
-    const reason: FallbackReason = kind === "quota" ? "quota_exceeded" : kind === "rate" ? "rate_limited" : "api_error";
+    const reason: FallbackReason = kind === "quota" ? "quota_exceeded" : kind === "rate" ? "rate_limited" : kind === "timeout" ? "timeout" : "api_error";
     if (kind === "quota" || kind === "rate") {
       cooldownUntil = Date.now() + (kind === "quota" ? 10 : 1) * 60_000;
       cooldownReason = reason;
